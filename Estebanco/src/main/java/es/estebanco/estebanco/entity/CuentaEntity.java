@@ -2,7 +2,7 @@ package es.estebanco.estebanco.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -18,8 +18,8 @@ public class CuentaEntity {
     @Column(name = "moneda", nullable = false, length = 45)
     private String moneda;
     @Basic
-    @Column(name = "estado", nullable = false)
-    private byte estado;
+    @Column(name = "estado", nullable = false, length = 45)
+    private String estado;
     @Basic
     @Column(name = "fecha_apertura", nullable = false)
     private Timestamp fechaApertura;
@@ -28,9 +28,9 @@ public class CuentaEntity {
     @Column(name = "id", nullable = false)
     private int id;
     @OneToMany(mappedBy = "cuentaByCuentaId")
-    private Collection<OperacionEntity> operacionsById;
+    private List<OperacionEntity> operacionsById;
     @OneToMany(mappedBy = "cuentaByCuentaId")
-    private Collection<RolEntity> rolsById;
+    private List<RolEntity> rolsById;
 
     public String getIban() {
         return iban;
@@ -56,11 +56,11 @@ public class CuentaEntity {
         this.moneda = moneda;
     }
 
-    public byte getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(byte estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 
@@ -85,7 +85,7 @@ public class CuentaEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CuentaEntity that = (CuentaEntity) o;
-        return saldo == that.saldo && estado == that.estado && id == that.id && Objects.equals(iban, that.iban) && Objects.equals(moneda, that.moneda) && Objects.equals(fechaApertura, that.fechaApertura);
+        return saldo == that.saldo && id == that.id && Objects.equals(iban, that.iban) && Objects.equals(moneda, that.moneda) && Objects.equals(estado, that.estado) && Objects.equals(fechaApertura, that.fechaApertura);
     }
 
     @Override
@@ -93,19 +93,19 @@ public class CuentaEntity {
         return Objects.hash(iban, saldo, moneda, estado, fechaApertura, id);
     }
 
-    public Collection<OperacionEntity> getOperacionsById() {
+    public List<OperacionEntity> getOperacionsById() {
         return operacionsById;
     }
 
-    public void setOperacionsById(Collection<OperacionEntity> operacionsById) {
+    public void setOperacionsById(List<OperacionEntity> operacionsById) {
         this.operacionsById = operacionsById;
     }
 
-    public Collection<RolEntity> getRolsById() {
+    public List<RolEntity> getRolsById() {
         return rolsById;
     }
 
-    public void setRolsById(Collection<RolEntity> rolsById) {
+    public void setRolsById(List<RolEntity> rolsById) {
         this.rolsById = rolsById;
     }
 }

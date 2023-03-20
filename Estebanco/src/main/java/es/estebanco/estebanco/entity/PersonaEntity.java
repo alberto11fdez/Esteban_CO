@@ -1,7 +1,7 @@
 package es.estebanco.estebanco.entity;
 
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -39,14 +39,14 @@ public class PersonaEntity {
     @Column(name = "contraseña", nullable = false, length = 45)
     private String contraseña;
     @Basic
-    @Column(name = "estado", nullable = false)
-    private byte estado;
+    @Column(name = "estado", nullable = false, length = 45)
+    private String estado;
     @OneToMany(mappedBy = "personaByPersonaId")
-    private Collection<ConversacionEntity> conversacionsById;
+    private List<ConversacionEntity> conversacionsById;
     @OneToMany(mappedBy = "personaByAsistenteId")
-    private Collection<ConversacionEntity> conversacionsById_0;
+    private List<ConversacionEntity> conversacionsById_0;
     @OneToMany(mappedBy = "personaByPersonaId")
-    private Collection<RolEntity> rolsById;
+    private List<RolEntity> rolsById;
 
     public int getId() {
         return id;
@@ -128,11 +128,11 @@ public class PersonaEntity {
         this.contraseña = contraseña;
     }
 
-    public byte getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(byte estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 
@@ -141,7 +141,7 @@ public class PersonaEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PersonaEntity that = (PersonaEntity) o;
-        return id == that.id && estado == that.estado && Objects.equals(dni, that.dni) && Objects.equals(nombre, that.nombre) && Objects.equals(apellido1, that.apellido1) && Objects.equals(apellido2, that.apellido2) && Objects.equals(correo, that.correo) && Objects.equals(direccion, that.direccion) && Objects.equals(telefono, that.telefono) && Objects.equals(usuario, that.usuario) && Objects.equals(contraseña, that.contraseña);
+        return id == that.id && Objects.equals(dni, that.dni) && Objects.equals(nombre, that.nombre) && Objects.equals(apellido1, that.apellido1) && Objects.equals(apellido2, that.apellido2) && Objects.equals(correo, that.correo) && Objects.equals(direccion, that.direccion) && Objects.equals(telefono, that.telefono) && Objects.equals(usuario, that.usuario) && Objects.equals(contraseña, that.contraseña) && Objects.equals(estado, that.estado);
     }
 
     @Override
@@ -149,27 +149,27 @@ public class PersonaEntity {
         return Objects.hash(id, dni, nombre, apellido1, apellido2, correo, direccion, telefono, usuario, contraseña, estado);
     }
 
-    public Collection<ConversacionEntity> getConversacionsById() {
+    public List<ConversacionEntity> getConversacionsById() {
         return conversacionsById;
     }
 
-    public void setConversacionsById(Collection<ConversacionEntity> conversacionsById) {
+    public void setConversacionsById(List<ConversacionEntity> conversacionsById) {
         this.conversacionsById = conversacionsById;
     }
 
-    public Collection<ConversacionEntity> getConversacionsById_0() {
+    public List<ConversacionEntity> getConversacionsById_0() {
         return conversacionsById_0;
     }
 
-    public void setConversacionsById_0(Collection<ConversacionEntity> conversacionsById_0) {
+    public void setConversacionsById_0(List<ConversacionEntity> conversacionsById_0) {
         this.conversacionsById_0 = conversacionsById_0;
     }
 
-    public Collection<RolEntity> getRolsById() {
+    public List<RolEntity> getRolsById() {
         return rolsById;
     }
 
-    public void setRolsById(Collection<RolEntity> rolsById) {
+    public void setRolsById(List<RolEntity> rolsById) {
         this.rolsById = rolsById;
     }
 }

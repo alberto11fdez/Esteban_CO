@@ -2,7 +2,7 @@ package es.estebanco.estebanco.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -28,7 +28,7 @@ public class ConversacionEntity {
     @JoinColumn(name = "Asistente_id", referencedColumnName = "id", nullable = false)
     private PersonaEntity personaByAsistenteId;
     @OneToMany(mappedBy = "conversacionByConversacionIdconversacion")
-    private Collection<MensajeEntity> mensajesByIdconversacion;
+    private List<MensajeEntity> mensajesByIdconversacion;
 
     public int getIdconversacion() {
         return idconversacion;
@@ -91,11 +91,11 @@ public class ConversacionEntity {
         this.personaByAsistenteId = personaByAsistenteId;
     }
 
-    public Collection<MensajeEntity> getMensajesByIdconversacion() {
+    public List<MensajeEntity> getMensajesByIdconversacion() {
         return mensajesByIdconversacion;
     }
 
-    public void setMensajesByIdconversacion(Collection<MensajeEntity> mensajesByIdconversacion) {
+    public void setMensajesByIdconversacion(List<MensajeEntity> mensajesByIdconversacion) {
         this.mensajesByIdconversacion = mensajesByIdconversacion;
     }
 }
