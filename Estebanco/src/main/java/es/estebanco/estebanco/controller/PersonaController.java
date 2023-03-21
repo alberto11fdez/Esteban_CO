@@ -22,7 +22,14 @@ public class PersonaController {
 
         model.addAttribute("personas", listaPersonas);
 
-        return "/WEB-INF/view/personas.jsp";
+        //return "/WEB-INF/view/personas.jsp";
+        return "personas";
+    }
+
+    @GetMapping("/p")
+    public String doMostrarEjemplo(){
+
+        return "p";
     }
 
 

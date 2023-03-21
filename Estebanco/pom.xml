@@ -45,13 +45,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-core</artifactId>
+			<artifactId>tomcat-embed-jasper</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>jstl</groupId>
+			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
-			<version>1.2</version>
 		</dependency>
 	</dependencies>
 
