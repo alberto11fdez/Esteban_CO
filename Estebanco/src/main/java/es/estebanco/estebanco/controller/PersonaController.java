@@ -1,6 +1,7 @@
 package es.estebanco.estebanco.controller;
 import es.estebanco.estebanco.dao.PersonaRepository;
 import es.estebanco.estebanco.entity.CuentaEntity;
+import es.estebanco.estebanco.entity.OperacionEntity;
 import es.estebanco.estebanco.entity.PersonaEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,9 @@ public class PersonaController {
             model.addAttribute("persona",persona);
             List<CuentaEntity> cuentas = this.personaRepository.cuentasPorPersona(persona);
             model.addAttribute("cuentas",cuentas);
+            List<OperacionEntity> operaciones = this.personaRepository.operacionesPorPersona(persona);
+            //List<OperacionEntity> operaciones = null;
+            model.addAttribute("operaciones",operaciones);
         }
 
         return urlTo;
