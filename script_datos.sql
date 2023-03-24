@@ -42,6 +42,8 @@ LIMIT 0, 1000
 -- Date: 2023-03-20 13:31
 */
 INSERT INTO cuenta (`IBAN`,`saldo`,`moneda`,`estado`,`fecha_apertura`,`id`) VALUES ('642764C',100,'euro','bien','2002-01-01 00:00:00',NULL);
+INSERT INTO cuenta (`IBAN`,`saldo`,`moneda`,`estado`,`fecha_apertura`,`id`) VALUES ('7632567H',1000,'libra','espera_confirmacion,'2002-01-01 00:00:00',NULL);
+INSERT INTO cuenta (`IBAN`,`saldo`,`moneda`,`estado`,`fecha_apertura`,`id`) VALUES ('5754348G',50,'euro','bloqueado','2002-01-01 00:00:00',NULL);
 
 /*
 -- Query: SELECT * FROM estebanco.mensaje
@@ -70,7 +72,8 @@ LIMIT 0, 1000
 -- Date: 2023-03-20 13:30
 */
 INSERT INTO rol (`rol`,`id`,`Persona_id`,`Cuenta_id`) VALUES ('normal',1,1,1);
-
+INSERT INTO rol (`rol`,`id`,`Persona_id`,`Cuenta_id`) VALUES ('asistente',1,2,2);
+INSERT INTO rol (`rol`,`id`,`Persona_id`,`Cuenta_id`) VALUES ('asistente',1,3,3);
 /*
 -- Query: SELECT * FROM estebanco.tipo_estado
 LIMIT 0, 1000
