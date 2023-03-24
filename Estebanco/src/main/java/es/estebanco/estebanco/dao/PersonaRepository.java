@@ -1,6 +1,7 @@
 package es.estebanco.estebanco.dao;
 
 
+import es.estebanco.estebanco.entity.CuentaEntity;
 import es.estebanco.estebanco.entity.PersonaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,4 +14,6 @@ public interface PersonaRepository extends JpaRepository<PersonaEntity, Integer>
     //public List<PersonaEntity> personas ();
     @Query("select p from PersonaEntity p where p.usuario = :user and p.contraseña = :contrasena")
     public PersonaEntity autenticar(@Param("user") String user, @Param("contrasena")String contrasena);
+    @Query("select c from CuentaEntity c join RolEntity r on c=r.cuentaByCuentaId and :persona=r.personaByPersonaId")
+    public List<CuentaEntity> cuentasPorPersona(@Param("persona")PersonaEntity persona);
 }

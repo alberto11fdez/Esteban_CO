@@ -19,13 +19,13 @@ public class LoginController {
     public String doAutenticar(@RequestParam("usuario") String user,
                                @RequestParam("contraseña") String contrasena,
                                Model model, HttpSession session){
-        String urlTo = "persona";
+        String urlTo = "redirect:/persona/";
         PersonaEntity persona = this.personaRepository.autenticar(user,contrasena);
         if(persona==null){
             model.addAttribute("error","Credenciales incorrectas");
             urlTo="login";
         }else {
-            model.addAttribute("persona",persona);
+            session.setAttribute("persona",persona);
         }
         return urlTo;
     }
