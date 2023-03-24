@@ -15,7 +15,7 @@ public class PersonaController {
     @Autowired
     protected PersonaRepository personaRepository;
 
-    @GetMapping("/")
+    @GetMapping("/personasprueba")
     public String doMostrarPersona(Model model){
 
         List<PersonaEntity> listaPersonas = this.personaRepository.findAll();
