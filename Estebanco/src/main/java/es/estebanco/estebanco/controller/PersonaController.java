@@ -6,8 +6,8 @@ import es.estebanco.estebanco.entity.PersonaEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -19,9 +19,9 @@ public class PersonaController {
     protected PersonaRepository personaRepository;
 
     @GetMapping("/")
-    public String doMostrarPersonaYCuentas(Model model, HttpSession session){
+    public String doMostrarPersonaYCuentas(@RequestParam("id") Integer idpersona, Model model, HttpSession session){
         String urlTo = "persona";
-        PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
+        PersonaEntity persona = personaRepository.findById(idpersona).orElse(null);//(PersonaEntity) session.getAttribute("persona");
         if(persona==null){
             urlTo="redirect:/";
         }else{
@@ -34,20 +34,22 @@ public class PersonaController {
         }
 
         return urlTo;
-    /*
-        List<PersonaEntity> listaPersonas = this.personaRepository.findAll();
-
-        model.addAttribute("personas", listaPersonas);
-
-        //return "/WEB-INF/view/personas.jsp";
-    */
+    }
+    @GetMapping("/editar")
+    public String doEditarPersona(@RequestParam("id") Integer idpersona, Model model){
+        PersonaEntity persona = personaRepository.findById(idpersona).orElse(null);
+        return this.mostrarEditarONuevo(persona,model);
+    }
+    protected String mostrarEditarONuevo(PersonaEntity persona, Model model){
+        return "datos";
+    }
+    @PostMapping("/guardar")
+    public String doGuardar (@ModelAttribute("persona") PersonaEntity persona) {
+        this.personaRepository.save(persona);
+        return "redirect:/persona/?id="+persona.getId();
     }
 
-    @GetMapping("/p")
-    public String doMostrarEjemplo(){
 
-        return "p";
-    }
 
 
 

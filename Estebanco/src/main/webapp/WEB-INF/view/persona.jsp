@@ -27,7 +27,7 @@
     <li>Contraseña: <%=persona.getContraseña()%></li>
     <li>Estado de la cuenta: <%=persona.getEstado()%></li>
 </ol>
-<button>Modificar datos</button>
+<a href="/persona/editar?id=<%= persona.getId() %>"> Editar</a>
 <h2>Cuentas:</h2>
 <table border="1">
     <tr>

@@ -25,7 +25,7 @@ public class LoginController {
             model.addAttribute("error","Credenciales incorrectas");
             urlTo="login";
         }else {
-            session.setAttribute("persona",persona);
+            urlTo = "redirect:/persona/?id="+persona.getId();
         }
         return urlTo;
     }
