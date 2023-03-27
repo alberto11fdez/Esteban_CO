@@ -29,5 +29,9 @@ public class EmpresaControlador {
         return "cuentaEmpresa";
     }
 
+    @GetMapping()
+    public String goCrearSocios(){
+        return "crearSocios";
+    }
 
 }
