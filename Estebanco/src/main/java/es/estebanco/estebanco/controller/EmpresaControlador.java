@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class EmpresaControlador {
+
+    private CuentaEntity cuentaEmpresa;
     @Autowired
     protected CuentaRepository cuentaRepository;
 /**
@@ -22,8 +24,10 @@ public class EmpresaControlador {
  */
     @GetMapping("/cuentaEmpresa")
     public String goCuentaEmpresa(@RequestParam("id") Integer idCuentaEmpresa, Model model){
-        CuentaEntity cuentaEmpresa = cuentaRepository.obtenerCuentaId(1);
+        CuentaEntity cuentaEmpresa = cuentaRepository.findById(idCuentaEmpresa).orElse(null);
         model.addAttribute("cuentaEmpresa",cuentaEmpresa);
         return "cuentaEmpresa";
     }
+
+
 }

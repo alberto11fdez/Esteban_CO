@@ -21,8 +21,6 @@
     <li>Moneda:<%=cuentaEmpresa.getMoneda()%></li>
     <li>Estado: <%=cuentaEmpresa.getEstado()%></li>
     <li>Fecha de Apertura: <%=cuentaEmpresa.getFechaApertura()%></li>
-
-
 </ol>
 </body>
 </html>
