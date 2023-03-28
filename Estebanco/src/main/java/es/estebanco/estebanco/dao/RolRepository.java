@@ -10,4 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 public interface RolRepository extends JpaRepository<RolEntity, Integer>{
+
+    @Query("select id from RolEntity where id =: idPerson")
+    public int getRolById(@Param("idPerson")Integer idPerson);
 }
