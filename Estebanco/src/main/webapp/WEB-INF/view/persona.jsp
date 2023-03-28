@@ -2,12 +2,15 @@
 <%@ page import="es.estebanco.estebanco.entity.CuentaEntity" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.estebanco.estebanco.entity.OperacionEntity" %>
+<%@ page import="es.estebanco.estebanco.entity.ConversacionEntity" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     PersonaEntity persona = (PersonaEntity) request.getAttribute("persona");
     List<CuentaEntity> cuentas = (List<CuentaEntity>) request.getAttribute("cuentas");
     List<OperacionEntity> operaciones = (List<OperacionEntity>) request.getAttribute("operaciones");
+    List<ConversacionEntity> conversaciones = (List<ConversacionEntity>) request.getAttribute("conversaciones");
+
 %>
 <html>
 <head>
@@ -85,6 +88,34 @@
     </tr>
     <%
         }
+        }
+    %>
+</table border="1">
+
+<h2>Conversaciones Con Asistentes:</h2>
+<table border="1">
+    <tr>
+        <th>ID_Conversacion</th>
+        <th>Estado</th>
+        <th>Fecha Inicio</th>
+        <th>Fecha Fin</th>
+        <th>PersonaId</th>
+        <th>AsitenteId</th>
+    </tr>
+    <%
+        for(ConversacionEntity conversacion: conversaciones){
+    %>
+    <tr>
+        <th> <%=conversacion.getIdconversacion()%></th>
+        <th> <%=conversacion.getEstado()%></th>
+        <th> <%=conversacion.getFechaInicio()%></th>
+        <th> <%=conversacion.getFechaFin()%></th>
+        <th> <%=conversacion.getPersonaByPersonaId().getId()%></th>
+        <th> <%=conversacion.getPersonaByAsistenteId().getId()%></th>
+        <th><a href="/conversacion/entrar?id=<%= conversacion.getPersonaByAsistenteId() %>"> Entrar en conversación</a></th>
+
+    </tr>
+    <%
         }
     %>
 </table border="1">

@@ -2,6 +2,7 @@ package es.estebanco.estebanco.controller;
 import es.estebanco.estebanco.dao.CuentaRepository;
 import es.estebanco.estebanco.dao.OperacionRepository;
 import es.estebanco.estebanco.dao.PersonaRepository;
+import es.estebanco.estebanco.entity.ConversacionEntity;
 import es.estebanco.estebanco.entity.CuentaEntity;
 import es.estebanco.estebanco.entity.OperacionEntity;
 import es.estebanco.estebanco.entity.PersonaEntity;
@@ -37,6 +38,9 @@ public class PersonaController {
             List<OperacionEntity> operaciones = this.operacionRepository.operacionesPorPersona(persona);
             //List<OperacionEntity> operaciones = null;
             model.addAttribute("operaciones",operaciones);
+
+            List<ConversacionEntity> conversaciones = this.personaRepository.conversacionPorPersona(persona);
+            model.addAttribute("conversaciones", conversaciones);
         }
 
         return urlTo;

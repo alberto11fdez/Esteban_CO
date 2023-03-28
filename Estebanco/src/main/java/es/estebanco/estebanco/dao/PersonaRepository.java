@@ -1,6 +1,7 @@
 package es.estebanco.estebanco.dao;
 
 
+import es.estebanco.estebanco.entity.ConversacionEntity;
 import es.estebanco.estebanco.entity.CuentaEntity;
 import es.estebanco.estebanco.entity.OperacionEntity;
 import es.estebanco.estebanco.entity.PersonaEntity;
@@ -18,4 +19,7 @@ public interface PersonaRepository extends JpaRepository<PersonaEntity, Integer>
 
     @Query("select  p from PersonaEntity p join RolEntity  r on  p=r.personaByPersonaId and r.cuentaByCuentaId=:empresa")
     public List<PersonaEntity> obtenerSocioEmpresa(@Param("empresa") CuentaEntity empresa) ;
+
+    @Query("select conv from ConversacionEntity conv where conv.personaByPersonaId = :persona")
+    public List<ConversacionEntity> conversacionPorPersona(@Param("persona") PersonaEntity persona);
 }
