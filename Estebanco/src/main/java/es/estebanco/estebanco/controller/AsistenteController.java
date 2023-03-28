@@ -3,13 +3,11 @@ package es.estebanco.estebanco.controller;
 import es.estebanco.estebanco.dao.AsistenteRepository;
 import es.estebanco.estebanco.entity.ConversacionEntity;
 import es.estebanco.estebanco.entity.PersonaEntity;
+import es.estebanco.estebanco.ui.Filtro;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -23,6 +21,17 @@ public class AsistenteController {
     protected AsistenteRepository asistenteRepository;
 
     @GetMapping("/")
+    public String doListar (Model model, HttpSession session) {
+        return this.procesarFiltrado(null, model, session);
+    }
+
+    @PostMapping("/filtrar")
+    public String doFiltrar (@ModelAttribute("filtro") Filtro filtro, Model model, HttpSession session) {
+        return this.procesarFiltrado(filtro, model, session);
+    }
+
+    /*
+    @GetMapping("/")
     public String doMostrarListaClientes(Model model, HttpSession session){
         String urlTo = "asistente";
 
@@ -34,6 +43,32 @@ public class AsistenteController {
             model.addAttribute("conversaciones", conversaciones);
         }
         return urlTo;
+    }
+
+     */
+
+    protected String procesarFiltrado (Filtro filtro, Model model, HttpSession session) {
+        List<ConversacionEntity> lista;
+        String urlto = "asistente";
+
+        PersonaEntity asistente = (PersonaEntity) session.getAttribute("persona");
+        if (asistente == null) {
+            urlto = "redirect:/";
+        } else {
+            if (filtro == null || (filtro.getIdConver()==0 && filtro.getMensajesByIdconversacion().isEmpty())) {
+                lista = this.asistenteRepository.findAll();
+                filtro = new Filtro();
+            } else if (filtro.getIdConver() == 0) {
+                lista = this.asistenteRepository.buscarPorMensajes(filtro.getMensajesByIdconversacion());
+            }
+
+           // model.addAttribute("clientes", lista);
+            model.addAttribute("filtro", filtro);
+            List<ConversacionEntity> conversaciones = this.asistenteRepository.conversacionPorPersona(asistente);
+            model.addAttribute("conversaciones", conversaciones);
+        }
+
+        return urlto;
     }
 
 

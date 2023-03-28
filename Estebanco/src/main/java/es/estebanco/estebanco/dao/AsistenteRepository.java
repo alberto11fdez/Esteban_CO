@@ -1,6 +1,7 @@
 package es.estebanco.estebanco.dao;
 
 import es.estebanco.estebanco.entity.ConversacionEntity;
+import es.estebanco.estebanco.entity.MensajeEntity;
 import es.estebanco.estebanco.entity.PersonaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,9 @@ public interface AsistenteRepository extends JpaRepository<ConversacionEntity,In
     public PersonaEntity autenticar(@Param("user") String user, @Param("contrasena")String contrasena);
     @Query("select conv from ConversacionEntity conv where conv.personaByAsistenteId = :persona")
     public List<ConversacionEntity> conversacionPorPersona(@Param("persona") PersonaEntity persona);
+
+    @Query("select c from ConversacionEntity c where c.mensajesByIdconversacion in :mensajes")
+    public List<ConversacionEntity> buscarPorMensajes (@Param("mensajes") List<MensajeEntity> mensajes);
 
 
 }
