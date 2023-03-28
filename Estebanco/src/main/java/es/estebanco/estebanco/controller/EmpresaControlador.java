@@ -43,9 +43,16 @@ public class EmpresaControlador {
         return "cuentaEmpresa";
     }
 
+<<<<<<< HEAD
     @GetMapping("/nff")
+=======
+
+    @GetMapping()
+>>>>>>> 854fd03087c73ea732de5ef0807ec439143379f3
     public String goCrearSocios(){
         return "crearSocios";
     }
+
+
 
 }
