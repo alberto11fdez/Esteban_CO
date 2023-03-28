@@ -1,6 +1,4 @@
 package es.estebanco.estebanco.controller;
-import es.estebanco.estebanco.dao.CuentaRepository;
-import es.estebanco.estebanco.dao.OperacionRepository;
 import es.estebanco.estebanco.dao.PersonaRepository;
 import es.estebanco.estebanco.entity.CuentaEntity;
 import es.estebanco.estebanco.entity.OperacionEntity;
@@ -19,10 +17,6 @@ public class PersonaController {
 
     @Autowired
     protected PersonaRepository personaRepository;
-    @Autowired
-    protected CuentaRepository cuentaRepository;
-    @Autowired
-    protected OperacionRepository operacionRepository;
 
     @GetMapping("/")
     public String doMostrarPersonaYCuentas(@RequestParam("id") Integer idpersona, Model model, HttpSession session){
@@ -32,9 +26,9 @@ public class PersonaController {
             urlTo="redirect:/";
         }else{
             model.addAttribute("persona",persona);
-            List<CuentaEntity> cuentas = this.cuentaRepository.cuentasPorPersona(persona);
+            List<CuentaEntity> cuentas = this.personaRepository.cuentasPorPersona(persona);
             model.addAttribute("cuentas",cuentas);
-            List<OperacionEntity> operaciones = this.operacionRepository.operacionesPorPersona(persona);
+            List<OperacionEntity> operaciones = this.personaRepository.operacionesPorPersona(persona);
             //List<OperacionEntity> operaciones = null;
             model.addAttribute("operaciones",operaciones);
         }
@@ -47,7 +41,6 @@ public class PersonaController {
         return this.mostrarEditarONuevo(persona,model);
     }
     protected String mostrarEditarONuevo(PersonaEntity persona, Model model){
-        model.addAttribute("persona", persona);
         return "datos";
     }
     @PostMapping("/guardar")

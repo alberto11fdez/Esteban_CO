@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface CuentaRepository extends JpaRepository<CuentaEntity, Integer> {
 
-    @Query("select c from CuentaEntity c join RolEntity r on c=r.cuentaByCuentaId and :persona=r.personaByPersonaId")
-    public List<CuentaEntity> cuentasPorPersona(@Param("persona")PersonaEntity persona);
+    @Query("select c from CuentaEntity c where c.id = :idCuenta ")
+    public CuentaEntity obtenerCuentaId(@Param("idCuenta") Integer id);
 
 }
