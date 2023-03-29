@@ -71,9 +71,9 @@ LIMIT 0, 1000
 
 -- Date: 2023-03-20 13:30
 */
-INSERT INTO rol (`rol`,`id`,`Persona_id`,`Cuenta_id`) VALUES ('normal',1,1,1);
-INSERT INTO rol (`rol`,`id`,`Persona_id`,`Cuenta_id`) VALUES ('asistente',2,2,2);
-INSERT INTO rol (`rol`,`id`,`Persona_id`,`Cuenta_id`) VALUES ('asistente',3,3,3);
+INSERT INTO rol (`rol`,`id`,`Persona_id`,`Cuenta_id`,`bloqueado_empresa` ) VALUES ('normal',1,1,1,0);
+INSERT INTO rol (`rol`,`id`,`Persona_id`,`Cuenta_id`,`bloqueado_empresa` ) VALUES ('asistente',2,2,2,0);
+INSERT INTO rol (`rol`,`id`,`Persona_id`,`Cuenta_id`,`bloqueado_empresa` ) VALUES ('asistente',3,3,3,0);
 /*
 -- Query: SELECT * FROM estebanco.tipo_estado
 LIMIT 0, 1000

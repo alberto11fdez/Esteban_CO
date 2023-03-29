@@ -19,7 +19,9 @@ public class RolEntity {
     @ManyToOne
     @JoinColumn(name = "Cuenta_id", referencedColumnName = "id", nullable = false)
     private CuentaEntity cuentaByCuentaId;
-
+    @Basic
+    @Column(name = "bloqueado_empresa", nullable = false)
+    private byte bloqueado_empresa;
     public String getRol() {
         return rol;
     }
@@ -36,17 +38,24 @@ public class RolEntity {
         this.id = id;
     }
 
+    public byte getBloqueado_Empresa() {
+        return bloqueado_empresa;
+    }
+
+    public void setBloqueado_empresa(byte bloqueado_empresa) {
+        this.bloqueado_empresa = bloqueado_empresa;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RolEntity rolEntity = (RolEntity) o;
-        return id == rolEntity.id && Objects.equals(rol, rolEntity.rol);
+        return id == rolEntity.id && Objects.equals(rol, rolEntity.rol) && bloqueado_empresa == rolEntity.bloqueado_empresa;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(rol, id);
+        return Objects.hash(rol, id,bloqueado_empresa);
     }
 
     public PersonaEntity getPersonaByPersonaId() {

@@ -43,11 +43,13 @@ public class EmpresaControlador {
         cuentaEmpresa = cuentaRepository.findById(idCuentaEmpresa).orElse(null);
         model.addAttribute("cuentaEmpresa",cuentaEmpresa);
 
-        List<OperacionEntity> operaciones = operacionRepository.obtenerListaOperaciones(cuentaEmpresa);
+        List<OperacionEntity> operaciones = cuentaEmpresa.getOperacionsById();
+        //List<OperacionEntity> operaciones = operacionRepository.obtenerListaOperaciones(cuentaEmpresa);
         model.addAttribute("operaciones",operaciones);
 
         List<PersonaEntity> socios = personaRepository.obtenerSocioEmpresa(cuentaEmpresa);
         model.addAttribute("socios",socios);
+
         return "cuentaEmpresa";
     }
 
@@ -56,6 +58,7 @@ public class EmpresaControlador {
     public String goCrearSocios(Model model){
         model.addAttribute("socio",new PersonaEntity());
         return "crearSocio";
+
     }
     @PostMapping("/socio/guardar")
     public String doGuardar (@ModelAttribute("socio") PersonaEntity socio) {
@@ -71,11 +74,12 @@ public class EmpresaControlador {
 
         return "redirect:/cuentaEmpresa?id="+cuentaEmpresa.getId();
     }
+
     @GetMapping("/socio/bloquear")
     public String bloquearSocio(@RequestParam ("id") Integer idSocio){
-        PersonaEntity socio = this.personaRepository.findById(idSocio).orElse(null);
-        socio.setEstado("bloqueado");
-        this.personaRepository.save(socio);
+        RolEntity rol = rolRepository.obtenerRol_Persona_en_Empresa(idSocio,cuentaEmpresa.getId());
+        rol.setBloqueado_empresa((byte) 1);
+        rolRepository.save(rol);
         return "redirect:/cuentaEmpresa?id="+cuentaEmpresa.getId();
     }
 
