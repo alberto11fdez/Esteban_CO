@@ -23,4 +23,6 @@ public interface PersonaRepository extends JpaRepository<PersonaEntity, Integer>
     @Query("select conv from ConversacionEntity conv where conv.personaByPersonaId = :persona")
     public List<ConversacionEntity> conversacionPorPersona(@Param("persona") PersonaEntity persona);
 
+ @Query("select c from CuentaEntity c join RolEntity r on c=r.cuentaByCuentaId and :persona=r.personaByPersonaId")
+ public List<CuentaEntity> cuentasPorPersona(@Param("persona")PersonaEntity persona);
 }

@@ -1,6 +1,8 @@
 package es.estebanco.estebanco.entity;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -12,7 +14,7 @@ public class OperacionEntity {
     private int idOperacion;
     @Basic
     @Column(name = "fecha_operacion", nullable = false, length = 45)
-    private String fechaOperacion;
+    private Date fechaOperacion;
     @Basic
     @Column(name = "tipo", nullable = false, length = 45)
     private String tipo;
@@ -37,11 +39,11 @@ public class OperacionEntity {
         this.idOperacion = idOperacion;
     }
 
-    public String getFechaOperacion() {
+    public Date getFechaOperacion() {
         return fechaOperacion;
     }
 
-    public void setFechaOperacion(String fechaOperacion) {
+    public void setFechaOperacion(Date fechaOperacion) {
         this.fechaOperacion = fechaOperacion;
     }
 

@@ -25,5 +25,8 @@
         </tr>
     </table>
 </form>
+
+<a href="/cajero/mostrarLogin">Modo cajero</a>
+
 </body>
 </html>
