@@ -24,15 +24,18 @@ public class LoginController {
                                Model model, HttpSession session){
         String urlTo = "redirect:/persona/";
         PersonaEntity persona = this.personaRepository.autenticar(user,contrasena);
-        int rol = this.rolRepository.getById(persona.getId()).getId();
         if(persona==null){
             model.addAttribute("error","Credenciales incorrectas");
             urlTo="login";
-        }else if(rol == 2){
-            session.setAttribute("persona",persona);
-            urlTo = "redirect:/asistente/";
-        }else {
-            urlTo = "redirect:/persona/?id="+persona.getId();
+        }else{
+            int rol = this.rolRepository.getById(persona.getId()).getId();
+            if(rol == 2){
+                session.setAttribute("persona",persona);
+                urlTo = "redirect:/asistente/";
+            }else {
+                urlTo = "redirect:/persona/?id="+persona.getId();
+            }
+
         }
         return urlTo;
     }
