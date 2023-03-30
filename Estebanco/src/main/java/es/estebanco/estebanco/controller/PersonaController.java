@@ -56,10 +56,23 @@ public class PersonaController {
     }
     @PostMapping("/guardar")
     public String doGuardar (@ModelAttribute("persona") PersonaEntity persona) {
-        this.personaRepository.save(persona);
-        return "redirect:/persona/?id="+persona.getId();
+        persona.setEstado("esperandoConfirmacion");
+        //si la persona ya esta registrada no la deja (comprobar usuario)
+        String usuario=persona.getUsuario();
+        if(personaRepository.buscarSiExisteUsuario(usuario)!=null){
+            return "redirect:/persona/registrarPersona";
+        }else{
+            this.personaRepository.save(persona);
+            return "redirect:/persona/?id="+persona.getId();
+        }
+
     }
 
+    @GetMapping("/registrarPersona")
+    public String registrarPersona(Model model){
+        model.addAttribute("persona",new PersonaEntity());
+        return "registroPersona";
+    }
 
 
 

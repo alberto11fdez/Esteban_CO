@@ -25,4 +25,7 @@ public interface PersonaRepository extends JpaRepository<PersonaEntity, Integer>
 
  @Query("select c from CuentaEntity c join RolEntity r on c=r.cuentaByCuentaId and :persona=r.personaByPersonaId")
  public List<CuentaEntity> cuentasPorPersona(@Param("persona")PersonaEntity persona);
+
+   @Query("select p from PersonaEntity p where p.usuario= :usuario ")
+   public PersonaEntity buscarSiExisteUsuario(@Param("usuario")String usuario);
 }

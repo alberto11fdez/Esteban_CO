@@ -41,7 +41,11 @@
 <%
     }
 %>
+
 </table border="1">
+<button><a href="/operacion">Realizar operacion</a></button>
+
+
 <h1>Lista de socios</h1>
 <table border="1">
         <%

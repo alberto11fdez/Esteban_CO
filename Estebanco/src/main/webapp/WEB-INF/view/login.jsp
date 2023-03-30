@@ -27,6 +27,8 @@
 </form>
 
 <a href="/cajero/mostrarLogin">Modo cajero</a>
-
+<br>
+<br>
+<a href="/persona/registrarPersona">Registrarse</a>
 </body>
 </html>

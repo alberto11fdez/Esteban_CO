@@ -67,7 +67,7 @@ public class EmpresaControlador {
         this.personaRepository.save(socio);
         //Unimos la tabla persona y cuentaEmpresa a traves de la tabla rol
         RolEntity rol = new RolEntity();
-        rol.setRol("asistente");
+        rol.setRol("socio");
         rol.setCuentaByCuentaId(cuentaEmpresa);
         rol.setPersonaByPersonaId(socio);
         this.rolRepository.save(rol);
