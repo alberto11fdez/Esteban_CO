@@ -1,8 +1,10 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.estebanco.estebanco.entity.PersonaEntity" %>
 <%@ page import="es.estebanco.estebanco.entity.CuentaEntity" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.estebanco.estebanco.entity.OperacionEntity" %>
 <%@ page import="es.estebanco.estebanco.entity.ConversacionEntity" %>
+<%@ page import="es.estebanco.estebanco.ui.FiltroOperacion" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -10,6 +12,7 @@
     List<CuentaEntity> cuentas = (List<CuentaEntity>) request.getAttribute("cuentas");
     List<OperacionEntity> operaciones = (List<OperacionEntity>) request.getAttribute("operaciones");
     List<ConversacionEntity> conversaciones = (List<ConversacionEntity>) request.getAttribute("conversaciones");
+    FiltroOperacion filtro = (FiltroOperacion) request.getAttribute("filtro");
 
 %>
 <html>
@@ -58,7 +61,14 @@
 %>
 </table border="1">
 <h2>Operaciones:</h2>
-<button>Filtrar</button>
+
+<form:form action="/persona/filtrar" method="post" modelAttribute="filtro">
+    <form:hidden path="idpersona"/>
+    Buscar por: <br/>
+    Tipo: <form:input path="tipo" /><br/>
+    Moneda: <form:input path="moneda" /><br/>
+    <button>Filtrar</button>
+</form:form>
     <%
     if(operaciones==null||operaciones.isEmpty()){
     %>

@@ -21,5 +21,11 @@ public interface OperacionRepository extends JpaRepository<OperacionEntity, Inte
 
     @Query("select o from OperacionEntity o join CuentaEntity c on o.cuentaByCuentaId=c join RolEntity r on c=r.cuentaByCuentaId and :persona=r.personaByPersonaId")
     public List<OperacionEntity> operacionesPorPersona(@Param("persona") PersonaEntity persona);
+    @Query("select o from OperacionEntity o   join CuentaEntity c on o.cuentaByCuentaId=c join RolEntity r on c=r.cuentaByCuentaId and :persona=r.personaByPersonaId and o.tipo=:tipo")
+    public List<OperacionEntity> operacionesPorPersonaYTipo(@Param("persona")PersonaEntity persona, @Param("tipo") String tipo);
+    @Query("select o from OperacionEntity o   join CuentaEntity c on o.cuentaByCuentaId=c join RolEntity r on c=r.cuentaByCuentaId and :persona=r.personaByPersonaId and o.moneda=:moneda")
+    public List<OperacionEntity> operacionesPorPersonaYMoneda(@Param("persona")PersonaEntity persona, @Param("moneda") String moneda);
+    @Query("select o from OperacionEntity o   join CuentaEntity c on o.cuentaByCuentaId=c join RolEntity r on c=r.cuentaByCuentaId and :persona=r.personaByPersonaId and o.tipo=:tipo and o.moneda=:moneda")
+    public List<OperacionEntity> operacionesPorPersonaYTipoYMoneda(@Param("persona")PersonaEntity persona, @Param("tipo") String tipo, @Param("moneda") String moneda);
 
 }
