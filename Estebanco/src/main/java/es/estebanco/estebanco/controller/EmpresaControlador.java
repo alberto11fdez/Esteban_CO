@@ -72,7 +72,7 @@ public class EmpresaControlador {
         rol.setPersonaByPersonaId(socio);
         this.rolRepository.save(rol);
 
-        return "redirect:/cuentaEmpresa?id="+cuentaEmpresa.getId();
+        return ""+cuentaEmpresa.getId();
     }
 
     @GetMapping("/socio/bloquear")

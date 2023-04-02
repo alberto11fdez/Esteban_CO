@@ -2,10 +2,8 @@ package es.estebanco.estebanco.controller;
 import es.estebanco.estebanco.dao.CuentaRepository;
 import es.estebanco.estebanco.dao.OperacionRepository;
 import es.estebanco.estebanco.dao.PersonaRepository;
-import es.estebanco.estebanco.entity.ConversacionEntity;
-import es.estebanco.estebanco.entity.CuentaEntity;
-import es.estebanco.estebanco.entity.OperacionEntity;
-import es.estebanco.estebanco.entity.PersonaEntity;
+import es.estebanco.estebanco.dao.TipoRolRepository;
+import es.estebanco.estebanco.entity.*;
 import es.estebanco.estebanco.ui.FiltroOperacion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +23,8 @@ public class PersonaController {
     protected CuentaRepository cuentaRepository;
     @Autowired
     protected OperacionRepository operacionRepository;
+    @Autowired
+    protected TipoRolRepository tipoRolRepository;
 
     @GetMapping("/")
     public String doEntrar(@RequestParam("id") Integer idpersona,Model model, HttpSession session) {
@@ -63,6 +63,11 @@ public class PersonaController {
             }
             model.addAttribute("operaciones",operaciones);
             model.addAttribute("filtro",filtro);
+
+            List<String> tipos_rol = tipoRolRepository.obtenerRoles();
+            model.addAttribute("tipos_rol",tipos_rol);
+            model.addAttribute("rolCuentaNueva",new RolEntity());
+
         }
 
 

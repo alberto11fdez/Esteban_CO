@@ -9,23 +9,23 @@ import java.util.Objects;
 @Table(name = "cuenta", schema = "estebanco", catalog = "")
 public class CuentaEntity {
     @Basic
-    @Column(name = "IBAN", nullable = false, length = 45)
+    @Column(name = "IBAN", nullable = true, length = 45)
     private String iban;
     @Basic
-    @Column(name = "saldo", nullable = false)
+    @Column(name = "saldo", nullable = true)
     private int saldo;
     @Basic
-    @Column(name = "moneda", nullable = false, length = 45)
+    @Column(name = "moneda", nullable = true, length = 45)
     private String moneda;
     @Basic
-    @Column(name = "estado", nullable = false, length = 45)
+    @Column(name = "estado", nullable = true, length = 45)
     private String estado;
     @Basic
-    @Column(name = "fecha_apertura", nullable = false)
+    @Column(name = "fecha_apertura", nullable = true)
     private Timestamp fechaApertura;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = true)
     private int id;
     @OneToMany(mappedBy = "cuentaByCuentaId")
     private List<OperacionEntity> operacionsById;

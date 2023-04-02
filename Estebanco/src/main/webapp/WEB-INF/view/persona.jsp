@@ -34,7 +34,15 @@
     <li>Estado de la cuenta: <%=persona.getEstado()%></li>
 </ol>
 <a href="/persona/editar?id=<%= persona.getId() %>"> Editar</a>
+<br/>
 <h2>Cuentas:</h2>
+<form:form action="/crearCuenta" modelAttribute="rolCuentaNueva" method="post">
+    <form:button>Crear Cuenta </form:button>
+    <input type="hidden" name="id" value="${persona.id}" />
+     Tipo de Cuenta: <form:select path="rol" items="${tipos_rol}" />
+</form:form>
+
+<br/>
 <table border="1">
     <tr>
         <th>IBAN</th>

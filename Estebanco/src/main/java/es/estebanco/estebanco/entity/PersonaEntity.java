@@ -12,34 +12,34 @@ public class PersonaEntity {
     @Column(name = "id", nullable = false)
     private int id;
     @Basic
-    @Column(name = "dni", nullable = false, length = 45)
+    @Column(name = "dni", nullable = true, length = 45)
     private String dni;
     @Basic
-    @Column(name = "nombre", nullable = false, length = 45)
+    @Column(name = "nombre", nullable = true, length = 45)
     private String nombre;
     @Basic
-    @Column(name = "apellido1", nullable = false, length = 45)
+    @Column(name = "apellido1", nullable = true, length = 45)
     private String apellido1;
     @Basic
     @Column(name = "apellido2", nullable = true, length = 45)
     private String apellido2;
     @Basic
-    @Column(name = "correo", nullable = false, length = 45)
+    @Column(name = "correo", nullable = true, length = 45)
     private String correo;
     @Basic
-    @Column(name = "direccion", nullable = false, length = 60)
+    @Column(name = "direccion", nullable = true, length = 60)
     private String direccion;
     @Basic
-    @Column(name = "telefono", nullable = false, length = 11)
+    @Column(name = "telefono", nullable = true, length = 11)
     private String telefono;
     @Basic
-    @Column(name = "usuario", nullable = false, length = 45)
+    @Column(name = "usuario", nullable = true, length = 45)
     private String usuario;
     @Basic
-    @Column(name = "contraseña", nullable = false, length = 45)
+    @Column(name = "contraseña", nullable = true, length = 45)
     private String contraseña;
     @Basic
-    @Column(name = "estado", nullable = false, length = 45)
+    @Column(name = "estado", nullable = true, length = 45)
     private String estado;
     @OneToMany(mappedBy = "personaByPersonaId")
     private List<ConversacionEntity> conversacionsById;
