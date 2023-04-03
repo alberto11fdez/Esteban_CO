@@ -62,6 +62,6 @@
     }
 %>
 </table>
-<button><a href="/crearSocio">Crear Socio</a></button>
+<button><a href="/crearSocio?idCuenta=<%=cuentaEmpresa.getId()%>">Crear Socio</a></button>
 </body>
 </html>

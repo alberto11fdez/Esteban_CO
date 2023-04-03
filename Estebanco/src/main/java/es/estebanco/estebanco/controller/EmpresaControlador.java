@@ -18,12 +18,14 @@ import es.estebanco.estebanco.dao.CuentaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Controller
 public class EmpresaControlador {
 
     private CuentaEntity cuentaEmpresa;
+    private Integer idCuenta;
     @Autowired
     protected CuentaRepository cuentaRepository;
     @Autowired
@@ -55,8 +57,9 @@ public class EmpresaControlador {
 
 
     @GetMapping("/crearSocio")
-    public String goCrearSocios(Model model){
+    public String goCrearSocios(Model model,@RequestParam("idCuenta") Integer idCuenta){
         model.addAttribute("socio",new PersonaEntity());
+        this.idCuenta=idCuenta;
         return "crearSocio";
 
     }
@@ -68,11 +71,12 @@ public class EmpresaControlador {
         //Unimos la tabla persona y cuentaEmpresa a traves de la tabla rol
         RolEntity rol = new RolEntity();
         rol.setRol("socio");
-        rol.setCuentaByCuentaId(cuentaEmpresa);
+        CuentaEntity cuenta = cuentaRepository.getById(this.idCuenta);
+        rol.setCuentaByCuentaId(cuenta);
         rol.setPersonaByPersonaId(socio);
         this.rolRepository.save(rol);
 
-        return ""+cuentaEmpresa.getId();
+        return "redirect:/cuentaEmpresa?id="+this.idCuenta;
     }
 
     @GetMapping("/socio/bloquear")

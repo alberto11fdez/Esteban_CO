@@ -37,8 +37,11 @@ public class CrearCuentaController {
 
         rol.setRol(rol.getRol());
         rolRepository.save(rol);
+        if(rol.getRol().equals("empresa")){
+            return "redirect:/crearSocio?idCuenta="+cuenta.getId();
+        }else{
+            return "redirect:/persona/?id="+id;
+        }
 
-
-        return "redirect:/persona/?id="+id;
     }
 }
