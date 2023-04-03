@@ -1,8 +1,5 @@
 package es.estebanco.estebanco.controller;
-import es.estebanco.estebanco.dao.CuentaRepository;
-import es.estebanco.estebanco.dao.OperacionRepository;
-import es.estebanco.estebanco.dao.PersonaRepository;
-import es.estebanco.estebanco.dao.TipoRolRepository;
+import es.estebanco.estebanco.dao.*;
 import es.estebanco.estebanco.entity.*;
 import es.estebanco.estebanco.ui.FiltroOperacion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/persona")
@@ -25,6 +23,8 @@ public class PersonaController {
     protected OperacionRepository operacionRepository;
     @Autowired
     protected TipoRolRepository tipoRolRepository;
+    @Autowired
+    private RolRepository rolRepository;
 
     @GetMapping("/")
     public String doEntrar(@RequestParam("id") Integer idpersona,Model model, HttpSession session) {
@@ -127,7 +127,14 @@ public class PersonaController {
     }
 
 
-
-
+    @GetMapping("/entrarEnCuenta")
+    public String entrarEnCuenta(@RequestParam("idPersona") Integer idPersona,@RequestParam("idCuenta") Integer idCuenta,Model model){
+        RolEntity rol=rolRepository.obtenerRol_Persona_en_Empresa(idPersona,idCuenta);
+        if(Objects.equals(rol.getRol(), "empresa") ||Objects.equals(rol.getRol(), "socio") ){
+            return "redirect:/cuentaEmpresa?id="+idCuenta;
+        }else{
+            return  "";//aqui lo rellena nico para que se vea las cuentas NORMALES
+        }
+    }
 
 }

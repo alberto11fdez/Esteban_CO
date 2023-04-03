@@ -63,6 +63,7 @@
         <td><a href="">Realizar operación</a></td>
         <td><a href="">Realizar cambio de divisa</a></td>
         <td><a href="">Activar/Desactivar cuenta</a></td>
+        <td><a href="/persona/entrarEnCuenta?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Entrar</a></td>
     </tr>
 <%
     }
