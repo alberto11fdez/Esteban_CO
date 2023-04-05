@@ -50,19 +50,40 @@ public class PersonaController {
             List<ConversacionEntity> conversaciones = this.personaRepository.conversacionPorPersona(persona);
             model.addAttribute("conversaciones", conversaciones);
             List<OperacionEntity> operaciones;
-            if(filtro==null||(filtro.getTipo().equals("todo"))&&filtro.getMoneda().equals("todo")){
-                operaciones = this.operacionRepository.operacionesPorPersona(persona);
+            if(filtro==null){
                 filtro = new FiltroOperacion();
                 filtro.setIdpersona(persona.getId());
-            }else if(filtro.getTipo().equals("todo")){
-                operaciones = this.operacionRepository.operacionesPorPersonaYMoneda(persona,filtro.getMoneda());
-            }else if(filtro.getMoneda().equals("todo")){
-                operaciones = this.operacionRepository.operacionesPorPersonaYTipo(persona,filtro.getTipo());
-            }else{
-                operaciones = this.operacionRepository.operacionesPorPersonaYTipoYMoneda(persona,filtro.getTipo(),filtro.getMoneda());
             }
+            switch(filtro.getTipo()){
+                case "sacar":
+                    operaciones = this.operacionRepository.operacionesPorPersonaYTipo(persona,filtro.getTipo());
+                    break;
+                case "meter":
+                    operaciones = this.operacionRepository.operacionesPorPersonaYTipo(persona,filtro.getTipo());
+                    break;
+                case "cambio de divisa":
+                    operaciones = this.operacionRepository.operacionesPorPersonaYTipo(persona,filtro.getTipo());
+                    break;
+                case "euro":
+                    operaciones = this.operacionRepository.operacionesPorPersonaYMoneda(persona,filtro.getTipo());
+                    break;
+                case "libra":
+                    operaciones = this.operacionRepository.operacionesPorPersonaYMoneda(persona,filtro.getTipo());
+                    break;
+                case "ordenar por fecha":
+                    operaciones = this.operacionRepository.operacionesPorPersonaOrdenadoPorFecha(persona);
+                    break;
+                case "ordenar por cantidad":
+                    operaciones = this.operacionRepository.operacionesPorPersonaOrdenadoPorCantidad(persona);
+                    break;
+                default:
+                    operaciones = this.operacionRepository.operacionesPorPersona(persona);
+
+            }
+
             model.addAttribute("operaciones",operaciones);
             model.addAttribute("filtro",filtro);
+            model.addAttribute("tipos_filtro",filtro.getTipos_filtro());
 
             List<String> tipos_rol = tipoRolRepository.obtenerRoles();
             model.addAttribute("tipos_rol",tipos_rol);

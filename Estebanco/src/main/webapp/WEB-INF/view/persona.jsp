@@ -73,10 +73,12 @@
 
 <form:form action="/persona/filtrar" method="post" modelAttribute="filtro">
     <form:hidden path="idpersona"/>
-    Buscar por: <br/>
-    Tipo: <form:input path="tipo" /><br/>
-    Moneda: <form:input path="moneda" /><br/>
-    <button>Filtrar</button>
+    Elige el tipo:
+    <form:select path="tipo">
+        <form:option value="" label="todo" />
+        <form:options items="${tipos_filtro}"/>
+    </form:select>
+<button>Filtrar</button>
 </form:form>
     <%
     if(operaciones==null||operaciones.isEmpty()){

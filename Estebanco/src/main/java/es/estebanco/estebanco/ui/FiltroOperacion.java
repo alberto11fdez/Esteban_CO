@@ -1,10 +1,23 @@
 package es.estebanco.estebanco.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FiltroOperacion {
     private String tipo;
-    private String moneda;
+
+    public List<String> getTipos_filtro() {
+        return tipos_filtro;
+    }
+
+    private List<String> tipos_filtro ;
+
+    /*
+        private String moneda;
     private String cantidad;
     private String fecha;
+     */
+
     private int idpersona;
     public int getIdpersona() {
         return idpersona;
@@ -17,9 +30,21 @@ public class FiltroOperacion {
 
     public FiltroOperacion(){
         tipo="todo";
-        moneda="todo";
+        tipos_filtro = new ArrayList<>();
+
+        tipos_filtro.add("sacar");
+        tipos_filtro.add("meter");
+        tipos_filtro.add("cambio de divisa");
+        tipos_filtro.add("euro");
+        tipos_filtro.add("libra");
+        tipos_filtro.add("ordenar por fecha");
+        tipos_filtro.add("ordenar por cantidad");
+        /*
+                moneda="todo";
         cantidad="asc";
         fecha="asc";
+         */
+
     }
 
     public String getTipo() {
@@ -29,8 +54,8 @@ public class FiltroOperacion {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-
-    public String getMoneda() {
+    /*
+        public String getMoneda() {
         return moneda;
     }
 
@@ -53,4 +78,7 @@ public class FiltroOperacion {
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
+     */
+
+
 }
