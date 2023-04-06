@@ -31,21 +31,20 @@ public class LoginCajeroController {
         if(persona==null){
             model.addAttribute("error","Credenciales incorrectas");
             urlTo="loginCajero";
-        }
-        else {
-            int rol = this.rolRepository.getById(persona.getId()).getId();
-            if(rol!=2){
-                model.addAttribute("error","Credenciales incorrectas");
+        } else {
+            /*int rol = this.rolRepository.getById(persona.getId()).getId();
+            if(rol==2){
+                model.addAttribute("error","Rol incorrecto");
                 urlTo="loginCajero";
-            } else {
+            } else {*/
                 session.setAttribute("persona", persona);
-            }
+            //}
         }
         return urlTo;
     }
     @GetMapping("/logout")
     public String doLogoutCajero(HttpSession session){
         session.invalidate();
-        return "redirect:/cajeroLogin";
+        return "loginCajero";
     }
 }
