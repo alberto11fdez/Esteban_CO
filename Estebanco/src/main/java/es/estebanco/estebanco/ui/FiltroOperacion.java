@@ -34,7 +34,7 @@ public class FiltroOperacion {
 
         tipos_filtro.add("sacar");
         tipos_filtro.add("meter");
-        tipos_filtro.add("cambio de divisa");
+        tipos_filtro.add("cambio divisa");
         tipos_filtro.add("euro");
         tipos_filtro.add("libra");
         tipos_filtro.add("ordenar por fecha");

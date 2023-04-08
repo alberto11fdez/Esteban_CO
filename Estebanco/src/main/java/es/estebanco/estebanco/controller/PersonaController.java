@@ -66,7 +66,7 @@ public class PersonaController {
                 case "meter":
                     operaciones = this.operacionRepository.operacionesPorPersonaYTipo(persona,filtro.getTipo());
                     break;
-                case "cambio de divisa":
+                case "cambio divisa":
                     operaciones = this.operacionRepository.operacionesPorPersonaYTipo(persona,filtro.getTipo());
                     break;
                 case "euro":

@@ -94,6 +94,7 @@
         <th>TIPO</th>
         <th>CANTIDAD</th>
         <th>MONEDA</th>
+        <th>CUENTA ORIGEN</th>
         <th>CUENTA DESTINO</th>
     </tr>
     <%
@@ -105,6 +106,7 @@
         <td><%=operacion.getTipo()%></td>
         <td><%=operacion.getCantidad()%></td>
         <td><%=operacion.getMoneda()%></td>
+        <td><%=operacion.getCuentaByCuentaId().getIban()%></td>
         <td><%=operacion.getIbanCuentaDestinoOrigen()%></td>
     </tr>
     <%
