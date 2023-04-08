@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,6 +26,10 @@ public class PersonaController {
     protected TipoRolRepository tipoRolRepository;
     @Autowired
     private RolRepository rolRepository;
+    @Autowired
+    private TipoOperacionEntityRepository tipoOperacionEntityRepository;
+    @Autowired
+    private TipoMonedaEntityRepository tipoMonedaEntityRepository;
 
     @GetMapping("/")
     public String doEntrar(@RequestParam("id") Integer idpersona,Model model, HttpSession session) {
@@ -95,27 +100,6 @@ public class PersonaController {
         return "persona";
     }
 
-/*
-    @GetMapping("/")
-    public String doMostrarPersonaYCuentas(@RequestParam("id") Integer idpersona, Model model, HttpSession session){
-        String urlTo = "persona";
-        PersonaEntity persona = personaRepository.findById(idpersona).orElse(null);//(PersonaEntity) session.getAttribute("persona");
-        if(persona==null){
-            urlTo="redirect:/";
-        }else{
-            model.addAttribute("persona",persona);
-            List<CuentaEntity> cuentas = this.cuentaRepository.cuentasPorPersona(persona);
-            model.addAttribute("cuentas",cuentas);
-            List<OperacionEntity> operaciones = this.operacionRepository.operacionesPorPersona(persona);
-            model.addAttribute("operaciones",operaciones);
-            List<ConversacionEntity> conversaciones = this.personaRepository.conversacionPorPersona(persona);
-            model.addAttribute("conversaciones", conversaciones);
-        }
-
-        return urlTo;
-    }
- */
-
 
 
     @GetMapping("/editar")
@@ -158,5 +142,109 @@ public class PersonaController {
             return  "";//aqui lo rellena nico para que se vea las cuentas NORMALES
         }
     }
+    @GetMapping("/mostrarTransferencia")
+    public String mostrarTransferencia(@RequestParam("idPersona") Integer idPersona,@RequestParam("idCuenta") Integer idCuenta, Model model){
+        PersonaEntity persona = personaRepository.findById(idPersona).orElse(null);
+        model.addAttribute("persona",persona);
+        CuentaEntity cuenta = cuentaRepository.findById(idCuenta).orElse(null);
+        model.addAttribute("cuenta",cuenta);
+        return "transferenciaPersona";
+    }
+    protected String mostrarEditadoTransferencia(CuentaEntity cuenta, Model model) {
+        model.addAttribute("cuenta", cuenta);
+        PersonaEntity persona = this.personaRepository.propietarioDeCuenta(cuenta);
+        model.addAttribute("persona",persona);
+        return "transferenciaPersona";
+    }
+    protected void nuevaOperacionMeterTransferencia(CuentaEntity cuentaOrigen, CuentaEntity cuentaDestino, Integer valor){
+        Date now = new Date();
+        TipoOperacionEntity tipo = this.tipoOperacionEntityRepository.buscarTipo(2);
+        OperacionEntity operacion = new OperacionEntity();
+        operacion.setCantidad(valor);
+        operacion.setCuentaByCuentaId(cuentaDestino);
+        operacion.setTipo(tipo.getNombre());
+        operacion.setFechaOperacion(now);
+        operacion.setIbanCuentaDestinoOrigen(cuentaOrigen.getIban());
+        this.operacionRepository.save(operacion);
+    }
+
+    protected void nuevaOperacionSacarTransferencia(CuentaEntity cuentaOrigen, CuentaEntity cuentaDestino, Integer valor){
+        Date now = new Date();
+        OperacionEntity operacion = new OperacionEntity();
+        TipoOperacionEntity tipo = this.tipoOperacionEntityRepository.buscarTipo(1);
+        operacion.setCantidad(valor);
+        operacion.setCuentaByCuentaId(cuentaOrigen);
+        operacion.setTipo(tipo.getNombre());
+        operacion.setFechaOperacion(now);
+        operacion.setIbanCuentaDestinoOrigen(cuentaDestino.getIban());
+        this.operacionRepository.save(operacion);
+    }
+    @PostMapping("/transfiriendoDinero")
+    public String doTransferidoDinero(@RequestParam ("valor") Integer valor,
+                                      @RequestParam ("id") Integer idCuenta,
+                                      @RequestParam ("destino") String destino,
+                                      Model model){
+        CuentaEntity cuentaOrigen = this.cuentaRepository.cuentaOrigen(idCuenta);
+        CuentaEntity cuentaDestino = this.cuentaRepository.cuentaDestinoTransferencia(destino);
+        PersonaEntity persona = this.personaRepository.propietarioDeCuenta(cuentaOrigen);
+        String urlTo = "redirect:/persona/?id="+persona.getId();
+
+        if(cuentaDestino==null){
+            model.addAttribute("error", "Cuenta destino no encontrada");
+            return this.mostrarEditadoTransferencia(cuentaOrigen,model);
+        } else {
+            if(valor<0||cuentaOrigen.getSaldo()<valor){
+                model.addAttribute("error", "Cantidad incorrecta introduce un nuevo valor");
+                return this.mostrarEditadoTransferencia(cuentaOrigen,model);
+            } else if (cuentaDestino==cuentaOrigen) {
+                model.addAttribute("error", "La cuenta origen y la cuenta destino son iguales");
+                return this.mostrarEditadoTransferencia(cuentaOrigen,model);
+            } else if (cuentaOrigen.getEstado().equals("bloqueado")) {
+                model.addAttribute("error", "No puede operar con esta cuenta porque esta bloqueada");
+                return this.mostrarEditadoTransferencia(cuentaOrigen,model);
+            } else if (cuentaDestino.getEstado().equals("bloqueado")) {
+                model.addAttribute("error", "No puede transferir a esta cuenta porque esta bloqueada");
+                return this.mostrarEditadoTransferencia(cuentaOrigen,model);
+            } else {
+                cuentaOrigen.setSaldo(cuentaOrigen.getSaldo()-valor);
+                cuentaDestino.setSaldo(cuentaDestino.getSaldo()+valor);
+                this.cuentaRepository.save(cuentaOrigen);
+                this.cuentaRepository.save(cuentaDestino);
+                this.nuevaOperacionSacarTransferencia(cuentaOrigen,cuentaDestino,valor);
+                this.nuevaOperacionMeterTransferencia(cuentaOrigen,cuentaDestino,valor);
+            }
+        }
+        return urlTo;
+    }
+    @GetMapping("/mostrarDivisa")
+    public String mostrarDivisa(@RequestParam("idPersona") Integer idPersona,@RequestParam("idCuenta") Integer idCuenta, Model model){
+        CuentaEntity cuenta = this.cuentaRepository.findById(idCuenta).orElse(null);
+        PersonaEntity persona = this.personaRepository.findById(idPersona).orElse(null);
+        List<TipoMonedaEntity> monedas = this.tipoMonedaEntityRepository.findAll();
+        model.addAttribute("cuenta", cuenta);
+        model.addAttribute("monedas", monedas);
+        model.addAttribute("persona",persona);
+        return "cambioDivisaPersona";
+    }
+    protected void nuevaOperacionCambioDivisa(CuentaEntity cuenta){
+        Date now = new Date();
+        TipoOperacionEntity tipo = this.tipoOperacionEntityRepository.buscarTipo(3);
+        OperacionEntity operacion = new OperacionEntity();
+        operacion.setCuentaByCuentaId(cuenta);
+        operacion.setTipo(tipo.getNombre());
+        operacion.setFechaOperacion(now);
+        this.operacionRepository.save(operacion);
+    }
+    @PostMapping("/guardarDivisa")
+    public String doGuardarDivisa(@ModelAttribute("cuenta") CuentaEntity cuenta,
+                                  @RequestParam("moneda") String moneda){
+        PersonaEntity persona = this.personaRepository.propietarioDeCuenta(cuenta);
+        TipoMonedaEntity moneda1 = this.tipoMonedaEntityRepository.buscarMoneda(moneda);
+        cuenta.setMoneda(moneda1.getMoneda());
+        this.cuentaRepository.save(cuenta);
+        this.nuevaOperacionCambioDivisa(cuenta);
+        return "redirect:/persona/?id="+persona.getId();
+    }
+
 
 }

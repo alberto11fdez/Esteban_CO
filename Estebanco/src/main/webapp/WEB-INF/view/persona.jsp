@@ -60,8 +60,8 @@
         <td><%=cuenta.getMoneda()%></td>
         <td><%=cuenta.getEstado()%></td>
         <td><%=cuenta.getFechaApertura()%></td>
-        <td><a href="">Realizar operación</a></td>
-        <td><a href="">Realizar cambio de divisa</a></td>
+        <td><a href="/persona/mostrarTransferencia?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Realizar transferencia</a></td>
+        <td><a href="/persona/mostrarDivisa?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Realizar cambio de divisa</a></td>
         <td><a href="">Activar/Desactivar cuenta</a></td>
         <td><a href="/persona/entrarEnCuenta?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Entrar</a></td>
     </tr>

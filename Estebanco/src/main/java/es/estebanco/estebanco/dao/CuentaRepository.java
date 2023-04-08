@@ -18,4 +18,5 @@ public interface CuentaRepository extends JpaRepository<CuentaEntity, Integer> {
 
     @Query("select c from CuentaEntity c where c.iban = :destino")
     public CuentaEntity cuentaDestinoTransferencia (@Param("destino") String destino);
+
 }
