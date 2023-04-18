@@ -60,10 +60,21 @@ public class EmpresaControlador {
 
     @GetMapping("/crearSocio")
     public String goCrearSocios(Model model,@RequestParam("idCuenta") Integer idCuenta){
-        model.addAttribute("socio",new PersonaEntity());
         this.idCuenta=idCuenta;
-        return "crearSocio";
 
+        model.addAttribute("socio",new PersonaEntity());
+
+        CuentaEntity cuentaEmpresa = cuentaRepository.findById(idCuenta).orElse(null);
+        List<PersonaEntity> personasNoSocio = personaRepository.personasNoSociosEnCuentaEmpresa(cuentaEmpresa);
+        List<PersonaEntity> personasSiSocio=personaRepository.obtenerSocioEmpresa(cuentaEmpresa);
+        personasNoSocio.removeAll(personasSiSocio);
+        model.addAttribute("personasNoSocio",personasNoSocio);
+
+        RolEntity rolNuevo=new RolEntity();
+        rolNuevo.setCuentaByCuentaId(cuentaEmpresa);
+        model.addAttribute("rolNuevo",rolNuevo);
+
+        return "crearSocio";
     }
     @PostMapping("/socio/guardar")
     public String doGuardar (@ModelAttribute("socio") PersonaEntity socio) {
@@ -79,6 +90,13 @@ public class EmpresaControlador {
         this.rolRepository.save(rol);
 
         return "redirect:/cuentaEmpresa?id="+this.idCuenta;
+    }
+    @PostMapping("/socio/guardarYaExistente")
+    public String doGuardar2(@ModelAttribute("rolNuevo") RolEntity rol){
+        rol.setRol("socio");
+        rol.setBloqueado_empresa((byte)0);
+        rolRepository.save(rol);
+        return "redirect:/cuentaEmpresa?id="+rol.getCuentaByCuentaId().getId();
     }
 
     @GetMapping("/socio/bloquear")

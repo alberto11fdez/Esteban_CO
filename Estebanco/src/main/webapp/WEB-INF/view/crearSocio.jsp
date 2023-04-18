@@ -32,5 +32,14 @@
         <form:button>Guardar</form:button>
 
     </form:form>
+
+    <br/>
+    <form:form action="/socio/guardarYaExistente" modelAttribute="rolNuevo" method="post">
+        <form:hidden path="id"></form:hidden>
+        <form:hidden path="cuentaByCuentaId"></form:hidden>
+        Personas no socias: <form:select path="personaByPersonaId"  items="${personasNoSocio}" itemLabel="dni"></form:select>
+        <form:button>Hacer socio</form:button>
+    </form:form>
+
 </body>
 </html>

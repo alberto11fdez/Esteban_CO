@@ -1,5 +1,7 @@
 package es.estebanco.estebanco.entity;
 
+import org.springframework.context.annotation.Bean;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -172,7 +174,6 @@ public class PersonaEntity {
     public void setRolsById(List<RolEntity> rolsById) {
         this.rolsById = rolsById;
     }
-
 
 
 }
