@@ -1,11 +1,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="input" uri="http://www.springframework.org/tags/form" %>
-<%@ page import="es.estebanco.estebanco.entity.PersonaEntity" %>
-<%@ page import="es.estebanco.estebanco.entity.CuentaEntity" %>
 <%@ page import="java.util.List" %>
-<%@ page import="es.estebanco.estebanco.entity.OperacionEntity" %>
-<%@ page import="es.estebanco.estebanco.entity.ConversacionEntity" %>
 <%@ page import="es.estebanco.estebanco.ui.FiltroOperacion" %>
+<%@ page import="es.estebanco.estebanco.dao.RolRepository" %>
+<%@ page import="es.estebanco.estebanco.entity.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -14,6 +12,7 @@
     List<OperacionEntity> operaciones = (List<OperacionEntity>) request.getAttribute("operaciones");
     List<ConversacionEntity> conversaciones = (List<ConversacionEntity>) request.getAttribute("conversaciones");
     FiltroOperacion filtro = (FiltroOperacion) request.getAttribute("filtro");
+    RolRepository rolRepository=(RolRepository) request.getAttribute("rolrepository");
 
 %>
 <html>
@@ -66,10 +65,15 @@
         <td><a href="/persona/mostrarDivisa?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Realizar cambio de divisa</a></td>
         <td><a href="">Activar/Desactivar cuenta</a></td>
 
-        <% if(!cuenta.getEstado().equals("Activado")){ %>
+        <%RolEntity rol= rolRepository.obtenerRol_Persona_en_Empresa(persona.getId(), cuenta.getId());%>
+       <!--Si la cuenta esta activada y no es socio -->
+        <% if(!cuenta.getEstado().equals("Activado") && (rol.getRol().equals("normal") || rol.getRol().equals("empresa")) ){ %>
+            <td><a href="/persona/entrarEnCuenta?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Entrar</a></td>
+        <!--Si la cuenta esta activada y es un socio NO bloqueado -->
+        <%}else if(cuenta.getEstado().equals("Activado") && rol.getRol().equals("socio") && rol.getBloqueado_Empresa()==0){%>
             <td><a href="/persona/entrarEnCuenta?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Entrar</a></td>
         <%}else{%>
-            <td>No puede acceder</td>
+            <td>No se le permite entrar</td>
         <%}%>
     </tr>
 <%

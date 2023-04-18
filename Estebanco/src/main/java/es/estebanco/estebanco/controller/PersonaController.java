@@ -96,6 +96,8 @@ public class PersonaController {
             rol.setPersonaByPersonaId(persona);
             model.addAttribute("rolCuentaNueva",rol);
 
+            model.addAttribute("rolrepository",rolRepository);
+
         }
 
 
