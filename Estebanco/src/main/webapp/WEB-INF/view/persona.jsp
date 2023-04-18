@@ -66,7 +66,7 @@
         <td><a href="/persona/mostrarDivisa?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Realizar cambio de divisa</a></td>
         <td><a href="">Activar/Desactivar cuenta</a></td>
 
-        <% if(cuenta.getEstado().equals("Activado")){ %>
+        <% if(!cuenta.getEstado().equals("Activado")){ %>
             <td><a href="/persona/entrarEnCuenta?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Entrar</a></td>
         <%}else{%>
             <td>No puede acceder</td>

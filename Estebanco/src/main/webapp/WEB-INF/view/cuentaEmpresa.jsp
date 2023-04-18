@@ -54,6 +54,7 @@
         <%
     for(PersonaEntity p: socios){
 %>
+    <%RolEntity rol =rolRepository.obtenerRol_Persona_en_Empresa(p.getId(),cuentaEmpresa.getId());%>
     <tr>
         <td><%=p.getDni()%></td>
         <td><%=p.getNombre()%></td>
@@ -62,7 +63,7 @@
         <%if(p.getEstado().equals("espera_confirmacion")){%>
             <td>---------</td>
         <%}else{%>
-            <% RolEntity rol =rolRepository.obtenerRol_Persona_en_Empresa(p.getId(),cuentaEmpresa.getId());
+            <%
             if(rol.getBloqueado_Empresa()==0){%>
                 <td><a href="/socio/bloquear?id=<%= p.getId()%>">Bloquear</a></td>
             <%}else{%>
