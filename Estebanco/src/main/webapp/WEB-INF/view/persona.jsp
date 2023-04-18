@@ -63,7 +63,7 @@
         <td><%=cuenta.getFechaApertura()%></td>
         <td><a href="/persona/mostrarTransferencia?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Realizar transferencia</a></td>
         <td><a href="/persona/mostrarDivisa?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Realizar cambio de divisa</a></td>
-        <%if(!cuenta.getEstado().equals("bloqueado")){%>
+        <%if(cuenta.getEstado().equals("bloqueado")){%>
             <td><a href="/persona/solicitarActivacion?idCuenta=<%=cuenta.getId()%>&&idPersona=<%=persona.getId()%>">Solicitar activacion</a></td>
         <%}else {%>
             <td>-------</td>
