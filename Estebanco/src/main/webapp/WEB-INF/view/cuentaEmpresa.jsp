@@ -3,6 +3,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="es.estebanco.estebanco.entity.OperacionEntity" %>
 <%@ page import="es.estebanco.estebanco.entity.PersonaEntity" %>
+<%@ page import="es.estebanco.estebanco.entity.RolEntity" %>
+<%@ page import="es.estebanco.estebanco.dao.RolRepository" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -10,6 +12,7 @@
     CuentaEntity cuentaEmpresa = (CuentaEntity) request.getAttribute("cuentaEmpresa");
     List<OperacionEntity> operaciones = (List<OperacionEntity>) request.getAttribute("operaciones");
     List<PersonaEntity> socios = (List<PersonaEntity>) request.getAttribute("socios");
+    RolRepository rolRepository=(RolRepository) request.getAttribute("rolrepository");
 %>
 
 
@@ -56,7 +59,16 @@
         <td><%=p.getNombre()%></td>
         <td><%=p.getApellido1()%></td>
         <td><%=p.getEstado()%></td>
-        <td><a href="/socio/bloquear?id=<%= p.getId()%>">Bloquear</a></td>
+        <%if(p.getEstado().equals("espera_confirmacion")){%>
+            <td>---------</td>
+        <%}else{%>
+            <% RolEntity rol =rolRepository.obtenerRol_Persona_en_Empresa(p.getId(),cuentaEmpresa.getId());
+            if(rol.getBloqueado_Empresa()==0){%>
+                <td><a href="/socio/bloquear?id=<%= p.getId()%>">Bloquear</a></td>
+            <%}else{%>
+                <td><a href="/socio/activar?id=<%= p.getId()%>">Activar</a></td>
+            <%}%>
+        <%}%>
     </tr>
         <%
     }

@@ -172,4 +172,8 @@ public class PersonaEntity {
     public void setRolsById(List<RolEntity> rolsById) {
         this.rolsById = rolsById;
     }
+
+
+
 }
+
