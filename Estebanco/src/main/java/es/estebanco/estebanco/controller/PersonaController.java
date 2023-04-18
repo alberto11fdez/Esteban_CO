@@ -250,5 +250,11 @@ public class PersonaController {
         return "redirect:/persona/?id="+persona.getId();
     }
 
-
+    @GetMapping("/solicitarActivacion")
+    public String solicitarActivacion(@RequestParam("idCuenta") Integer idCuenta, @RequestParam("idPersona") Integer idpersona){
+        CuentaEntity cuenta=cuentaRepository.findById(idCuenta).orElse(null);
+        cuenta.setEstado("Desbloqueame");
+        cuentaRepository.save(cuenta);
+        return "redirect:/persona/?id="+idpersona;
+    }
 }
