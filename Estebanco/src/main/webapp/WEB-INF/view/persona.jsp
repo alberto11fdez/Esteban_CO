@@ -1,4 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="input" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.estebanco.estebanco.entity.PersonaEntity" %>
 <%@ page import="es.estebanco.estebanco.entity.CuentaEntity" %>
 <%@ page import="java.util.List" %>
@@ -38,7 +39,8 @@
 <h2>Cuentas:</h2>
 <form:form action="/crearCuenta" modelAttribute="rolCuentaNueva" method="post">
     <form:button>Crear Cuenta </form:button>
-    <input type="hidden" name="id" value="${persona.id}" />
+    <form:hidden path="id"></form:hidden>
+    <form:hidden path="personaByPersonaId"></form:hidden>
      Tipo de Cuenta: <form:select path="rol" items="${tipos_rol}" />
 </form:form>
 

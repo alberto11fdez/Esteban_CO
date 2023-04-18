@@ -92,7 +92,9 @@ public class PersonaController {
 
             List<String> tipos_rol = tipoRolRepository.obtenerRoles();
             model.addAttribute("tipos_rol",tipos_rol);
-            model.addAttribute("rolCuentaNueva",new RolEntity());
+            RolEntity rol=new RolEntity();
+            rol.setPersonaByPersonaId(persona);
+            model.addAttribute("rolCuentaNueva",rol);
 
         }
 

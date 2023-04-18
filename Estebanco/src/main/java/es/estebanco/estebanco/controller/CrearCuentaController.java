@@ -25,15 +25,13 @@ public class CrearCuentaController {
     @Autowired
     protected PersonaRepository personaRepository;
     @PostMapping ("/crearCuenta")
-    public String crearCuenta(@RequestParam("id") Integer id, @ModelAttribute("rolCuentaNueva") RolEntity rol){
+    public String crearCuenta(@ModelAttribute("rolCuentaNueva") RolEntity rol){
+
         CuentaEntity cuenta=new CuentaEntity();
         cuenta.setEstado("en Espera");
         cuentaRepository.save(cuenta);
         rol.setCuentaByCuentaId(cuenta);
 
-        PersonaEntity persona=personaRepository.getById(id);
-        //personaRepository.save(persona);
-        rol.setPersonaByPersonaId(persona);
 
         rol.setRol(rol.getRol());
         rolRepository.save(rol);
@@ -41,7 +39,7 @@ public class CrearCuentaController {
         if(rol.getRol().equals("empresa")){
             return "redirect:/crearSocio?idCuenta="+cuenta.getId();
         }else{
-            return "redirect:/persona/?id="+id;
+            return "redirect:/persona/?id="+rol.getPersonaByPersonaId().getId();
         }
 
     }
