@@ -9,8 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -77,7 +75,8 @@ public class CajeroController {
         return "sacarDinero";
     }
 
-    protected void nuevaOperacionSacar(CuentaEntity cuenta, Integer valor){
+    protected void nuevaOperacionSacar(CuentaEntity cuenta, Integer valor, HttpSession session){
+        PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
         Date now = new Date();
         OperacionEntity operacion = new OperacionEntity();
         TipoOperacionEntity tipo = this.tipoOperacionEntityRepository.buscarTipo(1);
@@ -85,12 +84,15 @@ public class CajeroController {
         operacion.setCuentaByCuentaId(cuenta);
         operacion.setTipo(tipo.getNombre());
         operacion.setFechaOperacion(now);
+        operacion.setMoneda(cuenta.getMoneda());
+        operacion.setPersonaByPersonaId(persona);
         this.operacionRepository.save(operacion);
     }
 
     @PostMapping("/sacandoDinero")
     public String doSacadoDinero(@RequestParam("valor") Integer valor,
                                  @RequestParam("id") Integer idCuenta,
+                                 HttpSession session,
                                  Model model){
         String urlTo = "redirect:/cajero/";
         TipoEstadoEntity estado = this.tipoEstadoEntityRepository.findById(2).orElse(null);
@@ -101,7 +103,7 @@ public class CajeroController {
         } else {
             cuenta.setSaldo(cuenta.getSaldo()-valor);
             this.cuentaRepository.save(cuenta);
-            this.nuevaOperacionSacar(cuenta,valor);
+            this.nuevaOperacionSacar(cuenta,valor,session);
         }
         return urlTo;
     }
@@ -121,7 +123,8 @@ public class CajeroController {
         return "ingresarDinero";
     }
 
-    protected void nuevaOperacionMeter(CuentaEntity cuenta, Integer valor){
+    protected void nuevaOperacionMeter(CuentaEntity cuenta, Integer valor, HttpSession session){
+        PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
         Date now = new Date();
         TipoOperacionEntity tipo = this.tipoOperacionEntityRepository.buscarTipo(2);
         OperacionEntity operacion = new OperacionEntity();
@@ -129,13 +132,15 @@ public class CajeroController {
         operacion.setCuentaByCuentaId(cuenta);
         operacion.setTipo(tipo.getNombre());
         operacion.setFechaOperacion(now);
-
+        operacion.setMoneda(cuenta.getMoneda());
+        operacion.setPersonaByPersonaId(persona);
         this.operacionRepository.save(operacion);
     }
 
     @PostMapping("/ingresandoDinero")
     public String doIngresadoDinero(@RequestParam("valor") Integer valor,
                                     @RequestParam("id") Integer idCuenta,
+                                    HttpSession session,
                                     Model model){
         String urlTo = "redirect:/cajero/";
         CuentaEntity cuenta = this.cuentaRepository.cuentaOrigen(idCuenta);
@@ -148,7 +153,7 @@ public class CajeroController {
         }else {
             cuenta.setSaldo(cuenta.getSaldo()+valor);
             this.cuentaRepository.save(cuenta);
-            this.nuevaOperacionMeter(cuenta,valor);
+            this.nuevaOperacionMeter(cuenta,valor,session);
         }
         return urlTo;
     }
@@ -166,7 +171,8 @@ public class CajeroController {
         return "transferencia";
     }
 
-    protected void nuevaOperacionMeterTransferencia(CuentaEntity cuentaOrigen, CuentaEntity cuentaDestino, Integer valor){
+    protected void nuevaOperacionMeterTransferencia(CuentaEntity cuentaOrigen, CuentaEntity cuentaDestino, Integer valor, HttpSession session){
+        PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
         Date now = new Date();
         TipoOperacionEntity tipo = this.tipoOperacionEntityRepository.buscarTipo(2);
         OperacionEntity operacion = new OperacionEntity();
@@ -175,10 +181,13 @@ public class CajeroController {
         operacion.setTipo(tipo.getNombre());
         operacion.setFechaOperacion(now);
         operacion.setIbanCuentaDestinoOrigen(cuentaOrigen.getIban());
+        operacion.setMoneda(cuentaDestino.getMoneda());
+        operacion.setPersonaByPersonaId(persona);
         this.operacionRepository.save(operacion);
     }
 
-    protected void nuevaOperacionSacarTransferencia(CuentaEntity cuentaOrigen, CuentaEntity cuentaDestino, Integer valor){
+    protected void nuevaOperacionSacarTransferencia(CuentaEntity cuentaOrigen, CuentaEntity cuentaDestino, Integer valor, HttpSession session){
+        PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
         Date now = new Date();
         OperacionEntity operacion = new OperacionEntity();
         TipoOperacionEntity tipo = this.tipoOperacionEntityRepository.buscarTipo(1);
@@ -187,6 +196,8 @@ public class CajeroController {
         operacion.setTipo(tipo.getNombre());
         operacion.setFechaOperacion(now);
         operacion.setIbanCuentaDestinoOrigen(cuentaDestino.getIban());
+        operacion.setMoneda(cuentaOrigen.getMoneda());
+        operacion.setPersonaByPersonaId(persona);
         this.operacionRepository.save(operacion);
     }
 
@@ -194,6 +205,7 @@ public class CajeroController {
     public String doTransferidoDinero(@RequestParam ("valor") Integer valor,
                                       @RequestParam ("id") Integer idCuenta,
                                       @RequestParam ("destino") String destino,
+                                      HttpSession session,
                                       Model model){
         String urlTo = "redirect:/cajero/";
         CuentaEntity cuentaOrigen = this.cuentaRepository.cuentaOrigen(idCuenta);
@@ -220,8 +232,8 @@ public class CajeroController {
                 cuentaDestino.setSaldo(cuentaDestino.getSaldo()+valor);
                 this.cuentaRepository.save(cuentaOrigen);
                 this.cuentaRepository.save(cuentaDestino);
-                this.nuevaOperacionSacarTransferencia(cuentaOrigen,cuentaDestino,valor);
-                this.nuevaOperacionMeterTransferencia(cuentaOrigen,cuentaDestino,valor);
+                this.nuevaOperacionSacarTransferencia(cuentaOrigen,cuentaDestino,valor,session);
+                this.nuevaOperacionMeterTransferencia(cuentaOrigen,cuentaDestino,valor,session);
             }
         }
         return urlTo;
@@ -286,23 +298,26 @@ public class CajeroController {
         return "datosDivisa";
     }
 
-    protected void nuevaOperacionCambioDivisa(CuentaEntity cuenta){
+    protected void nuevaOperacionCambioDivisa(CuentaEntity cuenta, HttpSession session){
+        PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
         Date now = new Date();
         TipoOperacionEntity tipo = this.tipoOperacionEntityRepository.buscarTipo(3);
         OperacionEntity operacion = new OperacionEntity();
         operacion.setCuentaByCuentaId(cuenta);
         operacion.setTipo(tipo.getNombre());
         operacion.setFechaOperacion(now);
+        operacion.setPersonaByPersonaId(persona);
         this.operacionRepository.save(operacion);
     }
 
     @PostMapping("/guardarDivisa")
     public String doGuardarDivisa(@ModelAttribute("cuenta") CuentaEntity cuenta,
-                                  @RequestParam("moneda") String moneda){
+                                  @RequestParam("moneda") String moneda,
+                                  HttpSession session){
         TipoMonedaEntity moneda1 = this.tipoMonedaEntityRepository.buscarMoneda(moneda);
         cuenta.setMoneda(moneda1.getMoneda());
         this.cuentaRepository.save(cuenta);
-        this.nuevaOperacionCambioDivisa(cuenta);
+        this.nuevaOperacionCambioDivisa(cuenta,session);
         return "redirect:/cajero/";
     }
 

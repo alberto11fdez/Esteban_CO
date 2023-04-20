@@ -39,6 +39,7 @@
         <td>Tipo</td>
         <td>Cuenta origen</td>
         <td>Cuenta destino transferencia</td>
+        <td>Moneda</td>
     </tr>
     <%
         for (OperacionEntity operacion:listaOperaciones){
@@ -61,6 +62,7 @@
                 }
             %>
         </td>
+        <td><%=operacion.getMoneda()%></td>
     </tr>
     <%
         }
