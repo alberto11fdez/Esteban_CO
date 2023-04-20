@@ -76,6 +76,7 @@ public class EmpresaControlador {
 
         return "crearSocio";
     }
+
     @PostMapping("/socio/guardar")
     public String doGuardar (@ModelAttribute("socio") PersonaEntity socio) {
         //crea al socio
@@ -91,6 +92,7 @@ public class EmpresaControlador {
 
         return "redirect:/cuentaEmpresa?id="+this.idCuenta;
     }
+
     @PostMapping("/socio/guardarYaExistente")
     public String doGuardar2(@ModelAttribute("rolNuevo") RolEntity rol){
         rol.setRol("socio");
