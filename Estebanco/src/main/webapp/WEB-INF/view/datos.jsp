@@ -17,7 +17,7 @@
     Teléfono: <form:input path="telefono" size="20" maxlength="20"/><br/>
     Nombre de usuario: <form:input path="usuario" size="20" maxlength="20"/><br/>
     Contraseña: <form:input path="contraseña" size="30" maxlength="30"/><br/>
-    Estado de la cuenta: <form:input path="estado" size="30" maxlength="30"/><br/>
+
     <form:button>Guardar</form:button>
 </form:form>
 </body>

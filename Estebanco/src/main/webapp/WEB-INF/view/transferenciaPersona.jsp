@@ -6,7 +6,7 @@
 
 <%
     CuentaEntity cuenta = (CuentaEntity) request.getAttribute("cuenta");
-    PersonaEntity persona = (PersonaEntity) request.getAttribute("persona");
+
 %>
 
 <html>
@@ -22,12 +22,13 @@
 <h1>Transferir dinero</h1>
 <h2>Saldo disponible: <%=cuenta.getSaldo()%></h2>
 
-<form:form action="/persona/transfiriendoDinero" modelAttribute="cuenta" method="post">
+<form:form action="/cuentaPersona/transfiriendoDinero" modelAttribute="cuenta" method="post">
     Cantidad a sacar: <input type="number" name="valor">
     IBAN cuenta destino: <input type="text" name="destino">
     <form:hidden path="id"/>
+
     <button>Enviar</button>
 </form:form>
-<a href="/persona/?id=<%=persona.getId()%>">Volver</a>
+<a href="/cuentaPersona/?idCuenta=<%=cuenta.getId()%>">Volver</a>
 </body>
 </html>
