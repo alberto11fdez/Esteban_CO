@@ -31,6 +31,10 @@ public class OperacionEntity {
     @JoinColumn(name = "Cuenta_id", referencedColumnName = "id", nullable = false)
     private CuentaEntity cuentaByCuentaId;
 
+    @ManyToOne
+    @JoinColumn(name = "Persona_id", referencedColumnName = "id", nullable = false)
+    private PersonaEntity personaByPersonaId;
+
     public int getIdOperacion() {
         return idOperacion;
     }
@@ -99,4 +103,13 @@ public class OperacionEntity {
     public void setCuentaByCuentaId(CuentaEntity cuentaByCuentaId) {
         this.cuentaByCuentaId = cuentaByCuentaId;
     }
+
+    public PersonaEntity getPersonaByPersonaId() {
+        return personaByPersonaId;
+    }
+
+    public void setPersonaByPersonaId(PersonaEntity personaByPersonaId) {
+        this.personaByPersonaId = personaByPersonaId;
+    }
+
 }

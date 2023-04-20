@@ -63,6 +63,7 @@
         <td><%=cuenta.getFechaApertura()%></td>
         <td><a href="/persona/mostrarTransferencia?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Realizar transferencia</a></td>
         <td><a href="/persona/mostrarDivisa?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Realizar cambio de divisa</a></td>
+
         <%if(cuenta.getEstado().equals("bloqueado")){%>
             <td><a href="/persona/solicitarActivacion?idCuenta=<%=cuenta.getId()%>&&idPersona=<%=persona.getId()%>">Solicitar activacion</a></td>
         <%}else {%>
@@ -70,7 +71,7 @@
         <%}%>
         <%RolEntity rol= rolRepository.obtenerRol_Persona_en_Empresa(persona.getId(), cuenta.getId());%>
        <!--Si la cuenta esta activada y no es socio -->
-        <% if(!cuenta.getEstado().equals("Activado") && (rol.getRol().equals("normal") || rol.getRol().equals("empresa")) ){ %>
+        <% if(cuenta.getEstado().equals("Activado") && (rol.getRol().equals("normal") || rol.getRol().equals("empresa")) ){ %>
             <td><a href="/persona/entrarEnCuenta?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Entrar</a></td>
         <!--Si la cuenta esta activada y es un socio NO bloqueado -->
         <%}else if(cuenta.getEstado().equals("Activado") && rol.getRol().equals("socio") && rol.getBloqueado_Empresa()==0){%>
