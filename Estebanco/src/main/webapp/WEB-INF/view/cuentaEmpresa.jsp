@@ -45,8 +45,20 @@
     }
 %>
 
-</table border="1">
-<button><a href="/operacion">Realizar operacion</a></button>
+</table >
+<form:form modelAttribute="operacion" action="/realizarOperacion" method="post">
+    <form:select path="tipo" itemLabel="nombre" itemValue="nombre" items="${tipo_operaciones}"></form:select>
+    <form:hidden path="cuentaByCuentaId"></form:hidden>
+    <form:hidden path="personaByPersonaId"></form:hidden>
+
+    <form:button>Realizar operacion</form:button>
+</form:form>
+
+<br/>
+
+
+
+
 
 
 <h1>Lista de socios</h1>

@@ -1,11 +1,10 @@
 package es.estebanco.estebanco.controller;
-import es.estebanco.estebanco.dao.OperacionRepository;
-import es.estebanco.estebanco.dao.PersonaRepository;
-import es.estebanco.estebanco.dao.RolRepository;
+import es.estebanco.estebanco.dao.*;
 import es.estebanco.estebanco.entity.CuentaEntity;
 import es.estebanco.estebanco.entity.OperacionEntity;
 import es.estebanco.estebanco.entity.PersonaEntity;
 import es.estebanco.estebanco.entity.RolEntity;
+import es.estebanco.estebanco.ui.FiltroOperacionEmpresa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import es.estebanco.estebanco.dao.CuentaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -34,16 +32,21 @@ public class EmpresaControlador {
     protected PersonaRepository personaRepository;
     @Autowired
     protected RolRepository rolRepository;
-/**2
+    @Autowired
+    private TipoOperacionEntityRepository tipoOperacionEntityRepository;
+
+    /**2
  *Este metodo te leva al perfil de la cuenta de la Empresa.
  * Para ello se le ha pasado el id de la cuenta, se ha buscado la entidad en la base de datos
  * y se ha enviado al cuentaEmpresa.jsp
  */
     @GetMapping("/cuentaEmpresa")
-    public String goCuentaEmpresa(@RequestParam("id") Integer idCuentaEmpresa, Model model){
+    public String goCuentaEmpresa(@RequestParam("id") Integer idCuentaEmpresa,@RequestParam("idPersona") Integer idPersona, Model model){
 
         cuentaEmpresa = cuentaRepository.findById(idCuentaEmpresa).orElse(null);
         model.addAttribute("cuentaEmpresa",cuentaEmpresa);
+
+        PersonaEntity persona = personaRepository.findById(idPersona).orElse(null);
 
         List<OperacionEntity> operaciones = cuentaEmpresa.getOperacionsById();
         //List<OperacionEntity> operaciones = operacionRepository.obtenerListaOperaciones(cuentaEmpresa);
@@ -53,6 +56,16 @@ public class EmpresaControlador {
         model.addAttribute("socios",socios);
 
         model.addAttribute("rolrepository",rolRepository);
+
+        model.addAttribute("tipo_operaciones",tipoOperacionEntityRepository.findAll());
+
+        FiltroOperacionEmpresa filtro=new FiltroOperacionEmpresa();
+        model.addAttribute("filtro",filtro);
+
+        OperacionEntity operacion=new OperacionEntity();
+        operacion.setCuentaByCuentaId(cuentaEmpresa);
+        operacion.setPersonaByPersonaId(persona);
+        model.addAttribute("operacion",operacion);
 
         return "cuentaEmpresa";
     }
@@ -115,5 +128,17 @@ public class EmpresaControlador {
         rolRepository.save(rol);
         return "redirect:/cuentaEmpresa?id="+cuentaEmpresa.getId();
     }
+
+    @PostMapping("/realizarOperacion")
+    public String realizarOperacion(@RequestParam("operacion") OperacionEntity operacion){
+        if(operacion.getTipo().equals("transferencia")){
+            return "redirect:/transferencia";
+        }else if(operacion.getTipo().equals("cambio_divisa")){
+            return  "redirect:/cambioDivisa";
+        }else{
+            return "redirect:";
+        }
+    }
+
 
 }
