@@ -61,8 +61,7 @@
         <td><%=cuenta.getMoneda()%></td>
         <td><%=cuenta.getEstado()%></td>
         <td><%=cuenta.getFechaApertura()%></td>
-        <td><a href="/persona/mostrarTransferencia?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Realizar transferencia</a></td>
-        <td><a href="/persona/mostrarDivisa?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Realizar cambio de divisa</a></td>
+
 
         <%if(cuenta.getEstado().equals("bloqueado")){%>
             <td><a href="/persona/solicitarActivacion?idCuenta=<%=cuenta.getId()%>&&idPersona=<%=persona.getId()%>">Solicitar activacion</a></td>
@@ -83,52 +82,7 @@
 <%
     }
 %>
-</table border="1">
-<h2>Operaciones:</h2>
-
-<form:form action="/persona/filtrar" method="post" modelAttribute="filtro">
-    <form:hidden path="idpersona"/>
-    Elige el tipo:
-    <form:select path="tipo">
-        <form:option value="" label="todo" />
-        <form:options items="${tipos_filtro}"/>
-    </form:select>
-<button>Filtrar</button>
-</form:form>
-    <%
-    if(operaciones==null||operaciones.isEmpty()){
-    %>
-<h3>No hay operaciones</h3>
-<%
-    }else{
-%>
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>FECHA DE OPERACIÓN</th>
-        <th>TIPO</th>
-        <th>CANTIDAD</th>
-        <th>MONEDA</th>
-        <th>CUENTA ORIGEN</th>
-        <th>CUENTA DESTINO</th>
-    </tr>
-    <%
-        for(OperacionEntity operacion: operaciones){
-    %>
-    <tr>
-        <td><%=operacion.getIdOperacion()%></td>
-        <td><%=operacion.getFechaOperacion()%></td>
-        <td><%=operacion.getTipo()%></td>
-        <td><%=operacion.getCantidad()%></td>
-        <td><%=operacion.getMoneda()%></td>
-        <td><%=operacion.getCuentaByCuentaId().getIban()%></td>
-        <td><%=operacion.getIbanCuentaDestinoOrigen()%></td>
-    </tr>
-    <%
-        }
-        }
-    %>
-</table border="1">
+    </table border="1">
 
 <h2>Conversaciones Con Asistentes:</h2>
 <table border="1">
@@ -141,7 +95,7 @@
         <th>AsitenteId</th>
     </tr>
     <%
-        for(ConversacionEntity conversacion: conversaciones){
+        for(ConversacionEntity conversacion: persona.getConversacionsById()){
     %>
     <tr>
         <th> <%=conversacion.getIdconversacion()%></th>
