@@ -13,6 +13,7 @@
     List<OperacionEntity> operaciones = (List<OperacionEntity>) request.getAttribute("operaciones");
     List<PersonaEntity> socios = (List<PersonaEntity>) request.getAttribute("socios");
     RolRepository rolRepository=(RolRepository) request.getAttribute("rolrepository");
+    PersonaEntity persona=(PersonaEntity) request.getAttribute("persona");
 %>
 
 
@@ -46,13 +47,10 @@
 %>
 
 </table >
-<form:form modelAttribute="operacion" action="/realizarOperacion" method="post">
-    <form:select path="tipo" itemLabel="nombre" itemValue="nombre" items="${tipo_operaciones}"></form:select>
-    <form:hidden path="cuentaByCuentaId"></form:hidden>
-    <form:hidden path="personaByPersonaId"></form:hidden>
 
-    <form:button>Realizar operacion</form:button>
-</form:form>
+<button><a href="/cuentaEmpresa/mostrarTransferencia?idCuenta=<%=cuentaEmpresa.getId()%>&idPersona=<%=persona.getId()%>">Realizar transferencia</a></button>
+<button><a href="/cuentaEmpresa/mostrarDivisa?idCuenta=<%=cuentaEmpresa.getId()%>&idPersona=<%=persona.getId()%>">Realizar cambio de divisa</a></button>
+
 
 <br/>
 
@@ -77,9 +75,9 @@
         <%}else{%>
             <%
             if(rol.getBloqueado_Empresa()==0){%>
-                <td><a href="/socio/bloquear?id=<%= p.getId()%>">Bloquear</a></td>
+                <td><a href="/cuentaEmpresa/socio/bloquear?id=<%= p.getId()%>">Bloquear</a></td>
             <%}else{%>
-                <td><a href="/socio/activar?id=<%= p.getId()%>">Activar</a></td>
+                <td><a href="/cuentaEmpresa/socio/activar?id=<%= p.getId()%>">Activar</a></td>
             <%}%>
         <%}%>
     </tr>
@@ -87,6 +85,6 @@
     }
 %>
 </table>
-<button><a href="/crearSocio?idCuenta=<%=cuentaEmpresa.getId()%>">Crear Socio</a></button>
+<button><a href="/cuentaEmpresa/crearSocio?idCuenta=<%=cuentaEmpresa.getId()%>">Crear Socio</a></button>
 </body>
 </html>

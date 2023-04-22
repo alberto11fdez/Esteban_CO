@@ -9,6 +9,7 @@
 <%
     CuentaEntity cuenta = (CuentaEntity) request.getAttribute("cuenta");
     List<TipoMonedaEntity> monedas = (List<TipoMonedaEntity>) request.getAttribute("monedas");
+    PersonaEntity persona=(PersonaEntity) request.getAttribute("persona");
 %>
 
 <html>
@@ -18,7 +19,7 @@
 <body>
 Cuenta IBAN: <%=cuenta.getIban()%>
 Saldo: <%=cuenta.getSaldo()%>
-<form:form action="/cuentaPersona/guardarDivisa" modelAttribute="cuenta" method="post">
+<form:form action="/cuentaEmpresa/guardarDivisa" modelAttribute="cuenta" method="post">
     <form:hidden path="saldo"></form:hidden>
     <form:hidden path="iban"></form:hidden>
     <form:hidden path="estado"></form:hidden>
@@ -30,6 +31,6 @@ Saldo: <%=cuenta.getSaldo()%>
     </form:select>
     <form:button>Guardar</form:button>
 </form:form>
-<a href="/cuentaPersona/?idCuenta=<%=cuenta.getId()%>">Volver</a>
+<a href="/cuentaEmpresa/?id=<%=cuenta.getId()%>&idPersona=<%=persona.getId()%>">Volver</a>
 </body>
 </html>
