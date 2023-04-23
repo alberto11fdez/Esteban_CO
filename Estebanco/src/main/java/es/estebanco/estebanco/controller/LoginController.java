@@ -29,9 +29,12 @@ public class LoginController {
             urlTo="login";
         }else{
             int rol = this.rolRepository.getById(persona.getId()).getId();
-            if(rol == 2){
-                session.setAttribute("persona",persona);
+            if(rol == 2) {
+                session.setAttribute("persona", persona);
                 urlTo = "redirect:/asistente/";
+            }else if (rol == 1) {
+                    session.setAttribute("gestor",persona);
+                    urlTo = "redirect:/gestor/";
             }else {
                 urlTo = "redirect:/persona/?id="+persona.getId();
             }

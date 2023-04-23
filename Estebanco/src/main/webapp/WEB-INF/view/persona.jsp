@@ -123,5 +123,6 @@
     %>
 </table border="1">
 <button><a href="/asistente/crearConversacion?idCliente=<%=persona.getId()%>">Crear conversación</a></button>
+<button><a href="/gestor/"> Entrar como gestor</a></button>
 </body>
 </html>
