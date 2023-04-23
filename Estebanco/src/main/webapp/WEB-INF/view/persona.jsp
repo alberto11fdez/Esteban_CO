@@ -104,6 +104,7 @@
     </tr>
     <%
         for(ConversacionEntity conversacion: persona.getConversacionsById()){
+            if(conversacion.getEstado()==1){
     %>
     <tr>
         <th> <%=conversacion.getIdconversacion()%></th>
@@ -117,6 +118,7 @@
 
     </tr>
     <%
+            }
         }
     %>
 </table border="1">

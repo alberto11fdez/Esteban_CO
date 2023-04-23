@@ -123,7 +123,13 @@ public class AsistenteController {
     @GetMapping("/cerrar")
     public String doCerrar(@RequestParam("id")Integer idConversacion){
         ConversacionEntity conversacion = this.asistenteRepository.findById(idConversacion).orElse(null);
-        this.asistenteRepository.delete(conversacion);
+        byte estado=0;
+        conversacion.setEstado(estado);
+
+        Timestamp fecha = new Timestamp(System.currentTimeMillis());
+        conversacion.setFechaFin(fecha);
+
+        this.asistenteRepository.save(conversacion);
         return "redirect:/persona/?id="+ conversacion.getPersonaByPersonaId().getId();
     }
 
