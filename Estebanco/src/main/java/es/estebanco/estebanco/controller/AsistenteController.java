@@ -117,7 +117,14 @@ public class AsistenteController {
     @PostMapping("/guardar")
     public String doGuardar(@ModelAttribute("conversacionNueva")ConversacionEntity conversacionNueva){
         asistenteRepository.save(conversacionNueva);
-        return "redirect:/asistente/";
+        return "redirect:/persona/?id=" + conversacionNueva.getPersonaByPersonaId().getId();
+    }
+
+    @GetMapping("/cerrar")
+    public String doCerrar(@RequestParam("id")Integer idConversacion){
+        ConversacionEntity conversacion = this.asistenteRepository.findById(idConversacion).orElse(null);
+        this.asistenteRepository.delete(conversacion);
+        return "redirect:/persona/?id="+ conversacion.getPersonaByPersonaId().getId();
     }
 
 

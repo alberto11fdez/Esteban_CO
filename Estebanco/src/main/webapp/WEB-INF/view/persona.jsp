@@ -93,6 +93,14 @@
         <th>Fecha Fin</th>
         <th>PersonaId</th>
         <th>AsitenteId</th>
+        <th><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
+        </svg></th>
+
+        <th><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-x" viewBox="0 0 16 16">
+            <path d="M6.146 6.146a.5.5 0 0 1 .708 0L8 7.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 8l1.147 1.146a.5.5 0 0 1-.708.708L8 8.707 6.854 9.854a.5.5 0 0 1-.708-.708L7.293 8 6.146 6.854a.5.5 0 0 1 0-.708z"/>
+            <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+        </svg></th>
     </tr>
     <%
         for(ConversacionEntity conversacion: persona.getConversacionsById()){
@@ -105,6 +113,7 @@
         <th> <%=conversacion.getPersonaByPersonaId().getId()%></th>
         <th> <%=conversacion.getPersonaByAsistenteId().getId()%></th>
         <th><a href="/mensaje/entrar?id=<%= conversacion.getPersonaByPersonaId() %>"> Entrar en conversación</a></th>
+        <th><a href="/asistente/cerrar?id=<%=conversacion.getIdconversacion()%>">Cerrar conversación</a></th>
 
     </tr>
     <%
