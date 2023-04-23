@@ -1,3 +1,4 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%--
   Created by IntelliJ IDEA.
   User: USUARIO
@@ -11,18 +12,18 @@
     <title>Conversación</title>
 </head>
 <body>
-<h1>Conversación</h1>
+<h1>Mensajes</h1>
 
-<ul>
-    <c:forEach var="mensaje" items="${mensajes}">
-        <li>${mensaje}</li>
-    </c:forEach>
-</ul>
+<form:form method="post" action="/mensaje/guardar" modelAttribute="mensajeNuevo">
+    <form:hidden path="idmensaje"></form:hidden>
+    <form:hidden path="fechaEnvio"></form:hidden>
+    <form:hidden path="conversacionEmisorId"></form:hidden>
+    <form:hidden path="conversacionReceptorId"></form:hidden>
+    <form:hidden path="conversacionByConversacionIdconversacion"></form:hidden>
 
-<form method="post" action="/conversacion">
-    <input type="text" name="mensaje" />
-    <button type="submit">Enviar</button>
-    <button type="submit">Acabar Conversación</button>
-</form>
+    -<form:input path="texto" size="100" maxlength="100"></form:input>
+
+    <form:button>Enviar</form:button>
+</form:form>
 </body>
 </html>

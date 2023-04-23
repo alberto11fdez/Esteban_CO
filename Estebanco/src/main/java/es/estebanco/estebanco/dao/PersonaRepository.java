@@ -33,4 +33,5 @@ public interface PersonaRepository extends JpaRepository<PersonaEntity, Integer>
 
    @Query("select p from PersonaEntity p , RolEntity r where p=r.personaByPersonaId and r.cuentaByCuentaId != :cuenta ")
     public List<PersonaEntity> personasNoSociosEnCuentaEmpresa(@Param("cuenta") CuentaEntity cuenta);
+
 }
