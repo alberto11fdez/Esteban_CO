@@ -18,4 +18,10 @@ public interface RolRepository extends JpaRepository<RolEntity, Integer>{
     public RolEntity obtenerRol_Persona_en_Empresa(@Param("idPersona") Integer idPersona,@Param("idCuenta") Integer idCuenta);
 
 
+    @Query("select c.rol from RolEntity c where c.personaByPersonaId.id =:idPerson")
+    public String getRolByIdString(@Param("idPerson")Integer idPerson);
+
+    @Query("select c.personaByPersonaId.id from RolEntity c where c.rol='asistente'")
+    public List<Integer> getAsistentes();
+
 }

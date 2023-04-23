@@ -19,7 +19,7 @@ public interface MensajeRepository extends JpaRepository<MensajeEntity, Integer>
     public List<MensajeEntity> getMensajesDeEstaConversacion(@Param("idConver")Integer idConver);
 
     @Query("select c.personaByPersonaId.id from RolEntity c where c.rol='asistente'")
-    public List<Integer> getAsistente();
+    public List<Integer> getAsistentes();
 
     @Query("select c.personaByPersonaId.id from RolEntity c where c.rol='normal'")
     public List<Integer> getClientes();

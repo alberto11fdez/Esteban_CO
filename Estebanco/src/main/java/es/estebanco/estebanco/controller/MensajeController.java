@@ -41,9 +41,9 @@ public class MensajeController {
         model.addAttribute("cliente", cliente);
         model.addAttribute("asistente", asistente);
         model.addAttribute("idConversacion", idConversacion);
-        return "listaMensajes";
+        return "listaMensajesClientes";
     }
-/*
+
     @GetMapping("/entrarAsistente")
     public String doEntrarAsistente(@RequestParam("idCliente") Integer idCliente,@RequestParam("idAsistente") Integer idAsistente,
                                     @RequestParam("idConversacion")Integer idConversacion, Model model){
@@ -55,13 +55,14 @@ public class MensajeController {
 
         model.addAttribute("cliente", cliente);
         model.addAttribute("asistente", asistente);
-        return "listaMensajes";
+        model.addAttribute("idConversacion", idConversacion);
+        return "listaMensajesAsistentes";
     }
 
- */
 
-    @GetMapping("/crearMensaje")
-    public String enviarMensaje(@RequestParam("idCliente") Integer idCliente,@RequestParam("idAsistente") Integer idAsistente,
+
+    @GetMapping("/crearMensajeClientes")
+    public String enviarMensajeClientes(@RequestParam("idCliente") Integer idCliente,@RequestParam("idAsistente") Integer idAsistente,
                                 @RequestParam("idConversacion")Integer idConversacion, Model model) {
 
         PersonaEntity cliente = this.personaRepository.findById(idCliente).orElse(null);
@@ -79,8 +80,6 @@ public class MensajeController {
         Timestamp fecha = new Timestamp(System.currentTimeMillis());
         mensajeNuevo.setFechaEnvio(fecha);
 
-       // List<Integer> clientes = this.mensajeRepository.getClientes();
-       // List<Integer> asistentes = this.mensajeRepository.getAsistente();
 
         mensajeNuevo.setConversacionEmisorId(cliente.getId());
         mensajeNuevo.setConversacionReceptorId(asistente.getId());
@@ -91,11 +90,58 @@ public class MensajeController {
         return "mensajes";
     }
 
+    @GetMapping("/crearMensajeAsistentes")
+    public String enviarMensajeAsistentes(@RequestParam("idCliente") Integer idCliente,@RequestParam("idAsistente") Integer idAsistente,
+                                @RequestParam("idConversacion")Integer idConversacion, Model model) {
+
+        PersonaEntity cliente = this.personaRepository.findById(idCliente).orElse(null);
+        PersonaEntity asistente = this.personaRepository.findById(idAsistente).orElse(null);
+        ConversacionEntity conversacion = this.mensajeRepository.getConversacion(idConversacion);
+
+        MensajeEntity mensajeNuevo = new MensajeEntity();
+
+        //meto la id del mensaje
+        int idUltimaMensaje = this.mensajeRepository.getUltimaIdMensaje();
+        idUltimaMensaje++;
+        mensajeNuevo.setIdmensaje(idUltimaMensaje);
+
+        //meto la fecha de envio
+        Timestamp fecha = new Timestamp(System.currentTimeMillis());
+        mensajeNuevo.setFechaEnvio(fecha);
+
+
+        mensajeNuevo.setConversacionEmisorId(asistente.getId());
+        mensajeNuevo.setConversacionReceptorId(cliente.getId());
+        mensajeNuevo.setConversacionByConversacionIdconversacion(conversacion);
+
+        model.addAttribute("mensajeNuevo", mensajeNuevo);
+
+        return "mensajes";
+    }
+
 
     @PostMapping("/guardar")
     public String doGuardar(@ModelAttribute("mensajeNuevo") MensajeEntity mensaje){
+
+        List<Integer> clientes = this.mensajeRepository.getClientes();
+        List<Integer> asistentes = this.mensajeRepository.getAsistentes();
         mensajeRepository.save(mensaje);
-        return "redirect:/mensaje/entrarCliente?idCliente="+ mensaje.getConversacionEmisorId() + "&idAsistente="+ mensaje.getConversacionReceptorId() + "&idConversacion=" + mensaje.getConversacionByConversacionIdconversacion().getIdconversacion();
+
+        boolean clienteEsEmisor=false;
+        int i = 0;
+
+        while (i < clientes.size() && clienteEsEmisor==false){
+            if(clientes.get(i)==mensaje.getConversacionEmisorId()) {
+                clienteEsEmisor=true;
+            }
+            i++;
+        }
+
+        if(clienteEsEmisor==true){
+            return "redirect:/mensaje/entrarCliente?idCliente="+ mensaje.getConversacionEmisorId() + "&idAsistente="+ mensaje.getConversacionReceptorId() + "&idConversacion=" + mensaje.getConversacionByConversacionIdconversacion().getIdconversacion();
+        }else{
+            return "redirect:/mensaje/entrarAsistente?idCliente="+ mensaje.getConversacionReceptorId() + "&idAsistente="+ mensaje.getConversacionEmisorId() + "&idConversacion=" + mensaje.getConversacionByConversacionIdconversacion().getIdconversacion();
+        }
     }
 
 

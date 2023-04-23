@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
+
 @Controller
 public class LoginController {
     @Autowired
@@ -28,8 +30,18 @@ public class LoginController {
             model.addAttribute("error","Credenciales incorrectas");
             urlTo="login";
         }else{
-            int rol = this.rolRepository.getById(persona.getId()).getId();
-            if(rol == 2){
+
+            List<Integer> asistentes = this.rolRepository.getAsistentes();
+            int i = 0;
+            boolean esAsistente=false;
+            while(i<asistentes.size() && esAsistente==false){
+                if(persona.getId()==asistentes.get(i)){
+                    esAsistente=true;
+                }
+                i++;
+            }
+
+            if(esAsistente==true){
                 session.setAttribute("persona",persona);
                 urlTo = "redirect:/asistente/";
             }else {

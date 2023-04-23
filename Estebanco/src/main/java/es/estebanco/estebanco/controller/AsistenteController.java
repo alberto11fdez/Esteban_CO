@@ -38,7 +38,7 @@ public class AsistenteController {
         return this.procesarFiltrado(filtro, model, session);
     }
 
-    protected String procesarFiltrado (FiltroAsistente filtro, Model model, HttpSession session) {
+    protected String procesarFiltrado ( FiltroAsistente filtro, Model model, HttpSession session) {
         List<ConversacionEntity> lista;
         String urlto = "asistente";
 
