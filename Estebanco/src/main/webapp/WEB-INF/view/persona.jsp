@@ -104,13 +104,13 @@
         <th> <%=conversacion.getFechaFin()%></th>
         <th> <%=conversacion.getPersonaByPersonaId().getId()%></th>
         <th> <%=conversacion.getPersonaByAsistenteId().getId()%></th>
-        <th><a href="/asistente/entrar?id=<%= conversacion.getPersonaByPersonaId() %>"> Entrar en conversación</a></th>
+        <th><a href="/mensaje/entrar?id=<%= conversacion.getPersonaByPersonaId() %>"> Entrar en conversación</a></th>
 
     </tr>
     <%
         }
     %>
 </table border="1">
-<button>Crear conversación</button>
+<button><a href="/asistente/crearConversacion?idCliente=<%=persona.getId()%>">Crear conversación</a></button>
 </body>
 </html>

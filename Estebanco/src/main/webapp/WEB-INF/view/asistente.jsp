@@ -1,3 +1,4 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.estebanco.estebanco.entity.ConversacionEntity" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.estebanco.estebanco.entity.MensajeEntity" %><%--
@@ -25,12 +26,16 @@
 
 <form:form action="/asistente/filtrar" method="post" modelAttribute="filtro">
     Buscar por: <br/>
-    Contiene: <form:input path="idConver"/>
-    Mensaje:
-    <form:select multiple="true" path="mensajesByIdconversacion"  size="6" >
-        <form:option value="" label="------" />
-        <form:options items="${mensajes}" itemLabel="mensajes" itemValue="mensajes" />
-    </form:select>
+
+    Cliente ID: <form:select path="idCliente">
+            <form:option value="-1" label=""></form:option>
+            <form:options items="${idClients}"></form:options>
+        </form:select>
+
+    Estado: <form:select path="estado">
+            <form:option value="-1" label=""></form:option>
+            <form:options items="${estadoConver}"></form:options>
+        </form:select>
     <button>Filtrar</button>
 </form:form>
 
@@ -54,7 +59,7 @@
         <th> <%=conversacion.getFechaFin()%></th>
         <th> <%=conversacion.getPersonaByPersonaId().getId()%></th>
         <th> <%=conversacion.getPersonaByAsistenteId().getId()%></th>
-        <th><a href="/asistente/entrar?id=<%= conversacion.getPersonaByPersonaId() %>"> Entrar en conversación</a></th>
+        <th><a href="/mensaje/entrar?id=<%= conversacion.getPersonaByPersonaId() %>"> Entrar en conversación</a></th>
     </tr>
     <%
         }
