@@ -45,6 +45,8 @@ public class PersonaEntity {
     private String estado;
     @OneToMany(mappedBy = "personaByPersonaId")
     private List<ConversacionEntity> conversacionsById;
+    @OneToMany(mappedBy = "personaByPersonaId")
+    private List<OperacionEntity> operacionesById;
     @OneToMany(mappedBy = "personaByAsistenteId")
     private List<ConversacionEntity> conversacionsById_0;
     @OneToMany(mappedBy = "personaByPersonaId")
@@ -175,6 +177,12 @@ public class PersonaEntity {
         this.rolsById = rolsById;
     }
 
+    public List<OperacionEntity> getOperacionesByIdById() {
+        return operacionesById;
+    }
 
+    public void setOperacionesById(List<OperacionEntity> operacionesById) {
+        this.operacionesById = operacionesById;
+    }
 }
 

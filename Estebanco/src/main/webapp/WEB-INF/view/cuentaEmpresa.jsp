@@ -32,7 +32,13 @@
     <li>Estado: <%=cuentaEmpresa.getEstado()%></li>
     <li>Fecha de Apertura: <%=cuentaEmpresa.getFechaApertura()%></li>
 </ol>
+
 <h1>Operaciones:</h1>
+<form:form method="post" action="/cuentaEmpresa/filtroOperacionSocio" modelAttribute="filtroOperacionSocio">
+    <form:select path="idSocio" items="${socios}" itemValue="id" itemLabel="dni"></form:select>
+    <form:button>Buscar sus Operaciones</form:button>
+</form:form>
+
 <table border="1">
 <%
     for(OperacionEntity operacion: operaciones){

@@ -2,6 +2,7 @@ package es.estebanco.estebanco.controller;
 import es.estebanco.estebanco.dao.*;
 import es.estebanco.estebanco.entity.*;
 import es.estebanco.estebanco.ui.FiltroOperacionEmpresa;
+import es.estebanco.estebanco.ui.FiltroOperacionSocio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -70,6 +71,8 @@ public class EmpresaControlador {
         operacion.setCuentaByCuentaId(cuentaEmpresa);
         operacion.setPersonaByPersonaId(persona);
         model.addAttribute("operacion",operacion);
+
+        model.addAttribute("filtroOperacionSocio",new FiltroOperacionSocio());
 
         return "cuentaEmpresa";
     }
@@ -230,5 +233,38 @@ public class EmpresaControlador {
         operacion.setFechaOperacion(now);
         operacion.setPersonaByPersonaId(persona);
         this.operacionRepository.save(operacion);
+    }
+
+    @PostMapping("/filtroOperacionSocio")
+    public String filtroOperacionSocio(@ModelAttribute("filtroOperacionSocio") FiltroOperacionSocio filtroOperacionSocio,Model model){
+
+        model.addAttribute("cuentaEmpresa",this.cuentaEmpresa);
+
+        model.addAttribute("persona",this.persona);
+
+        PersonaEntity socioFiltro= personaRepository.findById(filtroOperacionSocio.getIdSocio()).orElse(null);
+
+        List<OperacionEntity> operaciones = operacionRepository.getOperacionesSocio(socioFiltro,cuentaEmpresa);
+
+        model.addAttribute("operaciones",operaciones);
+
+        List<PersonaEntity> socios = personaRepository.obtenerSocioEmpresa(cuentaEmpresa);
+        model.addAttribute("socios",socios);
+
+        model.addAttribute("rolrepository",rolRepository);
+
+        model.addAttribute("tipo_operaciones",tipoOperacionEntityRepository.findAll());
+
+        FiltroOperacionEmpresa filtro=new FiltroOperacionEmpresa();
+        model.addAttribute("filtro",filtro);
+
+        OperacionEntity operacion=new OperacionEntity();
+        operacion.setCuentaByCuentaId(cuentaEmpresa);
+        operacion.setPersonaByPersonaId(persona);
+        model.addAttribute("operacion",operacion);
+
+        model.addAttribute("filtroOperacionSocio",new FiltroOperacionSocio());
+
+        return "cuentaEmpresa";
     }
 }
