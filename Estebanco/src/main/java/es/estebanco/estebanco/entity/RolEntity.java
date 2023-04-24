@@ -1,5 +1,7 @@
 package es.estebanco.estebanco.entity;
 
+import es.estebanco.estebanco.dto.RolEntityDto;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -72,5 +74,15 @@ public class RolEntity {
 
     public void setCuentaByCuentaId(CuentaEntity cuentaByCuentaId) {
         this.cuentaByCuentaId = cuentaByCuentaId;
+    }
+
+    public RolEntityDto toDTO(){
+        RolEntityDto dto = new RolEntityDto();
+        dto.setRol(this.rol);
+        dto.setId(id);
+        dto.setBloqueado_empresa(this.bloqueado_empresa);
+        dto.setPersonaByPersonaId(this.personaByPersonaId.toDTO());
+        dto.setCuentaByCuentaId(this.cuentaByCuentaId.toDTO());
+        return dto;
     }
 }

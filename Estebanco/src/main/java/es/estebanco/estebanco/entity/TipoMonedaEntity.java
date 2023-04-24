@@ -1,5 +1,7 @@
 package es.estebanco.estebanco.entity;
 
+import es.estebanco.estebanco.dto.TipoMonedaEntityDto;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -41,5 +43,12 @@ public class TipoMonedaEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id, moneda);
+    }
+
+    public TipoMonedaEntityDto toDTO(){
+        TipoMonedaEntityDto dto = new TipoMonedaEntityDto();
+        dto.setId(this.id);
+        dto.setMoneda(this.moneda);
+        return dto;
     }
 }

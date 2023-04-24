@@ -1,5 +1,6 @@
 package es.estebanco.estebanco.entity;
 
+import es.estebanco.estebanco.dto.PersonaEntityDto;
 import org.springframework.context.annotation.Bean;
 
 import javax.persistence.*;
@@ -183,6 +184,22 @@ public class PersonaEntity {
 
     public void setOperacionesById(List<OperacionEntity> operacionesById) {
         this.operacionesById = operacionesById;
+    }
+
+    public PersonaEntityDto toDTO(){
+        PersonaEntityDto dto = new PersonaEntityDto();
+        dto.setId(this.id);
+        dto.setDni(this.dni);
+        dto.setNombre(this.nombre);
+        dto.setApellido1(this.apellido1);
+        dto.setApellido2(this.apellido2);
+        dto.setCorreo(this.correo);
+        dto.setDireccion(this.direccion);
+        dto.setTelefono(this.telefono);
+        dto.setUsuario(this.usuario);
+        dto.setContraseña(this.contraseña);
+        dto.setEstado(this.estado);
+        return dto;
     }
 }
 
