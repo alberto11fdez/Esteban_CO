@@ -28,7 +28,7 @@ public class CrearCuentaController {
     public String crearCuenta(@ModelAttribute("rolCuentaNueva") RolEntity rol){
 
         CuentaEntity cuenta=new CuentaEntity();
-        cuenta.setEstado("en Espera");
+        cuenta.setEstado("espera_confirmacion");
         cuentaRepository.save(cuenta);
         rol.setCuentaByCuentaId(cuenta);
 
@@ -37,7 +37,7 @@ public class CrearCuentaController {
         rolRepository.save(rol);
 
         if(rol.getRol().equals("empresa")){
-            return "redirect:/crearSocio?idCuenta="+cuenta.getId();
+            return "redirect:/cuentaEmpresa/crearSocio?idCuenta="+cuenta.getId();
         }else{
             return "redirect:/persona/?id="+rol.getPersonaByPersonaId().getId();
         }

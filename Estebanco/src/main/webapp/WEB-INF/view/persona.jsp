@@ -70,10 +70,10 @@
         <%}%>
         <%RolEntity rol= rolRepository.obtenerRol_Persona_en_Empresa(persona.getId(), cuenta.getId());%>
        <!--Si la cuenta esta activada y no es socio -->
-        <% if(cuenta.getEstado().equals("Activado") && (rol.getRol().equals("normal") || rol.getRol().equals("empresa")) ){ %>
+        <% if(cuenta.getEstado().equals("bien") && (rol.getRol().equals("normal") || rol.getRol().equals("empresa")) ){ %>
             <td><a href="/persona/entrarEnCuenta?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Entrar</a></td>
         <!--Si la cuenta esta activada y es un socio NO bloqueado -->
-        <%}else if(cuenta.getEstado().equals("Activado") && rol.getRol().equals("socio") && rol.getBloqueado_Empresa()==0){%>
+        <%}else if(cuenta.getEstado().equals("bien") && rol.getRol().equals("socio") && rol.getBloqueado_Empresa()==0){%>
             <td><a href="/persona/entrarEnCuenta?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Entrar</a></td>
         <%}else{%>
             <td>No se le permite entrar</td>
