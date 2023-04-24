@@ -7,6 +7,11 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+    Integer soyCliente = (Integer) request.getAttribute("soyCliente");
+%>
+
 <html>
 <head>
     <title>Conversación</title>
@@ -20,6 +25,7 @@
     <form:hidden path="conversacionEmisorId"></form:hidden>
     <form:hidden path="conversacionReceptorId"></form:hidden>
     <form:hidden path="conversacionByConversacionIdconversacion"></form:hidden>
+    <input type="hidden" name="soyCliente" value="<%=soyCliente%>">
 
     -<form:input path="texto" size="100" maxlength="100"></form:input>
 

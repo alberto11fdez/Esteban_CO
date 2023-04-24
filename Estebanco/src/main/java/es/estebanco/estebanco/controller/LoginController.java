@@ -2,6 +2,7 @@ package es.estebanco.estebanco.controller;
 import es.estebanco.estebanco.dao.PersonaRepository;
 import es.estebanco.estebanco.dao.RolRepository;
 import es.estebanco.estebanco.entity.PersonaEntity;
+import es.estebanco.estebanco.entity.RolEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,17 +31,20 @@ public class LoginController {
             model.addAttribute("error","Credenciales incorrectas");
             urlTo="login";
         }else{
-            String rol = this.rolRepository.getRolByIdString(persona.getId());
 
-
-            if(rol.equalsIgnoreCase("asistente")){
-                session.setAttribute("persona",persona);
-                urlTo = "redirect:/asistente/";
-            }else if (rol.equalsIgnoreCase("gestor")){
-                    session.setAttribute("gestor",persona);
-                    urlTo = "redirect:/gestor/";
-            }else {
+            List<RolEntity> roles = this.rolRepository.getRolByIdString(persona.getId());
+            if(roles.isEmpty()){
                 urlTo = "redirect:/persona/?id="+persona.getId();
+            }else {
+                if (roles.get(0).getRol().equals("asistente")) {
+                    session.setAttribute("persona", persona);
+                    urlTo = "redirect:/asistente/";
+                } else if (roles.get(0).getRol().equals("gestor")) {
+                    session.setAttribute("gestor", persona);
+                    urlTo = "redirect:/gestor/";
+                }else {
+                    urlTo = "redirect:/persona/?id="+persona.getId();
+                }
             }
 
         }
