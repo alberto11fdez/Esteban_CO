@@ -1,5 +1,7 @@
 package es.estebanco.estebanco.entity;
 
+import es.estebanco.estebanco.dto.MensajeEntityDto;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -86,5 +88,16 @@ public class MensajeEntity {
 
     public void setConversacionByConversacionIdconversacion(ConversacionEntity conversacionByConversacionIdconversacion) {
         this.conversacionByConversacionIdconversacion = conversacionByConversacionIdconversacion;
+    }
+
+    public MensajeEntityDto toDTO(){
+        MensajeEntityDto dto = new MensajeEntityDto();
+        dto.setIdmensaje(this.idmensaje);
+        dto.setFechaEnvio(this.fechaEnvio);
+        dto.setTexto(this.texto);
+        dto.setConversacionEmisorId(this.conversacionEmisorId);
+        dto.setConversacionReceptorId(this.conversacionReceptorId);
+        dto.setConversacionByConversacionIdconversacion(this.conversacionByConversacionIdconversacion.toDTO());
+        return dto;
     }
 }
