@@ -8,6 +8,11 @@
     PersonaEntity persona = (PersonaEntity) request.getAttribute("personaRevisar");
 
 %>
+<html>
+<head>
+    <title> Revisar Estado Persona</title>
+</head>
+<body>
 
 <form:form method="post" modelAttribute="personaRevisar" action="revisar">
     <form:hidden path="id"></form:hidden>
@@ -23,7 +28,7 @@
     <form:checkbox path="estado" value="bien" label="aceptar"></form:checkbox>
     <form:checkbox path="estado" value="bloqueado" label="rechazar"></form:checkbox>
 
-    <Button>Revisar Cuenta</Button>
+    <Button>Revisar Persona</Button>
 </form:form>
 
 <h1> Datos de la persona </h1>
@@ -37,3 +42,5 @@
     <li><%=persona.getTelefono()%></li>
     <li><%=persona.getDireccion()%></li>
 </ul>
+</body>
+</html>

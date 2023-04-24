@@ -12,7 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Random;
+
 import es.estebanco.estebanco.entity.PersonaEntity;
 
 import javax.servlet.http.HttpSession;
@@ -98,7 +101,7 @@ public class GestorController {
         if(gestor == null){
             return "redirect:/";
         } else {
-            List <PersonaEntity> personaSolicitante = this.personaRepository.obtenerPersonasPorEstado("espera_confirmacion");
+            List <PersonaEntity> personaSolicitante = this.personaRepository.obtenerPersonasPorEstado("esperandoConfirmacion");
             model.addAttribute("personaSolicitante", personaSolicitante);
         }
 
@@ -138,6 +141,40 @@ public class GestorController {
     public String doRevisar(@ModelAttribute("personaRevisar")PersonaEntity persona){
         this.personaRepository.save(persona);
         return "redirect:/gestor/solicitudes";
+    }
+    @GetMapping("/revisarCuenta")
+    public String doRevisarCuenta(@RequestParam("idCuenta") Integer idCuenta, Model model, HttpSession session){
+        String urlTo ="gestorRevisarCuenta";
+        PersonaEntity gestor = (PersonaEntity) session.getAttribute("gestor");
+        if(gestor == null){
+            return "redirect:/";
+        }
+        CuentaEntity cuenta = this.cuentaRepository.getById(idCuenta);
+        model.addAttribute("cuentaRevisar", cuenta);
+        return urlTo;
+    }
+
+    @PostMapping("/revisarCuenta")
+    public String doRevisarCuentaPost(@ModelAttribute("cuentaRevisar") CuentaEntity cuenta, Model model, HttpSession session){
+        String urlTo ="redirect:/gestor/";
+        Random iban = new Random();
+        String card = "ES";
+        for(int i = 0; i < 14; i++){
+            int n = iban.nextInt(10) + 0;
+            card += Integer.toString(n);
+        }
+        if(cuenta.getEstado().equalsIgnoreCase("bien")){
+            cuenta.setEstado("bien");
+            cuenta.setIban(card);
+            cuenta.setFechaApertura(new Timestamp(System.currentTimeMillis()));
+            this.cuentaRepository.save(cuenta);
+        } else {
+            cuenta.setFechaApertura(new Timestamp(System.currentTimeMillis()));
+            cuenta.setEstado("bloqueado");
+            this.cuentaRepository.save(cuenta);
+        }
+
+        return urlTo;
     }
 
 
