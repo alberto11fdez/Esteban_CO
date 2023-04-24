@@ -30,6 +30,7 @@ public class LoginController {
             model.addAttribute("error","Credenciales incorrectas");
             urlTo="login";
         }else{
+            int rol = this.rolRepository.getById(persona.getId()).getId();
 
             List<Integer> asistentes = this.rolRepository.getAsistentes();
             int i = 0;
@@ -44,6 +45,9 @@ public class LoginController {
             if(esAsistente==true){
                 session.setAttribute("persona",persona);
                 urlTo = "redirect:/asistente/";
+            }else if (rol == 1) {
+                    session.setAttribute("gestor",persona);
+                    urlTo = "redirect:/gestor/";
             }else {
                 urlTo = "redirect:/persona/?id="+persona.getId();
             }

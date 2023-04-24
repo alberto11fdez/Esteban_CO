@@ -18,5 +18,16 @@ public interface CuentaRepository extends JpaRepository<CuentaEntity, Integer> {
 
     @Query("select c from CuentaEntity c where c.iban = :destino")
     public CuentaEntity cuentaDestinoTransferencia (@Param("destino") String destino);
+    @Query("select c from CuentaEntity c where c.iban = :iban")
+    public List<CuentaEntity> cuentaPorIban(@Param("iban") String iban);
+
+    @Query("select c from CuentaEntity c where c.moneda in :divisa")
+    public List<CuentaEntity> cuentaPorDivisa(@Param("divisa") List<String> divisa);
+
+    @Query("select c from CuentaEntity c where (c.iban like CONCAT('%', :texto, '%') ) and c.moneda in :divisa")
+    public List<CuentaEntity> buscarPorIbanYDivisa(@Param("texto") String texto, @Param("divisa") List<String> divisa);
+
+    @Query("select moneda from CuentaEntity")
+    public List<String> monedas();
 
 }
