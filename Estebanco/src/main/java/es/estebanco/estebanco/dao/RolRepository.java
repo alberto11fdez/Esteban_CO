@@ -22,7 +22,5 @@ public interface RolRepository extends JpaRepository<RolEntity, Integer>{
     @Query("select c.rol from RolEntity c where c.personaByPersonaId.id =:idPerson")
     public String getRolByIdString(@Param("idPerson")Integer idPerson);
 
-    @Query("select c.personaByPersonaId.id from RolEntity c where c.rol='asistente'")
-    public List<Integer> getAsistentes();
 
 }
