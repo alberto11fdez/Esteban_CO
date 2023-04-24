@@ -39,7 +39,7 @@ public class LoginController {
             else if (rol.equals("gestor")) {
                     session.setAttribute("gestor",persona);
                     urlTo = "redirect:/gestor/";
-            }else {
+            }else{
                 urlTo = "redirect:/persona/?id="+persona.getId();
             }
 

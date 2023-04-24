@@ -10,6 +10,7 @@
     PersonaEntity cliente = (PersonaEntity) request.getAttribute("cliente");
     PersonaEntity asistente = (PersonaEntity) request.getAttribute("asistente");
     Integer idConversacion = (Integer) request.getAttribute("idConversacion");
+    Integer soyCliente = (Integer) request.getAttribute("soyCliente");
 %>
 <html>
 <head>
@@ -39,7 +40,7 @@
     }
 %>
 
-<button><a href="/mensaje/crearMensajeClientes?idCliente=<%=cliente.getId()%>&idAsistente=<%=asistente.getId()%>&idConversacion=<%=idConversacion%>">Crear Mensaje</a></button></br>
+<button><a href="/mensaje/crearMensaje?idCliente=<%=cliente.getId()%>&idAsistente=<%=asistente.getId()%>&idConversacion=<%=idConversacion%>&soyCliente=<%=soyCliente%>">Crear Mensaje</a></button></br>
 </br>
 <button><a href="/persona/?id=<%=cliente.getId()%>">Home</a></button>
 </body>

@@ -113,7 +113,7 @@
         <th> <%=conversacion.getFechaFin()%></th>
         <th> <%=conversacion.getPersonaByPersonaId().getId()%></th>
         <th> <%=conversacion.getPersonaByAsistenteId().getId()%></th>
-        <th><a href="/mensaje/entrarCliente?idCliente=<%=conversacion.getPersonaByPersonaId().getId()%>&idAsistente=<%=conversacion.getPersonaByAsistenteId().getId()%>&idConversacion=<%=conversacion.getIdconversacion()%>"> Entrar en conversación</a></th>
+        <th><a href="/mensaje/entrar?idCliente=<%=conversacion.getPersonaByPersonaId().getId()%>&idAsistente=<%=conversacion.getPersonaByAsistenteId().getId()%>&idConversacion=<%=conversacion.getIdconversacion()%>&soyCliente=<%=1%>"> Entrar en conversación</a></th>
         <th><a href="/asistente/cerrar?id=<%=conversacion.getIdconversacion()%>">Cerrar conversación</a></th>
 
     </tr>
