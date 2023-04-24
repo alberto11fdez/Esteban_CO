@@ -100,7 +100,7 @@ public class EmpresaControlador {
     @PostMapping("/socio/guardar")
     public String doGuardar (@ModelAttribute("socio") PersonaEntity socio) {
         //crea al socio
-        socio.setEstado("pendiente");
+        socio.setEstado("esperandoConfirmacion");
         this.personaRepository.save(socio);
         //Unimos la tabla persona y cuentaEmpresa a traves de la tabla rol
         RolEntity rol = new RolEntity();

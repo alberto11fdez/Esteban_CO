@@ -22,13 +22,13 @@
 <body>
 <h1>Cuentas del cliente: </h1>
 
-<table>
+<table border="1">
   <tr>
-    <td>IBAN</td>
-    <td>SALDO</td>
-    <td>MONEDA</td>
-    <td>ESTADO</td>
-    <td>FECHA DE APERTURA</td>
+    <th>IBAN</th>
+    <th>SALDO</th>
+    <th>MONEDA</th>
+    <th>ESTADO</th>
+    <th>FECHA DE APERTURA</th>
   </tr>
 
   <%

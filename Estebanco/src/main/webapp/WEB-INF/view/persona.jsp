@@ -33,6 +33,10 @@
     <li>Contraseña: <%=persona.getContraseña()%></li>
     <li>Estado de la cuenta: <%=persona.getEstado()%></li>
 </ol>
+
+<!--Dependiendo de si la cunta esta activada o no-->
+<% if(persona.getEstado().equals("bien")){%>
+
 <a href="/persona/editar?id=<%= persona.getId() %>"> Editar</a>
 <br/>
 <h2>Cuentas:</h2>
@@ -70,10 +74,10 @@
         <%}%>
         <%RolEntity rol= rolRepository.obtenerRol_Persona_en_Empresa(persona.getId(), cuenta.getId());%>
        <!--Si la cuenta esta activada y no es socio -->
-        <% if(cuenta.getEstado().equals("Activado") && (rol.getRol().equals("normal") || rol.getRol().equals("empresa")) ){ %>
+        <% if(cuenta.getEstado().equals("bien") && (rol.getRol().equals("normal") || rol.getRol().equals("empresa")) ){ %>
             <td><a href="/persona/entrarEnCuenta?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Entrar</a></td>
         <!--Si la cuenta esta activada y es un socio NO bloqueado -->
-        <%}else if(cuenta.getEstado().equals("Activado") && rol.getRol().equals("socio") && rol.getBloqueado_Empresa()==0){%>
+        <%}else if(cuenta.getEstado().equals("bien") && rol.getRol().equals("socio") && rol.getBloqueado_Empresa()==0){%>
             <td><a href="/persona/entrarEnCuenta?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Entrar</a></td>
         <%}else{%>
             <td>No se le permite entrar</td>
@@ -125,6 +129,9 @@
 
 <button><a href="/asistente/crearConversacion?idCliente=<%=persona.getId()%>">Crear conversación</a></button></br></br>
 <button><a href="/gestor/"> Entrar como gestor</a></button>
+<%}else{%>
+    <h1>Su cuenta sera activada mas adelante, espere por favor</h1>
+<%}%>
 <button><a href="/logout">Log out</a></button>
 
 
