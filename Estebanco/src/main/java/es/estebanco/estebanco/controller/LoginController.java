@@ -30,22 +30,13 @@ public class LoginController {
             model.addAttribute("error","Credenciales incorrectas");
             urlTo="login";
         }else{
-            int rol = this.rolRepository.getById(persona.getId()).getId();
+            String rol = this.rolRepository.getRolByIdString(persona.getId());
 
-            List<Integer> asistentes = this.rolRepository.getAsistentes();
-            int i = 0;
-            boolean esAsistente=false;
-            while(i<asistentes.size() && esAsistente==false){
-                if(persona.getId()==asistentes.get(i)){
-                    esAsistente=true;
-                }
-                i++;
-            }
 
-            if(esAsistente==true){
+            if(rol.equalsIgnoreCase("asistente")){
                 session.setAttribute("persona",persona);
                 urlTo = "redirect:/asistente/";
-            }else if (rol == 1) {
+            }else if (rol.equalsIgnoreCase("gestor")){
                     session.setAttribute("gestor",persona);
                     urlTo = "redirect:/gestor/";
             }else {

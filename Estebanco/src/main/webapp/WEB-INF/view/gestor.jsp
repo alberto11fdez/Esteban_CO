@@ -46,6 +46,16 @@
         <td><%= cuenta.getEstado()%></td>
         <td><%= cuenta.getFechaApertura()%></td>
         <td><%= cuenta.getId()%></td>
+        <td><a href="/gestor/historico?idCuenta=<%=cuenta.getId()%>">Historial operaciones</a></td>
+        <%
+            if (cuenta.getIban() == null){
+
+
+        %>
+        <td><a href="/gestor/revisarCuenta?idCuenta=<%=cuenta.getId()%>">Revisar cuenta</a></td>
+        <%
+            }
+        %>
     </tr>
 <%
     }
@@ -54,7 +64,7 @@
 
 
     <a href="/gestor/gestorPersonas">Vista de los clientes</a>
-    <a href="/gestor/solicitudes">Vista de las solicitudes</a>
+
 </table>
 </body>
 </html>

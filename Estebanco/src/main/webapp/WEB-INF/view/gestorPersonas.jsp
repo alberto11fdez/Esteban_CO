@@ -43,6 +43,10 @@
         }
     %>
     <a href="/gestor/"> Volver </a>
+
 </table>
+
+<a href="/gestor/solicitudes">Vista de las solicitudes</a>
+
 </body>
 </html>
