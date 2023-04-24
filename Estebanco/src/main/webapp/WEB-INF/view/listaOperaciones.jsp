@@ -34,12 +34,13 @@
 
 <table border="1">
     <tr>
-        <td>ID</td>
-        <td>Fecha</td>
-        <td>Tipo</td>
-        <td>Cuenta origen</td>
-        <td>Cuenta destino transferencia</td>
-        <td>Moneda</td>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Tipo</th>
+        <th>Cuenta origen</th>
+        <th>Cantidad</th>
+        <th>Moneda</th>
+        <th>Cuenta destino transferencia</th>
     </tr>
     <%
         for (OperacionEntity operacion:listaOperaciones){
@@ -49,20 +50,21 @@
         <td><%=operacion.getFechaOperacion()%></td>
         <td><%=operacion.getTipo()%></td>
         <td><%=operacion.getCuentaByCuentaId().getIban()%></td>
+        <td><%=operacion.getCantidad()%></td>
+        <td><%=operacion.getMoneda()%></td>
         <td>
             <%
                 if(operacion.getIbanCuentaDestinoOrigen()==null){
             %>
             ---
             <%
-                }else{
+            }else{
             %>
             <%=operacion.getIbanCuentaDestinoOrigen()%>
             <%
                 }
             %>
         </td>
-        <td><%=operacion.getMoneda()%></td>
     </tr>
     <%
         }
