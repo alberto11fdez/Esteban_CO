@@ -33,6 +33,10 @@
     <li>Contraseña: <%=persona.getContraseña()%></li>
     <li>Estado de la cuenta: <%=persona.getEstado()%></li>
 </ol>
+
+<!--Dependiendo de si la cunta esta activada o no-->
+<% if(persona.getEstado().equals("bien")){%>
+
 <a href="/persona/editar?id=<%= persona.getId() %>"> Editar</a>
 <br/>
 <h2>Cuentas:</h2>
@@ -125,6 +129,9 @@
 
 <button><a href="/asistente/crearConversacion?idCliente=<%=persona.getId()%>">Crear conversación</a></button></br></br>
 <button><a href="/gestor/"> Entrar como gestor</a></button>
+<%}else{%>
+    <h1>Su cuenta sera activada mas adelante, espere por favor</h1>
+<%}%>
 <button><a href="/logout">Log out</a></button>
 
 
