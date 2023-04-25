@@ -1,5 +1,7 @@
 package es.estebanco.estebanco.entity;
 
+import es.estebanco.estebanco.dto.CuentaEntityDto;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
@@ -107,5 +109,16 @@ public class CuentaEntity {
 
     public void setRolsById(List<RolEntity> rolsById) {
         this.rolsById = rolsById;
+    }
+
+    public CuentaEntityDto toDTO(){
+        CuentaEntityDto dto = new CuentaEntityDto();
+        dto.setIban(this.iban);
+        dto.setSaldo(this.saldo);
+        dto.setMoneda(this.moneda);
+        dto.setEstado(this.estado);
+        dto.setFechaApertura(this.fechaApertura);
+        dto.setId(this.id);
+        return dto;
     }
 }

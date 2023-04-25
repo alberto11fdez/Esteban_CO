@@ -1,5 +1,7 @@
 package es.estebanco.estebanco.entity;
 
+import es.estebanco.estebanco.dto.OperacionEntityDto;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -110,6 +112,19 @@ public class OperacionEntity {
 
     public void setPersonaByPersonaId(PersonaEntity personaByPersonaId) {
         this.personaByPersonaId = personaByPersonaId;
+    }
+
+    public OperacionEntityDto toDTO(){
+        OperacionEntityDto dto = new OperacionEntityDto();
+        dto.setIdOperacion(this.idOperacion);
+        dto.setFechaOperacion(this.fechaOperacion);
+        dto.setTipo(this.tipo);
+        dto.setCantidad(this.cantidad);
+        dto.setMoneda(this.moneda);
+        dto.setIbanCuentaDestinoOrigen(this.ibanCuentaDestinoOrigen);
+        dto.setCuentaByCuentaId(this.cuentaByCuentaId.toDTO());
+        dto.setPersonaByPersonaId(this.personaByPersonaId.toDTO());
+        return dto;
     }
 
 }

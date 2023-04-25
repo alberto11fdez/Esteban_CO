@@ -28,12 +28,12 @@
         for(MensajeEntity m : listaMensajes){
             if(m.getConversacionEmisorId()==cliente.getId()){
 %>
-        <p><%=cliente.getNombre()%>: <%=m.getTexto()%></p>
+<p><%=cliente.getNombre()%>: <%=m.getTexto()%> <a>Envio:(<%=m.getFechaEnvio()%>)</a></p>
 <%
             }else{
 
 %>
-        <p align="center"><%=asistente.getNombre()%>: <%=m.getTexto()%></p>
+        <p align="center"><%=asistente.getNombre()%>: <%=m.getTexto()%>  <a>Envio:(<%=m.getFechaEnvio()%>)</a></p>
 <%
             }
         }

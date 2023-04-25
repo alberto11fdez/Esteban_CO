@@ -1,5 +1,7 @@
 package es.estebanco.estebanco.entity;
 
+import es.estebanco.estebanco.dto.TipoOperacionEntityDto;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -41,5 +43,12 @@ public class TipoOperacionEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id, nombre);
+    }
+
+    public TipoOperacionEntityDto toDTO(){
+        TipoOperacionEntityDto dto = new TipoOperacionEntityDto();
+        dto.setId(this.id);
+        dto.setNombre(this.nombre);
+        return dto;
     }
 }

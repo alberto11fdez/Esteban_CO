@@ -47,19 +47,19 @@ public class AsistenteController {
             urlto = "redirect:/";
         } else {
             if (filtro == null || (filtro.getIdCliente()==(-1) && filtro.getEstado()==(-1))) {
-                lista = this.asistenteRepository.conversacionPorPersona(asistente);
+                lista = this.asistenteRepository.conversacionPorPersona(asistente.getId());
                 //lista = this.asistenteRepository.findAll();
                 filtro = new FiltroAsistente();
             }else if(filtro.getIdCliente()!=(-1) && filtro.getEstado()==(-1)){
-                lista = this.asistenteRepository.buscarPorIdCliente(filtro.getIdCliente());
+                lista = this.asistenteRepository.buscarPorIdCliente(filtro.getIdCliente(),asistente.getId());
             }else if(filtro.getEstado() == 1 && filtro.getIdCliente()==(-1)){
-                lista = this.asistenteRepository.conversacionesActivas();
+                lista = this.asistenteRepository.conversacionesActivas(asistente.getId());
             }else if(filtro.getEstado() == 0 && filtro.getIdCliente()==(-1)){
-                lista = this.asistenteRepository.conversacionesBloqueadas();
+                lista = this.asistenteRepository.conversacionesBloqueadas(asistente.getId());
             }else if(filtro.getEstado() == 1 && filtro.getIdCliente()!=(-1)){
-                lista = this.asistenteRepository.buscarPorIdClienteCuentaActiva(filtro.getIdCliente());
+                lista = this.asistenteRepository.buscarPorIdClienteCuentaActiva(filtro.getIdCliente(),asistente.getId());
             }else{
-                lista = this.asistenteRepository.buscarPorIdClienteCuentaBloqueada(filtro.getIdCliente());
+                lista = this.asistenteRepository.buscarPorIdClienteCuentaBloqueada(filtro.getIdCliente(),asistente.getId());
             }
 
 
