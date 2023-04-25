@@ -1,6 +1,8 @@
 <%@ page import="es.estebanco.estebanco.entity.CuentaEntity" %>
 <%@ page import="es.estebanco.estebanco.entity.PersonaEntity" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="es.estebanco.estebanco.dto.CuentaEntityDto" %>
+<%@ page import="es.estebanco.estebanco.dto.PersonaEntityDto" %><%--
   Created by IntelliJ IDEA.
   User: ferli
   Date: 29/03/2023
@@ -10,8 +12,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-  PersonaEntity persona = (PersonaEntity) request.getAttribute("persona");
-  List<CuentaEntity> cuentas = (List<CuentaEntity>) request.getAttribute("cuentas");
+  PersonaEntityDto persona = (PersonaEntityDto) request.getAttribute("persona");
+  List<CuentaEntityDto> cuentas = (List<CuentaEntityDto>) request.getAttribute("cuentas");
 
 %>
 
@@ -32,7 +34,7 @@
   </tr>
 
   <%
-    for(CuentaEntity cuenta:cuentas){
+    for(CuentaEntityDto cuenta:cuentas){
   %>
 
   <tr>

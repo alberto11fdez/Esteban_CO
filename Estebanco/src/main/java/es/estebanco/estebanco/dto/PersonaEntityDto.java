@@ -1,6 +1,11 @@
 package es.estebanco.estebanco.dto;
 
+import es.estebanco.estebanco.entity.ConversacionEntity;
+import es.estebanco.estebanco.entity.OperacionEntity;
+import es.estebanco.estebanco.entity.RolEntity;
+
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -18,6 +23,10 @@ public class PersonaEntityDto implements Serializable {
     private  String usuario;
     private  String contraseña;
     private  String estado;
+    private List<ConversacionEntity> conversacionsById;
+    private List<OperacionEntity> operacionesById;
+    private List<ConversacionEntity> conversacionsById_0;
+    private List<RolEntity> rolsById;
 
     public int getId() {
         return id;
@@ -105,6 +114,38 @@ public class PersonaEntityDto implements Serializable {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public List<ConversacionEntity> getConversacionsById() {
+        return conversacionsById;
+    }
+
+    public void setConversacionsById(List<ConversacionEntity> conversacionsById) {
+        this.conversacionsById = conversacionsById;
+    }
+
+    public List<OperacionEntity> getOperacionesById() {
+        return operacionesById;
+    }
+
+    public void setOperacionesById(List<OperacionEntity> operacionesById) {
+        this.operacionesById = operacionesById;
+    }
+
+    public List<ConversacionEntity> getConversacionsById_0() {
+        return conversacionsById_0;
+    }
+
+    public void setConversacionsById_0(List<ConversacionEntity> conversacionsById_0) {
+        this.conversacionsById_0 = conversacionsById_0;
+    }
+
+    public List<RolEntity> getRolsById() {
+        return rolsById;
+    }
+
+    public void setRolsById(List<RolEntity> rolsById) {
+        this.rolsById = rolsById;
     }
 
     @Override

@@ -1,6 +1,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="es.estebanco.estebanco.entity.CuentaEntity" %><%--
+<%@ page import="es.estebanco.estebanco.entity.CuentaEntity" %>
+<%@ page import="es.estebanco.estebanco.dto.CuentaEntityDto" %><%--
   Created by IntelliJ IDEA.
   User: ferli
   Date: 29/03/2023
@@ -10,7 +11,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-  CuentaEntity cuenta = (CuentaEntity) request.getAttribute("cuenta");
+  CuentaEntityDto cuenta = (CuentaEntityDto) request.getAttribute("cuenta");
 %>
 
 <html>

@@ -119,6 +119,8 @@ public class CuentaEntity {
         dto.setEstado(this.estado);
         dto.setFechaApertura(this.fechaApertura);
         dto.setId(this.id);
+        dto.setOperacionsById(this.operacionsById);
+        dto.setRolsById(this.rolsById);
         return dto;
     }
 }

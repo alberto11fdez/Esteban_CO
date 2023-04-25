@@ -34,12 +34,14 @@ public interface OperacionRepository extends JpaRepository<OperacionEntity, Inte
 
 
 
-    @Query("select o from OperacionEntity o join CuentaEntity c on o.cuentaByCuentaId=c join RolEntity r on c=r.cuentaByCuentaId and r.personaByPersonaId=:persona and o.tipo in :tipos")
-    public List<OperacionEntity> buscarPorTipoOperacion(@Param("persona") PersonaEntity persona,@Param("tipos") List<String> tipos);
-    @Query("select o from OperacionEntity o join CuentaEntity c on o.cuentaByCuentaId=c join RolEntity r on c=r.cuentaByCuentaId and r.personaByPersonaId=:persona and o.ibanCuentaDestinoOrigen like CONCAT('%', :texto, '%')")
-    public List<OperacionEntity> buscarPorIban(@Param("persona") PersonaEntity persona,@Param("texto") String texto);
-    @Query("select o from OperacionEntity o join CuentaEntity c on o.cuentaByCuentaId=c join RolEntity r on c=r.cuentaByCuentaId and r.personaByPersonaId=:persona and o.ibanCuentaDestinoOrigen like CONCAT('%', :texto, '%') and o.tipo in :tipos")
-    public List<OperacionEntity> buscarPorTipoOperacionEIban(@Param("persona") PersonaEntity persona,@Param("texto") String texto, @Param("tipos") List<String> tipos);
+    @Query("select o from OperacionEntity o join CuentaEntity c on o.cuentaByCuentaId=c  join RolEntity  r on r.cuentaByCuentaId=c and r.personaByPersonaId.id=:idPersona")
+    public List<OperacionEntity> buscarOperacionesPorPersona(@Param("idPersona") Integer idPersona);
+    @Query("select o from OperacionEntity o join CuentaEntity c on o.cuentaByCuentaId=c join RolEntity r on c=r.cuentaByCuentaId and r.personaByPersonaId.id=:idPersona and o.tipo in :tipos")
+    public List<OperacionEntity> buscarPorTipoOperacion(@Param("idPersona") Integer idPersona,@Param("tipos") List<String> tipos);
+    @Query("select o from OperacionEntity o join CuentaEntity c on o.cuentaByCuentaId=c join RolEntity r on c=r.cuentaByCuentaId and r.personaByPersonaId.id=:idPersona and o.ibanCuentaDestinoOrigen like CONCAT('%', :texto, '%')")
+    public List<OperacionEntity> buscarPorIban(@Param("idPersona") Integer idPersona,@Param("texto") String texto);
+    @Query("select o from OperacionEntity o join CuentaEntity c on o.cuentaByCuentaId=c join RolEntity r on c=r.cuentaByCuentaId and r.personaByPersonaId.id=:idPersona and o.ibanCuentaDestinoOrigen like CONCAT('%', :texto, '%') and o.tipo in :tipos")
+    public List<OperacionEntity> buscarPorTipoOperacionEIban(@Param("idPersona") Integer idPersona,@Param("texto") String texto, @Param("tipos") List<String> tipos);
 
 
     @Query("select  o from OperacionEntity o where o.personaByPersonaId = :socioFiltro and o.cuentaByCuentaId = :cuentaEmpresa ")

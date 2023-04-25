@@ -2,7 +2,9 @@ package es.estebanco.estebanco.controller;
 
 import es.estebanco.estebanco.dao.PersonaRepository;
 import es.estebanco.estebanco.dao.RolRepository;
+import es.estebanco.estebanco.dto.PersonaEntityDto;
 import es.estebanco.estebanco.entity.PersonaEntity;
+import es.estebanco.estebanco.service.LoginCajeroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +18,10 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/cajeroLogin")
 public class LoginCajeroController {
+
     @Autowired
-    protected PersonaRepository personaRepository;
-    @Autowired
-    protected RolRepository rolRepository;
+    protected LoginCajeroService loginCajeroService;
+
     @GetMapping("/")
     public String doLoginCajero(){return "loginCajero";}
     @PostMapping("/")
@@ -27,7 +29,7 @@ public class LoginCajeroController {
                                @RequestParam("clave") String contrasena,
                                Model model, HttpSession session){
         String urlTo = "redirect:/cajero/";
-        PersonaEntity persona = this.personaRepository.autenticar(user,contrasena);
+        PersonaEntityDto persona = this.loginCajeroService.doAutenticar(user,contrasena);
         if(persona==null){
             model.addAttribute("error","Credenciales incorrectas");
             urlTo="loginCajero";

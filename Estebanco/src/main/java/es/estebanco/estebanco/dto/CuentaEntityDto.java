@@ -1,7 +1,11 @@
 package es.estebanco.estebanco.dto;
 
+import es.estebanco.estebanco.entity.OperacionEntity;
+import es.estebanco.estebanco.entity.RolEntity;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -14,6 +18,8 @@ public class CuentaEntityDto implements Serializable {
     private  String estado;
     private  Timestamp fechaApertura;
     private  Integer id;
+    private List<OperacionEntity> operacionsById;
+    private List<RolEntity> rolsById;
 
 
     public String getIban() {
@@ -62,6 +68,22 @@ public class CuentaEntityDto implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public List<OperacionEntity> getOperacionsById() {
+        return operacionsById;
+    }
+
+    public void setOperacionsById(List<OperacionEntity> operacionsById) {
+        this.operacionsById = operacionsById;
+    }
+
+    public List<RolEntity> getRolsById() {
+        return rolsById;
+    }
+
+    public void setRolsById(List<RolEntity> rolsById) {
+        this.rolsById = rolsById;
     }
 
     @Override

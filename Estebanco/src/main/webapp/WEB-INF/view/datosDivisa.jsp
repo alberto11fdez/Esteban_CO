@@ -1,7 +1,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.estebanco.estebanco.entity.CuentaEntity" %>
 <%@ page import="java.util.List" %>
-<%@ page import="es.estebanco.estebanco.entity.TipoMonedaEntity" %><%--
+<%@ page import="es.estebanco.estebanco.entity.TipoMonedaEntity" %>
+<%@ page import="es.estebanco.estebanco.dto.CuentaEntityDto" %>
+<%@ page import="es.estebanco.estebanco.dto.TipoMonedaEntityDto" %><%--
   Created by IntelliJ IDEA.
   User: ferli
   Date: 30/03/2023
@@ -11,8 +13,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    CuentaEntity cuenta = (CuentaEntity) request.getAttribute("cuenta");
-    List<TipoMonedaEntity> monedas = (List<TipoMonedaEntity>) request.getAttribute("monedas");
+    CuentaEntityDto cuenta = (CuentaEntityDto) request.getAttribute("cuenta");
+    List<TipoMonedaEntityDto> monedas = (List<TipoMonedaEntityDto>) request.getAttribute("monedas");
 %>
 
 <html>

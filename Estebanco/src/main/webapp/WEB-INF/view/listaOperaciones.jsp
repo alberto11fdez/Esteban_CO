@@ -1,7 +1,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.estebanco.estebanco.entity.OperacionEntity" %>
 <%@ page import="java.util.List" %>
-<%@ page import="es.estebanco.estebanco.entity.TipoOperacionEntity" %><%--
+<%@ page import="es.estebanco.estebanco.entity.TipoOperacionEntity" %>
+<%@ page import="es.estebanco.estebanco.dto.OperacionEntityDto" %>
+<%@ page import="es.estebanco.estebanco.dto.TipoOperacionEntityDto" %><%--
   Created by IntelliJ IDEA.
   User: ferli
   Date: 29/03/2023
@@ -11,8 +13,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-  List<OperacionEntity> listaOperaciones = (List<OperacionEntity>) request.getAttribute("operaciones");
-  List<TipoOperacionEntity> tipos = (List<TipoOperacionEntity>) request.getAttribute("tipos");
+  List<OperacionEntityDto> listaOperaciones = (List<OperacionEntityDto>) request.getAttribute("operaciones");
+  List<TipoOperacionEntityDto> tipos = (List<TipoOperacionEntityDto>) request.getAttribute("tipos");
 %>
 
 <html>
@@ -22,7 +24,7 @@
 <body>
 
 <form:form action="/cajero/filtrar" method="post" modelAttribute="filtro">
-    IBAN: <form:input path="texto"></form:input>
+    IBAN DESTINO TRANSFERENCIA: <form:input path="texto"></form:input>
     Tipo operacion:
     <form:select path="tipoOperacion">
         <form:option value="" label="-----"></form:option>
@@ -43,7 +45,7 @@
         <th>Cuenta destino transferencia</th>
     </tr>
     <%
-        for (OperacionEntity operacion:listaOperaciones){
+        for (OperacionEntityDto operacion:listaOperaciones){
     %>
     <tr>
         <td><%=operacion.getIdOperacion()%></td>

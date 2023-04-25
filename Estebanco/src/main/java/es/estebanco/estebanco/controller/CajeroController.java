@@ -1,7 +1,9 @@
 package es.estebanco.estebanco.controller;
 
 import es.estebanco.estebanco.dao.*;
+import es.estebanco.estebanco.dto.*;
 import es.estebanco.estebanco.entity.*;
+import es.estebanco.estebanco.service.CajeroService;
 import es.estebanco.estebanco.ui.FiltroCajero;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,33 +17,19 @@ import java.util.List;
 @Controller
 @RequestMapping("/cajero")
 public class CajeroController {
-    @Autowired
-    protected PersonaRepository personaRepository;
 
     @Autowired
-    protected CuentaRepository cuentaRepository;
-
-    @Autowired
-    protected OperacionRepository operacionRepository;
-
-    @Autowired
-    protected TipoOperacionEntityRepository tipoOperacionEntityRepository;
-
-    @Autowired
-    protected TipoEstadoEntityRepository tipoEstadoEntityRepository;
-
-    @Autowired
-    protected TipoMonedaEntityRepository tipoMonedaEntityRepository;
+    protected CajeroService cajeroService;
 
     @GetMapping("/")
     public String doListar (Model model, HttpSession session){
         String urlTo = "cajero";
-        PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
+        PersonaEntityDto persona = (PersonaEntityDto) session.getAttribute("persona");
         if(persona==null){
             urlTo = "redirect:/cajeroLogin/";
         } else {
             model.addAttribute("persona", persona);
-            List<CuentaEntity> cuentas = this.personaRepository.cuentasPorPersona(persona);
+            List<CuentaEntityDto> cuentas = this.cajeroService.listarCuentas(persona.getId());
             model.addAttribute("cuentas",cuentas);
         }
         return urlTo;
@@ -55,7 +43,7 @@ public class CajeroController {
     @GetMapping("/mostrarOperaciones")
     public String doMostrarOperaciones(@RequestParam("id") Integer idCuenta,
                                        Model model){
-        CuentaEntity cuenta = this.cuentaRepository.findById(idCuenta).orElse(null);
+        CuentaEntityDto cuenta = this.cajeroService.cuentaPorId(idCuenta);
         model.addAttribute("cuenta", cuenta);
 
         return "operacionesCajero";
@@ -64,29 +52,20 @@ public class CajeroController {
     @GetMapping("/sacarDinero")
     public String doSacarDinero(@RequestParam("id") Integer idCuenta,
                                 Model model){
-        CuentaEntity cuenta = this.cuentaRepository.findById(idCuenta).orElse(null);
+        CuentaEntityDto cuenta = this.cajeroService.cuentaPorId(idCuenta);
         model.addAttribute("cuenta", cuenta);
 
         return "sacarDinero";
     }
 
-    protected String mostrarEditadoSacar (CuentaEntity cuenta, Model model){
+    protected String mostrarEditadoSacar (CuentaEntityDto cuenta, Model model){
         model.addAttribute("cuenta", cuenta);
         return "sacarDinero";
     }
 
-    protected void nuevaOperacionSacar(CuentaEntity cuenta, Integer valor, HttpSession session){
-        PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
-        Date now = new Date();
-        OperacionEntity operacion = new OperacionEntity();
-        TipoOperacionEntity tipo = this.tipoOperacionEntityRepository.buscarTipo(1);
-        operacion.setCantidad(valor);
-        operacion.setCuentaByCuentaId(cuenta);
-        operacion.setTipo(tipo.getNombre());
-        operacion.setFechaOperacion(now);
-        operacion.setMoneda(cuenta.getMoneda());
-        operacion.setPersonaByPersonaId(persona);
-        this.operacionRepository.save(operacion);
+    protected void nuevaOperacionSacar(CuentaEntityDto cuenta, Integer valor, HttpSession session){
+        PersonaEntityDto persona = (PersonaEntityDto) session.getAttribute("persona");
+        this.cajeroService.nuevaOperacionSacar(cuenta,valor,persona);
     }
 
     @PostMapping("/sacandoDinero")
@@ -95,14 +74,12 @@ public class CajeroController {
                                  HttpSession session,
                                  Model model){
         String urlTo = "redirect:/cajero/";
-        TipoEstadoEntity estado = this.tipoEstadoEntityRepository.findById(2).orElse(null);
-        CuentaEntity cuenta = this.cuentaRepository.cuentaOrigen(idCuenta);
+        CuentaEntityDto cuenta = this.cajeroService.cuentaOrigenPorId(idCuenta);
         if(valor==null||valor>cuenta.getSaldo()||valor<0){
             model.addAttribute("error", "Cantidad incorrecta introduce un nuevo valor");
             return this.mostrarEditadoSacar(cuenta,model);
         } else {
-            cuenta.setSaldo(cuenta.getSaldo()-valor);
-            this.cuentaRepository.save(cuenta);
+            this.cajeroService.guardarSacar(cuenta,valor);
             this.nuevaOperacionSacar(cuenta,valor,session);
         }
         return urlTo;
@@ -112,29 +89,20 @@ public class CajeroController {
     @GetMapping("/ingresarDinero")
     public String doIngresarDinero(@RequestParam("id") Integer idCuenta,
                                    Model model){
-        CuentaEntity cuenta = this.cuentaRepository.findById(idCuenta).orElse(null);
+        CuentaEntityDto cuenta = this.cajeroService.cuentaPorId(idCuenta);
         model.addAttribute("cuenta", cuenta);
 
         return "ingresarDinero";
     }
 
-    protected String mostrarEditadoIngresar (CuentaEntity cuenta, Model model){
+    protected String mostrarEditadoIngresar (CuentaEntityDto cuenta, Model model){
         model.addAttribute("cuenta", cuenta);
         return "ingresarDinero";
     }
 
-    protected void nuevaOperacionMeter(CuentaEntity cuenta, Integer valor, HttpSession session){
-        PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
-        Date now = new Date();
-        TipoOperacionEntity tipo = this.tipoOperacionEntityRepository.buscarTipo(2);
-        OperacionEntity operacion = new OperacionEntity();
-        operacion.setCantidad(valor);
-        operacion.setCuentaByCuentaId(cuenta);
-        operacion.setTipo(tipo.getNombre());
-        operacion.setFechaOperacion(now);
-        operacion.setMoneda(cuenta.getMoneda());
-        operacion.setPersonaByPersonaId(persona);
-        this.operacionRepository.save(operacion);
+    protected void nuevaOperacionMeter(CuentaEntityDto cuenta, Integer valor, HttpSession session){
+        PersonaEntityDto persona = (PersonaEntityDto) session.getAttribute("persona");
+        this.cajeroService.nuevaOperacionMeter(cuenta,valor,persona);
     }
 
     @PostMapping("/ingresandoDinero")
@@ -143,7 +111,7 @@ public class CajeroController {
                                     HttpSession session,
                                     Model model){
         String urlTo = "redirect:/cajero/";
-        CuentaEntity cuenta = this.cuentaRepository.cuentaOrigen(idCuenta);
+        CuentaEntityDto cuenta = this.cajeroService.cuentaOrigen(idCuenta);
         if(valor<0){
             model.addAttribute("error", "Cantidad incorrecta introduce un nuevo valor");
             return this.mostrarEditadoIngresar(cuenta,model);
@@ -151,8 +119,7 @@ public class CajeroController {
             model.addAttribute("error", "No puede operar con esta cuenta porque esta bloqueada");
             return this.mostrarEditadoIngresar(cuenta,model);
         }else {
-            cuenta.setSaldo(cuenta.getSaldo()+valor);
-            this.cuentaRepository.save(cuenta);
+            this.cajeroService.guardarMeter(cuenta,valor);
             this.nuevaOperacionMeter(cuenta,valor,session);
         }
         return urlTo;
@@ -160,45 +127,25 @@ public class CajeroController {
 
     @GetMapping("/transferirDinero")
     public String doTransferirDinero(@RequestParam ("id") Integer idCuenta, Model model){
-        CuentaEntity cuenta = this.cuentaRepository.findById(idCuenta).orElse(null);
+        CuentaEntityDto cuenta = this.cajeroService.cuentaPorId(idCuenta);
         model.addAttribute("cuenta", cuenta);
 
         return "transferencia";
     }
 
-    protected String mostrarEditadoTransferencia(CuentaEntity cuenta, Model model){
+    protected String mostrarEditadoTransferencia(CuentaEntityDto cuenta, Model model){
         model.addAttribute("cuenta", cuenta);
         return "transferencia";
     }
 
-    protected void nuevaOperacionMeterTransferencia(CuentaEntity cuentaOrigen, CuentaEntity cuentaDestino, Integer valor, HttpSession session){
-        PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
-        Date now = new Date();
-        TipoOperacionEntity tipo = this.tipoOperacionEntityRepository.buscarTipo(2);
-        OperacionEntity operacion = new OperacionEntity();
-        operacion.setCantidad(valor);
-        operacion.setCuentaByCuentaId(cuentaDestino);
-        operacion.setTipo(tipo.getNombre());
-        operacion.setFechaOperacion(now);
-        operacion.setIbanCuentaDestinoOrigen(cuentaOrigen.getIban());
-        operacion.setMoneda(cuentaDestino.getMoneda());
-        operacion.setPersonaByPersonaId(persona);
-        this.operacionRepository.save(operacion);
+    protected void nuevaOperacionMeterTransferencia(CuentaEntityDto cuentaOrigen, CuentaEntityDto cuentaDestino, Integer valor, HttpSession session){
+        PersonaEntityDto persona = (PersonaEntityDto) session.getAttribute("persona");
+        this.cajeroService.nuevaOperacionTransferenciaMeter(cuentaDestino,cuentaOrigen,valor,persona);
     }
 
-    protected void nuevaOperacionSacarTransferencia(CuentaEntity cuentaOrigen, CuentaEntity cuentaDestino, Integer valor, HttpSession session){
-        PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
-        Date now = new Date();
-        OperacionEntity operacion = new OperacionEntity();
-        TipoOperacionEntity tipo = this.tipoOperacionEntityRepository.buscarTipo(1);
-        operacion.setCantidad(valor);
-        operacion.setCuentaByCuentaId(cuentaOrigen);
-        operacion.setTipo(tipo.getNombre());
-        operacion.setFechaOperacion(now);
-        operacion.setIbanCuentaDestinoOrigen(cuentaDestino.getIban());
-        operacion.setMoneda(cuentaOrigen.getMoneda());
-        operacion.setPersonaByPersonaId(persona);
-        this.operacionRepository.save(operacion);
+    protected void nuevaOperacionSacarTransferencia(CuentaEntityDto cuentaOrigen, CuentaEntityDto cuentaDestino, Integer valor, HttpSession session){
+        PersonaEntityDto persona = (PersonaEntityDto) session.getAttribute("persona");
+        this.cajeroService.nuevaOperacionTransferenciaSacar(cuentaDestino,cuentaOrigen,valor,persona);
     }
 
     @PostMapping("/transfiriendoDinero")
@@ -208,8 +155,8 @@ public class CajeroController {
                                       HttpSession session,
                                       Model model){
         String urlTo = "redirect:/cajero/";
-        CuentaEntity cuentaOrigen = this.cuentaRepository.cuentaOrigen(idCuenta);
-        CuentaEntity cuentaDestino = this.cuentaRepository.cuentaDestinoTransferencia(destino);
+        CuentaEntityDto cuentaOrigen = this.cajeroService.cuentaOrigen(idCuenta);
+        CuentaEntityDto cuentaDestino = this.cajeroService.cuentaDestino(destino);
 
         if(cuentaDestino==null){
             model.addAttribute("error", "Cuenta destino no encontrada");
@@ -228,10 +175,8 @@ public class CajeroController {
                 model.addAttribute("error", "No puede transferir a esta cuenta porque esta bloqueada");
                 return this.mostrarEditadoTransferencia(cuentaOrigen,model);
             } else {
-                cuentaOrigen.setSaldo(cuentaOrigen.getSaldo()-valor);
-                cuentaDestino.setSaldo(cuentaDestino.getSaldo()+valor);
-                this.cuentaRepository.save(cuentaOrigen);
-                this.cuentaRepository.save(cuentaDestino);
+                this.cajeroService.guardarSacar(cuentaOrigen,valor);
+                this.cajeroService.guardarMeter(cuentaDestino,valor);
                 this.nuevaOperacionSacarTransferencia(cuentaOrigen,cuentaDestino,valor,session);
                 this.nuevaOperacionMeterTransferencia(cuentaOrigen,cuentaDestino,valor,session);
             }
@@ -246,25 +191,26 @@ public class CajeroController {
     }
 
     protected String procesarFiltrado(FiltroCajero filtro, Model model,HttpSession session){
-        List<OperacionEntity> lista;
+        List<OperacionEntityDto> lista;
         String urlTo = "listaOperaciones";
-        PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
+        PersonaEntityDto persona = (PersonaEntityDto) session.getAttribute("persona");
         if(persona == null){
             urlTo = "loginCajero";
         } else {
             if(filtro==null || (filtro.getTipoOperacion().isEmpty() && filtro.getTexto().isEmpty())){
-                lista = this.operacionRepository.operacionesPorPersona(persona);
+                lista = this.cajeroService.listarOperaciones(persona);
                 filtro = new FiltroCajero();
             } else if (filtro.getTexto().isEmpty()){
-                lista = this.operacionRepository.buscarPorTipoOperacion(persona, filtro.getTipoOperacion());
+                lista = this.cajeroService.listarOperacionesPorTipo(persona,filtro.getTipoOperacion());
+
             } else if (filtro.getTipoOperacion().isEmpty()) {
-                lista = this.operacionRepository.buscarPorIban(persona, filtro.getTexto());
+                lista = this.cajeroService.listarOperacionesPorTexto(persona, filtro.getTexto());
             } else {
-                lista = this.operacionRepository.buscarPorTipoOperacionEIban(persona, filtro.getTexto(),filtro.getTipoOperacion());
+                lista = this.cajeroService.listarOperacionesPorTextoYTipo(persona,filtro.getTipoOperacion(),filtro.getTexto());
             }
             model.addAttribute("operaciones", lista);
             model.addAttribute("filtro", filtro);
-            List<TipoOperacionEntity> tipos = this.tipoOperacionEntityRepository.findAll();
+            List<TipoOperacionEntityDto> tipos = this.cajeroService.listarTiposOperaciones();
             model.addAttribute("tipos", tipos);
         }
         return urlTo;
@@ -278,55 +224,46 @@ public class CajeroController {
 
     @GetMapping("/editar")
     public String doEditarPersona(@RequestParam("id") Integer idpersona, Model model){
-        PersonaEntity persona = this.personaRepository.findById(idpersona).orElse(null);
+        PersonaEntityDto persona = this.cajeroService.personaPorId(idpersona);
         model.addAttribute("persona", persona);
         return "datosCajero";
     }
 
     @PostMapping("/guardar")
-    public String doGuardar (@ModelAttribute("persona") PersonaEntity persona) {
-        this.personaRepository.save(persona);
+    public String doGuardar (@ModelAttribute("persona") PersonaEntityDto persona) {
+        this.cajeroService.guardarPersona(persona);
         return "redirect:/cajero/?id="+persona.getId();
     }
 
     @GetMapping("/cambiarDivisa")
     public String doEditarDivisa(@RequestParam("id") Integer idcuenta, Model model){
-        CuentaEntity cuenta = this.cuentaRepository.findById(idcuenta).orElse(null);
-        List<TipoMonedaEntity> monedas = this.tipoMonedaEntityRepository.findAll();
+        CuentaEntityDto cuenta = this.cajeroService.cuentaPorId(idcuenta);
+        List<TipoMonedaEntityDto> monedas = this.cajeroService.listarTiposMonedas();
         model.addAttribute("cuenta", cuenta);
         model.addAttribute("monedas", monedas);
         return "datosDivisa";
     }
 
-    protected void nuevaOperacionCambioDivisa(CuentaEntity cuenta, HttpSession session){
-        PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
-        Date now = new Date();
-        TipoOperacionEntity tipo = this.tipoOperacionEntityRepository.buscarTipo(3);
-        OperacionEntity operacion = new OperacionEntity();
-        operacion.setCuentaByCuentaId(cuenta);
-        operacion.setTipo(tipo.getNombre());
-        operacion.setFechaOperacion(now);
-        operacion.setPersonaByPersonaId(persona);
-        this.operacionRepository.save(operacion);
+    protected void nuevaOperacionCambioDivisa(CuentaEntityDto cuenta, HttpSession session){
+        PersonaEntityDto persona = (PersonaEntityDto) session.getAttribute("persona");
+        this.cajeroService.nuevaOperacionCambiarDivisa(cuenta,persona);
     }
 
     @PostMapping("/guardarDivisa")
-    public String doGuardarDivisa(@ModelAttribute("cuenta") CuentaEntity cuenta,
+    public String doGuardarDivisa(@ModelAttribute("cuenta") CuentaEntityDto cuenta,
                                   @RequestParam("moneda") String moneda,
                                   HttpSession session){
-        TipoMonedaEntity moneda1 = this.tipoMonedaEntityRepository.buscarMoneda(moneda);
-        cuenta.setMoneda(moneda1.getMoneda());
-        this.cuentaRepository.save(cuenta);
+        TipoMonedaEntityDto moneda1 = this.cajeroService.tipoDeMoneda(moneda);
+        this.cajeroService.guardarCuentaCambioDivisa(cuenta, moneda1.getMoneda());
         this.nuevaOperacionCambioDivisa(cuenta,session);
         return "redirect:/cajero/";
     }
 
     @GetMapping("/solicitarDesbloqueo")
     public String doSolicitarDesbloqueoCajero(@RequestParam("id") Integer idcuenta, Model model){
-        CuentaEntity cuenta = this.cuentaRepository.findById(idcuenta).orElse(null);
-        TipoEstadoEntity estado = this.tipoEstadoEntityRepository.buscarTipo(1);
-        cuenta.setEstado(estado.getNombre());
-        this.cuentaRepository.save(cuenta);
+        CuentaEntityDto cuenta = this.cajeroService.cuentaPorId(idcuenta);
+        TipoEstadoEntityDto estado = this.cajeroService.buscarTipoEstadoPorId();
+        this.cajeroService.guardarSolicitarDesbloqueo(cuenta, estado);
         return "solicitarDesbloqueo";
     }
 
