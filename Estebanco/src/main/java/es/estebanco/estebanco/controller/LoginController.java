@@ -34,6 +34,7 @@ public class LoginController {
 
             List<RolEntity> roles = this.rolRepository.getRolByIdString(persona.getId());
             if(roles.isEmpty()){
+                session.setAttribute("persona",persona);
                 urlTo = "redirect:/persona/?id="+persona.getId();
             }else {
                 if (roles.get(0).getRol().equals("asistente")) {
@@ -43,6 +44,7 @@ public class LoginController {
                     session.setAttribute("gestor", persona);
                     urlTo = "redirect:/gestor/";
                 }else {
+                    session.setAttribute("persona",persona);
                     urlTo = "redirect:/persona/?id="+persona.getId();
                 }
             }

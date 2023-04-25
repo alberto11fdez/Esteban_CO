@@ -38,7 +38,7 @@ public class EmpresaControlador {
     @Autowired
     protected TipoMonedaEntityRepository tipoMonedaEntityRepository;
 
-    /**2
+    /**
  *Este metodo te leva al perfil de la cuenta de la Empresa.
  * Para ello se le ha pasado el id de la cuenta, se ha buscado la entidad en la base de datos
  * y se ha enviado al cuentaEmpresa.jsp
@@ -76,7 +76,38 @@ public class EmpresaControlador {
 
         return "cuentaEmpresa";
     }
+/*@GetMapping("/")
+    public String goCuentaEmpresa(@RequestParam("id") Integer idCuentaEmpresa,Model model,HttpSession session){
 
+        CuentaEntity cuentaEmpresa = session.getAtribute("cuenta");
+        model.addAttribute("cuentaEmpresa",cuentaEmpresa);
+
+        PersonaEntity persona = session.getAtribute("persona");
+
+        model.addAttribute("persona",persona);
+
+        List<OperacionEntity> operaciones = cuentaEmpresa.getOperacionsById();
+        model.addAttribute("operaciones",operaciones);
+
+        List<PersonaEntity> socios = personaRepository.obtenerSocioEmpresa(cuentaEmpresa);
+        model.addAttribute("socios",socios);
+
+        model.addAttribute("rolrepository",rolRepository);
+
+        model.addAttribute("tipo_operaciones",tipoOperacionEntityRepository.findAll());
+
+        FiltroOperacionEmpresa filtro=new FiltroOperacionEmpresa();
+        model.addAttribute("filtro",filtro);
+
+        OperacionEntity operacion=new OperacionEntity();
+        operacion.setCuentaByCuentaId(cuentaEmpresa);
+        operacion.setPersonaByPersonaId(persona);
+        model.addAttribute("operacion",operacion);
+
+        model.addAttribute("filtroOperacionSocio",new FiltroOperacionSocio());
+
+        return "cuentaEmpresa";
+    }*/
 
     @GetMapping("/crearSocio")
     public String goCrearSocios(Model model,@RequestParam("idCuenta") Integer idCuenta){
@@ -96,7 +127,24 @@ public class EmpresaControlador {
 
         return "crearSocio";
     }
+/* @GetMapping("/crearSocio")
+    public String goCrearSocios(Model model,@RequestParam("idCuenta") Integer idCuenta){
 
+        model.addAttribute("socio",new PersonaEntity());
+
+        CuentaEntity cuentaEmpresa = session.getAtribute("cuenta");
+
+        List<PersonaEntity> personasNoSocio = personaRepository.personasNoSociosEnCuentaEmpresa(cuentaEmpresa);
+        List<PersonaEntity> personasSiSocio=personaRepository.obtenerSocioEmpresa(cuentaEmpresa);
+        personasNoSocio.removeAll(personasSiSocio);
+        model.addAttribute("personasNoSocio",personasNoSocio);
+
+        RolEntity rolNuevo=new RolEntity();
+        rolNuevo.setCuentaByCuentaId(cuentaEmpresa);
+        model.addAttribute("rolNuevo",rolNuevo);
+
+        return "crearSocio";
+    }*/
     @PostMapping("/socio/guardar")
     public String doGuardar (@ModelAttribute("socio") PersonaEntity socio) {
         //crea al socio
@@ -112,6 +160,21 @@ public class EmpresaControlador {
 
         return "redirect:/cuentaEmpresa?id="+this.idCuenta;
     }
+    /*@PostMapping("/socio/guardar")
+    public String doGuardar (@ModelAttribute("socio") PersonaEntity socio) {
+        //crea al socio
+        socio.setEstado("esperandoConfirmacion");
+        this.personaRepository.save(socio);
+        //Unimos la tabla persona y cuentaEmpresa a traves de la tabla rol
+        RolEntity rol = new RolEntity();
+        rol.setRol("socio");
+        CuentaEntity cuenta = sessicon.getAtrinbute("cuenta");
+        rol.setCuentaByCuentaId(cuenta);
+        rol.setPersonaByPersonaId(socio);
+        this.rolRepository.save(rol);
+
+        return "redirect:/cuentaEmpresa?id="+cuenta.getId();
+    }*/
 
     @PostMapping("/socio/guardarYaExistente")
     public String doGuardar2(@ModelAttribute("rolNuevo") RolEntity rol){
@@ -128,6 +191,14 @@ public class EmpresaControlador {
         rolRepository.save(rol);
         return "redirect:/cuentaEmpresa?id="+cuentaEmpresa.getId();
     }
+    /*@GetMapping("/socio/bloquear")
+    public String bloquearSocio(@RequestParam ("id") Integer idSocio){
+        CuentaEntity cuentaEmpresa= session.getAtribute("cuenta");
+        RolEntity rol = rolRepository.obtenerRol_Persona_en_Empresa(idSocio,cuentaEmpresa.getId());
+        rol.setBloqueado_empresa((byte) 1);
+        rolRepository.save(rol);
+        return "redirect:/cuentaEmpresa?id="+cuentaEmpresa.getId();
+    }*/
     @GetMapping("/socio/activar")
     public String activarSocio(@RequestParam ("id") Integer idSocio){
         RolEntity rol = rolRepository.obtenerRol_Persona_en_Empresa(idSocio,cuentaEmpresa.getId());
@@ -135,6 +206,14 @@ public class EmpresaControlador {
         rolRepository.save(rol);
         return "redirect:/cuentaEmpresa?id="+cuentaEmpresa.getId();
     }
+    /*@GetMapping("/socio/activar")
+    public String activarSocio(@RequestParam ("id") Integer idSocio){
+        CuentaEntity cuentaEmpresa= session.getAtribute("cuenta");
+        RolEntity rol = rolRepository.obtenerRol_Persona_en_Empresa(idSocio,cuentaEmpresa.getId());
+        rol.setBloqueado_empresa((byte) 0);
+        rolRepository.save(rol);
+        return "redirect:/cuentaEmpresa?id="+cuentaEmpresa.getId();
+    }*/
 
     @GetMapping("/mostrarTransferencia")
     public String mostrarTransferencia(@RequestParam("idCuenta") Integer idCuenta,@RequestParam("idPersona") Integer idPersona, Model model){

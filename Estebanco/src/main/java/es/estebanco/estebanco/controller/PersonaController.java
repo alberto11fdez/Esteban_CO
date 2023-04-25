@@ -155,10 +155,11 @@ public class PersonaController {
 
 
     @GetMapping("/entrarEnCuenta")
-    public String entrarEnCuenta(@RequestParam("idPersona") Integer idPersona,@RequestParam("idCuenta") Integer idCuenta,Model model){
+    public String entrarEnCuenta(@RequestParam("idPersona") Integer idPersona,@RequestParam("idCuenta") Integer idCuenta,Model model,HttpSession session){
         RolEntity rol=rolRepository.obtenerRol_Persona_en_Empresa(idPersona,idCuenta);
 
         if(Objects.equals(rol.getRol(), "empresa") || Objects.equals(rol.getRol(), "socio") ){
+            session.setAttribute("cuenta",cuentaRepository.findById(idCuenta));
             return "redirect:/cuentaEmpresa?id="+idCuenta+"&idPersona="+idPersona;
         }else{
             return  "redirect:/cuentaPersona/?idCuenta="+idCuenta;
