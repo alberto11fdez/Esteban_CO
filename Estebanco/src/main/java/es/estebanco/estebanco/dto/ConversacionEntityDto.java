@@ -1,5 +1,7 @@
 package es.estebanco.estebanco.dto;
 
+import es.estebanco.estebanco.entity.MensajeEntity;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
@@ -15,6 +17,7 @@ public class ConversacionEntityDto implements Serializable {
     private  Timestamp fechaFin;
     private PersonaEntityDto personaByPersonaId;
     private PersonaEntityDto personaByAsistenteId;
+    private List<MensajeEntity> mensajesByIdconversacion;
 
     public Integer getIdconversacion() {
         return idconversacion;
@@ -62,6 +65,14 @@ public class ConversacionEntityDto implements Serializable {
 
     public void setPersonaByAsistenteId(PersonaEntityDto personaByAsistenteId) {
         this.personaByAsistenteId = personaByAsistenteId;
+    }
+
+    public List<MensajeEntity> getMensajesByIdconversacion() {
+        return mensajesByIdconversacion;
+    }
+
+    public void setMensajesByIdconversacion(List<MensajeEntity> mensajesByIdconversacion) {
+        this.mensajesByIdconversacion = mensajesByIdconversacion;
     }
 
     @Override
