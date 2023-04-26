@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import javax.swing.text.html.parser.Entity;
 import java.sql.Timestamp;
 
@@ -25,17 +26,17 @@ public class CrearCuentaController {
     @Autowired
     protected PersonaRepository personaRepository;
     @PostMapping ("/crearCuenta")
-    public String crearCuenta(@ModelAttribute("rolCuentaNueva") RolEntity rol){
+    public String crearCuenta(@ModelAttribute("rolCuentaNueva") RolEntity rol, HttpSession session){
 
         CuentaEntity cuenta=new CuentaEntity();
-        cuenta.setEstado("espera_confirmacion");
+        cuenta.setEstado("esperandoConfirmacion");
         cuentaRepository.save(cuenta);
+
         rol.setCuentaByCuentaId(cuenta);
-
-
         rol.setRol(rol.getRol());
         rolRepository.save(rol);
 
+        session.setAttribute("cuenta",cuenta);
         if(rol.getRol().equals("empresa")){
             return "redirect:/cuentaEmpresa/crearSocio?idCuenta="+cuenta.getId();
         }else{

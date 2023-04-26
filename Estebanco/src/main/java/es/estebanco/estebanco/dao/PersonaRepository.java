@@ -32,9 +32,9 @@ public interface PersonaRepository extends JpaRepository<PersonaEntity, Integer>
    @Query("select p from PersonaEntity p join RolEntity r on p=r.personaByPersonaId join CuentaEntity c on c=r.cuentaByCuentaId and c=:cuenta")
     public PersonaEntity propietarioDeCuenta(@Param("cuenta") CuentaEntity cuenta);
 
-   @Query("select p from PersonaEntity p , RolEntity r where p=r.personaByPersonaId and r.cuentaByCuentaId != :cuenta ")
+   @Query("select distinct p from PersonaEntity p , RolEntity r where p=r.personaByPersonaId and r.cuentaByCuentaId != :cuenta ")
     public List<PersonaEntity> personasNoSociosEnCuentaEmpresa(@Param("cuenta") CuentaEntity cuenta);
-    @Query("select p from PersonaEntity p where p.estado = :estado")
+    @Query("select distinct p from PersonaEntity p where p.estado = :estado")
     public List<PersonaEntity> obtenerPersonasPorEstado(@Param("estado")String estado);
 
 }

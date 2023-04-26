@@ -17,7 +17,7 @@
 
 <h1>Crear Socio:</h1>
 
-    <form:form action="/socio/guardar" modelAttribute="socio" method="post">
+    <form:form action="/cuentaEmpresa/socio/guardar" modelAttribute="socio" method="post">
         <form:hidden path="id"/>
         Dni: <form:input path="dni" size="30" maxlength="30"  /><br/>
         Nombre: <form:input path="nombre" size="40"  maxlength="40"/> <br/>
@@ -34,7 +34,7 @@
     </form:form>
 
     <br/>
-    <form:form action="/socio/guardarYaExistente" modelAttribute="rolNuevo" method="post">
+    <form:form action="/cuentaEmpresa/socio/guardarYaExistente" modelAttribute="rolNuevo" method="post">
         <form:hidden path="id"></form:hidden>
         <form:hidden path="cuentaByCuentaId"></form:hidden>
         Personas no socias: <form:select path="personaByPersonaId"  items="${personasNoSocio}" itemLabel="dni"></form:select>
