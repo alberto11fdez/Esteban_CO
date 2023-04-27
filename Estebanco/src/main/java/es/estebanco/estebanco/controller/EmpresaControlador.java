@@ -45,8 +45,8 @@ public class EmpresaControlador {
     @GetMapping("/")
     public String goCuentaEmpresa(@RequestParam("id") Integer idCuentaEmpresa, @RequestParam("idPersona") Integer idPersona, Model model, HttpSession session) {
 
-        CuentaEntity cuentaEmpresa = (CuentaEntity) session.getAttribute("cuenta");
-        PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
+        CuentaEntity cuentaEmpresa = cuentaRepository.findById(idCuentaEmpresa).orElse(null);
+        PersonaEntity persona = personaRepository.findById(idPersona).orElse(null);
 
         model.addAttribute("cuentaEmpresa", cuentaEmpresa);
 
@@ -72,6 +72,8 @@ public class EmpresaControlador {
 
         model.addAttribute("filtroOperacionSocio", new FiltroOperacionSocio());
 
+        List<OperacionEntity> operacionesRecibidas = operacionRepository.buscarOperacionesRecibidas(cuentaEmpresa.getIban());
+        model.addAttribute("operacionesRecibidas",operacionesRecibidas);
         return "cuentaEmpresa";
     }
 
@@ -99,6 +101,7 @@ public class EmpresaControlador {
     public String doGuardarSocioCreado(@ModelAttribute("socio") PersonaEntity socio, HttpSession session) {
         CuentaEntity cuentaEmpresa = (CuentaEntity) session.getAttribute("cuenta");
         int idCuenta = cuentaEmpresa.getId();
+        PersonaEntity persona=(PersonaEntity) session.getAttribute("persona") ;
 
         //crea al socio
         socio.setEstado("esperandoConfirmacion");
@@ -115,10 +118,9 @@ public class EmpresaControlador {
         this.rolRepository.save(rol);
 
         if(cuentaEmpresa.getEstado().equals("esperandoConfirmacion")){
-            PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
             return "redirect:/persona/?id="+persona.getId();
         }else{
-            return "redirect:/cuentaEmpresa?id=" + idCuenta;
+            return "redirect:/cuentaEmpresa/?id=" + cuentaEmpresa.getId()+"&idPersona="+persona.getId();
         }
     }
 
@@ -128,36 +130,37 @@ public class EmpresaControlador {
         rol.setRol("socio");
         rol.setBloqueado_empresa((byte) 0);
         rolRepository.save(rol);
-
+        PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
         CuentaEntity cuentaEmpresa =(CuentaEntity) session.getAttribute("cuenta");
         if(cuentaEmpresa.getEstado().equals("esperandoConfirmacion")){
-            PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
             return "redirect:/persona/?id="+persona.getId();
         }else{
-            return "redirect:/cuentaEmpresa?id=" + cuentaEmpresa.getId();
+            return "redirect:/cuentaEmpresa/?id=" + cuentaEmpresa.getId()+"&idPersona="+persona.getId();
         }
     }
 
     @GetMapping("/socio/bloquear")
     public String bloquearSocio(@RequestParam("id") Integer idSocio, HttpSession session) {
         CuentaEntity cuentaEmpresa = (CuentaEntity) session.getAttribute("cuenta");
+        PersonaEntity persona=(PersonaEntity)session.getAttribute("persona");
 
         RolEntity rol = rolRepository.obtenerRol_Persona_en_Empresa(idSocio, cuentaEmpresa.getId());
         rol.setBloqueado_empresa((byte) 1);
         rolRepository.save(rol);
 
-        return "redirect:/cuentaEmpresa?id=" + cuentaEmpresa.getId();
+        return "redirect:/cuentaEmpresa/?id=" + cuentaEmpresa.getId()+"&idPersona="+persona.getId();
     }
 
     @GetMapping("/socio/activar")
     public String activarSocio(@RequestParam("id") Integer idSocio, HttpSession session) {
         CuentaEntity cuentaEmpresa = (CuentaEntity) session.getAttribute("cuenta");
+        PersonaEntity persona=(PersonaEntity)session.getAttribute("persona");
 
         RolEntity rol = rolRepository.obtenerRol_Persona_en_Empresa(idSocio, cuentaEmpresa.getId());
         rol.setBloqueado_empresa((byte) 0);
         rolRepository.save(rol);
 
-        return "redirect:/cuentaEmpresa?id=" + cuentaEmpresa.getId();
+        return "redirect:/cuentaEmpresa/?id=" + cuentaEmpresa.getId()+"&idPersona="+persona.getId();
     }
 
 

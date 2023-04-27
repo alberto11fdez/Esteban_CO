@@ -14,6 +14,8 @@
     List<PersonaEntity> socios = (List<PersonaEntity>) request.getAttribute("socios");
     RolRepository rolRepository=(RolRepository) request.getAttribute("rolrepository");
     PersonaEntity persona=(PersonaEntity) request.getAttribute("persona");
+    List<OperacionEntity> operacionesRescibidas = (List<OperacionEntity>) request.getAttribute("operacionesRescibidas");
+
 %>
 
 
@@ -33,31 +35,53 @@
     <li>Fecha de Apertura: <%=cuentaEmpresa.getFechaApertura()%></li>
 </ol>
 
-<h1>Operaciones:</h1>
-<form:form method="post" action="/cuentaEmpresa/filtroOperacionSocio" modelAttribute="filtroOperacionSocio">
-    <form:select path="idSocio" items="${socios}" itemValue="id" itemLabel="dni"></form:select>
-    <form:button>Buscar sus Operaciones</form:button>
-</form:form>
 
-<table border="1">
-<%
-    for(OperacionEntity operacion: operaciones){
-%>
-<tr>
-    <td><%=operacion.getTipo()%></td>
-    <td><%=operacion.getCantidad()%></td>
-    <td><%=operacion.getFechaOperacion()%></td>
-</tr>
-<%
-    }
-%>
 
-</table >
 
+        <h1>Operaciones realizadas:</h1>
+        <form:form method="post" action="/cuentaEmpresa/filtroOperacionSocio" modelAttribute="filtroOperacionSocio">
+            <form:select path="idSocio" items="${socios}" itemValue="id" itemLabel="dni"></form:select>
+            <form:button>Buscar sus Operaciones</form:button>
+        </form:form>
+
+        <table border="1">
+            <%
+                for(OperacionEntity operacion: operaciones){
+            %>
+            <tr>
+                <td><%=operacion.getTipo()%></td>
+                <td><%=operacion.getCantidad()%></td>
+                <td><%=operacion.getFechaOperacion()%></td>
+                <td><%=operacion.getIbanCuentaDestinoOrigen()%></td>
+            </tr>
+            <%
+                }
+            %>
+        </table >
+
+<br/>
 <button><a href="/cuentaEmpresa/mostrarTransferencia?idCuenta=<%=cuentaEmpresa.getId()%>&idPersona=<%=persona.getId()%>">Realizar transferencia</a></button>
 <button><a href="/cuentaEmpresa/mostrarDivisa?idCuenta=<%=cuentaEmpresa.getId()%>&idPersona=<%=persona.getId()%>">Realizar cambio de divisa</a></button>
+<br/>
+    <h1>Operaciones recibidas:</h1>
 
-
+        <%if(!(operacionesRescibidas ==null))
+            {%>
+    <table border="1">
+        <%
+            for(OperacionEntity operacion: operacionesRescibidas){
+        %>
+        <tr>
+            <td><%=operacion.getTipo()%></td>
+            <td><%=operacion.getCantidad()%></td>
+            <td><%=operacion.getFechaOperacion()%></td>
+            <td><%=operacion.getIbanCuentaDestinoOrigen()%></td>
+        </tr>
+        <%
+            }
+        %>
+    </table >
+        <%}%>
 <br/>
 
 
@@ -65,7 +89,7 @@
 
 
 
-<h1>Lista de socios</h1>
+<h1>Lista de socios:</h1>
 <table border="1">
         <%
     for(PersonaEntity p: socios){
@@ -91,6 +115,7 @@
     }
 %>
 </table>
+<br/>
 <button><a href="/cuentaEmpresa/crearSocio?idCuenta=<%=cuentaEmpresa.getId()%>">Crear Socio</a></button>
 </body>
 </html>

@@ -159,8 +159,8 @@ public class PersonaController {
         RolEntity rol=rolRepository.obtenerRol_Persona_en_Empresa(idPersona,idCuenta);
 
         if(Objects.equals(rol.getRol(), "empresa") || Objects.equals(rol.getRol(), "socio") ){
-            session.setAttribute("cuenta",cuentaRepository.findById(idCuenta));
-            return "redirect:/cuentaEmpresa?id="+idCuenta+"&idPersona="+idPersona;
+            session.setAttribute("cuenta",cuentaRepository.findById(idCuenta).orElse(null));
+            return "redirect:/cuentaEmpresa/?id="+idCuenta+"&idPersona="+idPersona;
         }else{
             return  "redirect:/cuentaPersona/?idCuenta="+idCuenta;
         }
