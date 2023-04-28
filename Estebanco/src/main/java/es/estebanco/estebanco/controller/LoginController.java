@@ -1,8 +1,12 @@
 package es.estebanco.estebanco.controller;
 import es.estebanco.estebanco.dao.PersonaRepository;
 import es.estebanco.estebanco.dao.RolRepository;
+import es.estebanco.estebanco.dto.PersonaEntityDto;
+import es.estebanco.estebanco.dto.RolEntityDto;
 import es.estebanco.estebanco.entity.PersonaEntity;
 import es.estebanco.estebanco.entity.RolEntity;
+import es.estebanco.estebanco.service.LoginService;
+import es.estebanco.estebanco.service.RolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +19,12 @@ import java.util.List;
 
 @Controller
 public class LoginController {
+
     @Autowired
-    protected PersonaRepository personaRepository;
+    protected LoginService loginService;
     @Autowired
-    protected RolRepository rolRepository;
+    protected RolService rolService;
+
     @GetMapping
     public String doLogin(){return "login";}
     @PostMapping
@@ -26,13 +32,13 @@ public class LoginController {
                                @RequestParam("contraseña") String contrasena,
                                Model model, HttpSession session){
         String urlTo = "redirect:/persona/";
-        PersonaEntity persona = this.personaRepository.autenticar(user,contrasena);
+        PersonaEntityDto persona = this.loginService.autenticar(user,contrasena);
         if(persona==null){
             model.addAttribute("error","Credenciales incorrectas");
             urlTo="login";
         }else{
 
-            List<RolEntity> roles = this.rolRepository.getRolByIdString(persona.getId());
+            List<RolEntityDto> roles = this.rolService.getRolByIdString(persona.getId());
             if(roles.isEmpty()){
                 session.setAttribute("persona",persona);
                 urlTo = "redirect:/persona/?id="+persona.getId();

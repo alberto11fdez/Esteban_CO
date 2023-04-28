@@ -4,13 +4,17 @@
 <%@ page import="es.estebanco.estebanco.ui.FiltroOperacion" %>
 <%@ page import="es.estebanco.estebanco.dao.RolRepository" %>
 <%@ page import="es.estebanco.estebanco.entity.*" %>
+<%@ page import="es.estebanco.estebanco.dto.PersonaEntityDto" %>
+<%@ page import="es.estebanco.estebanco.dto.CuentaEntityDto" %>
+<%@ page import="es.estebanco.estebanco.dto.OperacionEntityDto" %>
+<%@ page import="es.estebanco.estebanco.dto.ConversacionEntityDto" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    PersonaEntity persona = (PersonaEntity) request.getAttribute("persona");
-    List<CuentaEntity> cuentas = (List<CuentaEntity>) request.getAttribute("cuentas");
-    List<OperacionEntity> operaciones = (List<OperacionEntity>) request.getAttribute("operaciones");
-    List<ConversacionEntity> conversaciones = (List<ConversacionEntity>) request.getAttribute("conversaciones");
+    PersonaEntityDto persona = (PersonaEntityDto) request.getAttribute("persona");
+    List<CuentaEntityDto> cuentas = (List<CuentaEntityDto>) request.getAttribute("cuentas");
+    List<OperacionEntityDto> operaciones = (List<OperacionEntityDto>) request.getAttribute("operaciones");
+    List<ConversacionEntityDto> conversaciones = (List<ConversacionEntityDto>) request.getAttribute("conversaciones");
     FiltroOperacion filtro = (FiltroOperacion) request.getAttribute("filtro");
     RolRepository rolRepository=(RolRepository) request.getAttribute("rolrepository");
 
@@ -57,7 +61,7 @@
         <th>FECHA DE APERTURA</th>
     </tr>
     <%
-        for(CuentaEntity cuenta: cuentas){
+        for(CuentaEntityDto cuenta: cuentas){
     %>
     <tr>
         <td><%=cuenta.getIban()%></td>

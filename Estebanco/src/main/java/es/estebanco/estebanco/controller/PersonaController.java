@@ -1,6 +1,11 @@
 package es.estebanco.estebanco.controller;
 import es.estebanco.estebanco.dao.*;
+import es.estebanco.estebanco.dto.ConversacionEntityDto;
+import es.estebanco.estebanco.dto.CuentaEntityDto;
+import es.estebanco.estebanco.dto.PersonaEntityDto;
+import es.estebanco.estebanco.dto.RolEntityDto;
 import es.estebanco.estebanco.entity.*;
+import es.estebanco.estebanco.service.*;
 import es.estebanco.estebanco.ui.FiltroOperacion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,36 +22,37 @@ import java.util.Objects;
 @RequestMapping("/persona")
 public class PersonaController {
 
+
     @Autowired
-    protected PersonaRepository personaRepository;
+    protected CuentaService cuentaService;
     @Autowired
-    protected CuentaRepository cuentaRepository;
+    protected ConversacionService conversacionService;
     @Autowired
-    protected OperacionRepository operacionRepository;
+    protected TipoRolService tipoRolService;
     @Autowired
-    protected TipoRolRepository tipoRolRepository;
+    protected PersonaService personaService;
+    @Autowired
+    protected RolService rolService;
+
     @Autowired
     private RolRepository rolRepository;
-    @Autowired
-    private TipoOperacionEntityRepository tipoOperacionEntityRepository;
-    @Autowired
-    private TipoMonedaEntityRepository tipoMonedaEntityRepository;
+
 
     @GetMapping("/")
     public String doEntrar(@RequestParam("id") Integer idpersona,Model model, HttpSession session) {
-        PersonaEntity persona = personaRepository.findById(idpersona).orElse(null);//(PersonaEntity) session.getAttribute("persona");
+        PersonaEntityDto persona = (PersonaEntityDto) session.getAttribute("persona");
         if (persona == null) {
             return "redirect:/";
 
         } else {
             model.addAttribute("persona",persona);
-            List<CuentaEntity> cuentas = this.cuentaRepository.cuentasPorPersona(persona);
+            List<CuentaEntityDto> cuentas = this.cuentaService.cuentasPorPersona(persona);
             model.addAttribute("cuentas",cuentas);
-            List<ConversacionEntity> conversaciones = this.personaRepository.conversacionPorPersona(persona);
+            List<ConversacionEntityDto> conversaciones = this.conversacionService.conversacionPorPersona(persona);
             model.addAttribute("conversaciones", conversaciones);
-            List<String> tipos_rol = tipoRolRepository.obtenerRoles();
+            List<String> tipos_rol = tipoRolService.obtenerRoles();
             model.addAttribute("tipos_rol",tipos_rol);
-            RolEntity rol=new RolEntity();
+            RolEntityDto rol=new RolEntityDto();
             rol.setPersonaByPersonaId(persona);
             model.addAttribute("rolCuentaNueva",rol);
 
@@ -126,22 +132,22 @@ public class PersonaController {
 
     @GetMapping("/editar")
     public String doEditarPersona(@RequestParam("id") Integer idpersona, Model model){
-        PersonaEntity persona = personaRepository.findById(idpersona).orElse(null);
+        PersonaEntityDto persona = personaService.encontrarPersona(idpersona);
         return this.mostrarEditarONuevo(persona,model);
     }
-    protected String mostrarEditarONuevo(PersonaEntity persona, Model model){
+    protected String mostrarEditarONuevo(PersonaEntityDto persona, Model model){
         model.addAttribute("persona", persona);
         return "datos";
     }
     @PostMapping("/guardar")
-    public String doGuardar (@ModelAttribute("persona") PersonaEntity persona) {
+    public String doGuardar (@ModelAttribute("persona") PersonaEntityDto persona) {
         persona.setEstado("esperandoConfirmacion");
         //si la persona ya esta registrada no la deja (comprobar usuario)
         String usuario=persona.getUsuario();
-        if(personaRepository.buscarSiExisteUsuario(usuario)!=null){
+        if(personaService.buscarSiExisteUsuario(usuario)!=null){
             return "redirect:/persona/registrarPersona";
         }else{
-            this.personaRepository.save(persona);
+            this.personaService.save(persona);
             return "redirect:/persona/?id="+persona.getId();
         }
 
@@ -149,17 +155,17 @@ public class PersonaController {
 
     @GetMapping("/registrarPersona")
     public String registrarPersona(Model model){
-        model.addAttribute("persona",new PersonaEntity());
+        model.addAttribute("persona",new PersonaEntityDto());
         return "datos";
     }
 
 
     @GetMapping("/entrarEnCuenta")
     public String entrarEnCuenta(@RequestParam("idPersona") Integer idPersona,@RequestParam("idCuenta") Integer idCuenta,Model model,HttpSession session){
-        RolEntity rol=rolRepository.obtenerRol_Persona_en_Empresa(idPersona,idCuenta);
+        RolEntityDto rol=rolService.obtenerRol_Persona_en_Empresa(idPersona,idCuenta);
 
         if(Objects.equals(rol.getRol(), "empresa") || Objects.equals(rol.getRol(), "socio") ){
-            session.setAttribute("cuenta",cuentaRepository.findById(idCuenta).orElse(null));
+            session.setAttribute("cuenta",cuentaService.encontrarPorId(idCuenta));
             return "redirect:/cuentaEmpresa/?id="+idCuenta+"&idPersona="+idPersona;
         }else{
             return  "redirect:/cuentaPersona/?idCuenta="+idCuenta;
@@ -169,9 +175,9 @@ public class PersonaController {
 
     @GetMapping("/solicitarActivacion")
     public String solicitarActivacion(@RequestParam("idCuenta") Integer idCuenta, @RequestParam("idPersona") Integer idpersona){
-        CuentaEntity cuenta=cuentaRepository.findById(idCuenta).orElse(null);
+        CuentaEntityDto cuenta=cuentaService.encontrarPorId(idCuenta);
         cuenta.setEstado("esperandoConfirmacion");
-        cuentaRepository.save(cuenta);
+        cuentaService.save(cuenta);
         return "redirect:/persona/?id="+idpersona;
     }
 }
