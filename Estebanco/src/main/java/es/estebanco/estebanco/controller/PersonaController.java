@@ -42,7 +42,8 @@ public class PersonaController {
             model.addAttribute("conversaciones", conversaciones);
             List<String> tipos_rol = cuentaPersonaService.obtenerRoles();
             model.addAttribute("tipos_rol",tipos_rol);
-            RolEntityDto rol=new RolEntityDto();
+            RolEntity rol1 = new RolEntity();
+            RolEntityDto rol = rol1.toDTO();
             rol.setPersonaByPersonaId(persona);
             model.addAttribute("rolCuentaNueva",rol);
 
@@ -145,7 +146,7 @@ public class PersonaController {
 
     @GetMapping("/registrarPersona")
     public String registrarPersona(Model model){
-        model.addAttribute("persona",new PersonaEntityDto());
+        model.addAttribute("persona",cuentaPersonaService.nuevaPersona());
         return "datos";
     }
 

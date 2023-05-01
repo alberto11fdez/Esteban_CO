@@ -233,7 +233,7 @@ public class EmpresaControlador {
         operacion.setTipo(tipo.getNombre());
         operacion.setFechaOperacion(now);
         operacion.setIbanCuentaDestinoOrigen(cuentaDestino.getIban());
-        operacion.setPersonaByPersonaId(personaRepository.propietarioDeCuenta(cuentaOrigen));
+        operacion.setPersonaByPersonaId(personaRepository.propietarioDeCuenta(cuentaOrigen.getId()));
         this.operacionRepository.save(operacion);
     }
 

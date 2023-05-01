@@ -2,10 +2,11 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.estebanco.estebanco.entity.CuentaEntity" %>
 <%@ page import="es.estebanco.estebanco.entity.PersonaEntity" %>
+<%@ page import="es.estebanco.estebanco.dto.CuentaEntityDto" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    CuentaEntity cuenta = (CuentaEntity) request.getAttribute("cuenta");
+    CuentaEntityDto cuenta = (CuentaEntityDto) request.getAttribute("cuenta");
 
 %>
 

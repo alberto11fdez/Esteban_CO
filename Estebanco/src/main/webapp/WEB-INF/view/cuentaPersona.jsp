@@ -5,11 +5,14 @@
 <%@ page import="es.estebanco.estebanco.entity.PersonaEntity" %>
 <%@ page import="es.estebanco.estebanco.entity.RolEntity" %>
 <%@ page import="es.estebanco.estebanco.dao.RolRepository" %>
+<%@ page import="es.estebanco.estebanco.dto.CuentaEntityDto" %>
+<%@ page import="es.estebanco.estebanco.dto.OperacionEntityDto" %>
+<%@ page import="es.estebanco.estebanco.dto.PersonaEntityDto" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    CuentaEntity cuenta = (CuentaEntity) request.getAttribute("cuenta");
-    List<OperacionEntity> operaciones = (List<OperacionEntity>) request.getAttribute("operaciones");
-    PersonaEntity persona = (PersonaEntity) request.getAttribute("persona");
+    CuentaEntityDto cuenta = (CuentaEntityDto) request.getAttribute("cuenta");
+    List<OperacionEntityDto> operaciones = (List<OperacionEntityDto>) request.getAttribute("operaciones");
+    PersonaEntityDto persona = (PersonaEntityDto) request.getAttribute("persona");
 %>
 
 <html>
@@ -44,7 +47,7 @@
 %>
 <table border="1">
     <%
-        for(OperacionEntity operacion: operaciones ){
+        for(OperacionEntityDto operacion: operaciones ){
     %>
     <tr>
         <td><%=operacion.getTipo()%></td>
