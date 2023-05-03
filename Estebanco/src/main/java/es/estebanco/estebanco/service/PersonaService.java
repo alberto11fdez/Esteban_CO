@@ -1,15 +1,22 @@
 package es.estebanco.estebanco.service;
 
 import es.estebanco.estebanco.dao.PersonaRepository;
+import es.estebanco.estebanco.dto.CuentaEntityDto;
 import es.estebanco.estebanco.dto.PersonaEntityDto;
+import es.estebanco.estebanco.entity.CuentaEntity;
 import es.estebanco.estebanco.entity.PersonaEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PersonaService {
     @Autowired
     PersonaRepository personaRepository;
+    @Autowired
+    CuentaPersonaService cuentaPersonaService;
 
     public PersonaEntityDto encontrarPersona(int idpersona){
         PersonaEntity persona = personaRepository.findById(idpersona).orElse(null);
@@ -51,5 +58,78 @@ public class PersonaService {
         }else{
             return null;
         }
+    }
+
+    public List<PersonaEntityDto> obtenerSocioEmpresa(CuentaEntityDto cuentaEmpresa) {
+
+        List<PersonaEntity> personaEntities = personaRepository.obtenerSocioEmpresa(cuentaEmpresa.getId());
+        ArrayList dtos = new ArrayList<PersonaEntityDto>();
+
+        personaEntities.forEach((final PersonaEntity persona) -> dtos.add(persona.toDTO()));
+
+        return  dtos;
+    }
+
+    public List<PersonaEntityDto> personasNoSociosEnCuentaEmpresa(CuentaEntityDto cuentaEmpresa) {
+        List<PersonaEntity> personaEntities = personaRepository.personasNoSociosEnCuentaEmpresa(cuentaEmpresa.getId());
+        ArrayList dtos = new ArrayList<PersonaEntityDto>();
+
+        personaEntities.forEach((final PersonaEntity persona) -> dtos.add(persona.toDTO()));
+
+        return  dtos;
+    }
+
+    public List<PersonaEntityDto> ordenarSociosDniAscendente(CuentaEntityDto cuentaEmpresa) {
+        List<PersonaEntity> personaEntities = personaRepository.ordenarSociosDniAscendente(cuentaEmpresa.getId());
+        ArrayList dtos = new ArrayList<PersonaEntityDto>();
+
+        personaEntities.forEach((final PersonaEntity persona) -> dtos.add(persona.toDTO()));
+
+        return  dtos;
+    }
+
+    public List<PersonaEntityDto> ordenarSociosDniDescendente(CuentaEntityDto cuentaEmpresa) {
+        List<PersonaEntity> personaEntities = personaRepository.ordenarSociosDniDescendente(cuentaEmpresa.getId());
+        ArrayList dtos = new ArrayList<PersonaEntityDto>();
+
+        personaEntities.forEach((final PersonaEntity persona) -> dtos.add(persona.toDTO()));
+
+        return  dtos;
+    }
+
+    public List<PersonaEntityDto> ordenarSociosBloqueados(CuentaEntityDto cuentaEmpresa) {
+        List<PersonaEntity> personaEntities = personaRepository.ordenarSociosBloqueados(cuentaEmpresa.getId());
+        ArrayList dtos = new ArrayList<PersonaEntityDto>();
+
+        personaEntities.forEach((final PersonaEntity persona) -> dtos.add(persona.toDTO()));
+
+        return  dtos;
+    }
+
+    public List<PersonaEntityDto> ordenarSociosActivados(CuentaEntityDto cuentaEmpresa) {
+        List<PersonaEntity> personaEntities = personaRepository.ordenarSociosActivados(cuentaEmpresa.getId());
+        ArrayList dtos = new ArrayList<PersonaEntityDto>();
+
+        personaEntities.forEach((final PersonaEntity persona) -> dtos.add(persona.toDTO()));
+
+        return  dtos;
+    }
+
+    public List<PersonaEntityDto> ordenarSociosApellidosAscendente(CuentaEntityDto cuentaEmpresa) {
+        List<PersonaEntity> personaEntities = personaRepository.ordenarSociosApellidosAscendente(cuentaEmpresa.getId());
+        ArrayList dtos = new ArrayList<PersonaEntityDto>();
+
+        personaEntities.forEach((final PersonaEntity persona) -> dtos.add(persona.toDTO()));
+
+        return  dtos;
+    }
+
+    public List<PersonaEntityDto> ordenarSociosApellidosDescendente(CuentaEntityDto cuentaEmpresa) {
+        List<PersonaEntity> personaEntities = personaRepository.ordenarSociosApellidosDescendente(cuentaEmpresa.getId());
+        ArrayList dtos = new ArrayList<PersonaEntityDto>();
+
+        personaEntities.forEach((final PersonaEntity persona) -> dtos.add(persona.toDTO()));
+
+        return  dtos;
     }
 }

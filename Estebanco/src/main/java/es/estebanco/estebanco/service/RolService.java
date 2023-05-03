@@ -28,4 +28,8 @@ public class RolService {
         this.rolRepository.save(rol);
     }
 
+    public RolEntityDto obtenerRol_Persona_en_Empresa(Integer idSocio, int id) {
+        RolEntity rol = rolRepository.obtenerRol_Persona_en_Empresa(idSocio,id);
+        return rol.toDTO();
+    }
 }
