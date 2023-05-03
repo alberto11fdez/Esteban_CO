@@ -51,8 +51,11 @@ public class CuentaPersonaService {
         cuenta.setMoneda(dto.getMoneda());
         cuenta.setEstado(dto.getEstado());
         cuenta.setFechaApertura(dto.getFechaApertura());
-        cuenta.setOperacionsById(dto.getOperacionsById());
+
+        //cuenta.setOperacionsById(dto.getOperacionsById());
+        cuenta.setOperacionsById(operacionRepository.operacionesPorCuenta(dto.getId()));
         cuenta.setRolsById(dto.getRolsById());
+
     }
 
     public List<String> obtenerRoles(){

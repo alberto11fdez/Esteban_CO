@@ -1,9 +1,12 @@
 package es.estebanco.estebanco.entity;
 
 import es.estebanco.estebanco.dto.CuentaEntityDto;
+import es.estebanco.estebanco.dto.OperacionEntityDto;
+import es.estebanco.estebanco.dto.RolEntityDto;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -119,8 +122,15 @@ public class CuentaEntity {
         dto.setEstado(this.estado);
         dto.setFechaApertura(this.fechaApertura);
         dto.setId(this.id);
-        dto.setOperacionsById(this.operacionsById);
-        dto.setRolsById(this.rolsById);
+
+
+        ArrayList dtosOperacion = new ArrayList<OperacionEntityDto>();
+        operacionsById.forEach((final OperacionEntity operacion) -> dtosOperacion.add(operacion.toDTO()));
+        ArrayList dtosRol = new ArrayList<RolEntityDto>();
+        rolsById.forEach((final RolEntity rol) -> dtosRol.add(rol.toDTO()));
+
+        dto.setOperacionsById(dtosOperacion);
+        dto.setRolsById(dtosRol);
         return dto;
     }
 }

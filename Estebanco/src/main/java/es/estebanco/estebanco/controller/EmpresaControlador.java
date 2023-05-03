@@ -35,6 +35,8 @@ public class EmpresaControlador {
     protected RolService rolService;
     //protected RolRepository rolRepository;
     @Autowired
+    protected RolRepository rolRepository;
+    @Autowired
     protected TipoOperacionService tipoOperacionService;
     //protected TipoOperacionEntityRepository tipoOperacionEntityRepository;
 
@@ -66,7 +68,7 @@ public class EmpresaControlador {
 
         model.addAttribute("rolrepository", rolRepository);
 
-        model.addAttribute("tipo_operaciones", tipoOperacionEntityRepository.findAll());
+        model.addAttribute("tipo_operaciones", tipoMonedaService.findAll());
 
         //OperacionEntity operacion = new OperacionEntity();
         OperacionEntityDto operacion=new OperacionEntityDto();
@@ -155,7 +157,7 @@ public class EmpresaControlador {
 
         model.addAttribute("rolrepository", rolRepository);
 
-        model.addAttribute("tipo_operaciones", tipoOperacionEntityRepository.findAll());
+        model.addAttribute("tipo_operaciones", tipoOperacionService.findAll());
 
         //OperacionEntity operacion = new OperacionEntity();
         OperacionEntityDto operacion= new OperacionEntityDto();
