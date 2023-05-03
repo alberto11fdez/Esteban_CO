@@ -130,7 +130,8 @@ public class PersonaController {
         model.addAttribute("persona", persona);
         return "datos";
     }
-    @PostMapping("/guardar")
+
+    /*@PostMapping("/guardar")
     public String doGuardar (@ModelAttribute("persona") PersonaEntityDto persona) {
         persona.setEstado("esperandoConfirmacion");
         //si la persona ya esta registrada no la deja (comprobar usuario)
@@ -144,11 +145,22 @@ public class PersonaController {
 
     }
 
+
+     */
+     @PostMapping("/guardar")
+     public String doGuardar(@ModelAttribute("persona") PersonaEntityDto persona){
+         int id = this.cuentaPersonaService.guardarPersona(persona);
+         return "redirect:/persona/?id="+id;
+     }
+
     @GetMapping("/registrarPersona")
     public String registrarPersona(Model model){
-        model.addAttribute("persona",cuentaPersonaService.nuevaPersona());
+        PersonaEntityDto dto = new PersonaEntityDto();
+        model.addAttribute("persona",dto);
         return "datos";
     }
+
+
 
 
     @GetMapping("/entrarEnCuenta")

@@ -245,6 +245,23 @@ public class CuentaPersonaService {
     }
 
     public PersonaEntityDto nuevaPersona() {
-        return new PersonaEntity().toDTO();
+        PersonaEntity persona = new PersonaEntity();
+        PersonaEntityDto dto = persona.toDTO();
+        return dto;
+    }
+
+    public Integer guardarPersona(PersonaEntityDto dto){
+        PersonaEntity persona;
+        persona = new PersonaEntity();
+
+        persona.setDni(dto.getDni());
+        persona.setUsuario(dto.getUsuario());
+        persona.setEstado(dto.getEstado());
+        persona.setNombre(dto.getNombre());
+        persona.setApellido1(dto.getApellido1());
+
+        this.personaRepository.save(persona);
+
+        return persona.getId();
     }
 }

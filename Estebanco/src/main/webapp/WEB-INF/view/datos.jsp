@@ -7,7 +7,7 @@
 <body>
 <h1>Datos del cliente:</h1>
 <form:form action="/persona/guardar" modelAttribute="persona" method="post">
-    <form:hidden path="id"/>
+
     Dni:<form:input path="dni" size="9" maxlength="9"/><br/>
     Nombre:<form:input path="nombre" size="40" maxlength="40"/><br/>
     Primer apellido: <form:input path="apellido1" size="40" maxlength="50"/><br/>
