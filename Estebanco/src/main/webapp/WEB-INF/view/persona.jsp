@@ -46,8 +46,6 @@
 <h2>Cuentas:</h2>
 <form:form action="/crearCuenta" modelAttribute="rolCuentaNueva" method="post">
     <form:button>Crear Cuenta </form:button>
-    <form:hidden path="id"></form:hidden>
-    <form:hidden path="personaByPersonaId"></form:hidden>
      Tipo de Cuenta: <form:select path="rol" items="${tipos_rol}" />
 </form:form>
 

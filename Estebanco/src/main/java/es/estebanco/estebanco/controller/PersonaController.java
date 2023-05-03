@@ -46,7 +46,7 @@ public class PersonaController {
             model.addAttribute("tipos_rol",tipos_rol);
             RolEntity rol1 = new RolEntity();
             RolEntityDto rol = rol1.toDTO();
-            rol.setPersonaByPersonaId(persona);
+           // rol.setPersonaByPersonaId(persona);
             model.addAttribute("rolCuentaNueva",rol);
 
             model.addAttribute("rolrepository",rolRepository);

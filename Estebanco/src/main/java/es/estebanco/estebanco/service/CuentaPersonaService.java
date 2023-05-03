@@ -270,4 +270,11 @@ public class CuentaPersonaService {
 
         return persona.getId();
     }
+    public Integer saveCuentaNueva(CuentaEntityDto dto) {
+        CuentaEntity cuenta = new CuentaEntity();
+        cuenta.setEstado("esperandoConfirmacion");
+
+        cuentaRepository.save(cuenta);
+        return cuenta.getId();
+    }
 }

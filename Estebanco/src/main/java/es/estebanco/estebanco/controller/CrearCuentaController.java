@@ -3,9 +3,15 @@ package es.estebanco.estebanco.controller;
 import es.estebanco.estebanco.dao.CuentaRepository;
 import es.estebanco.estebanco.dao.PersonaRepository;
 import es.estebanco.estebanco.dao.RolRepository;
+import es.estebanco.estebanco.dto.CuentaEntityDto;
+import es.estebanco.estebanco.dto.PersonaEntityDto;
+import es.estebanco.estebanco.dto.RolEntityDto;
 import es.estebanco.estebanco.entity.CuentaEntity;
 import es.estebanco.estebanco.entity.PersonaEntity;
 import es.estebanco.estebanco.entity.RolEntity;
+import es.estebanco.estebanco.service.CuentaPersonaService;
+import es.estebanco.estebanco.service.PersonaService;
+import es.estebanco.estebanco.service.RolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,21 +26,29 @@ import java.sql.Timestamp;
 @Controller
 public class CrearCuentaController {
     @Autowired
-    protected RolRepository rolRepository;
+    protected RolService rolService;
     @Autowired
-    protected CuentaRepository cuentaRepository;
+    protected CuentaPersonaService cuentaService;
     @Autowired
-    protected PersonaRepository personaRepository;
+    protected PersonaService personaService;
+
     @PostMapping ("/crearCuenta")
-    public String crearCuenta(@ModelAttribute("rolCuentaNueva") RolEntity rol, HttpSession session){
+    public String crearCuenta(@ModelAttribute("rolCuentaNueva") RolEntityDto rol, HttpSession session){
 
-        CuentaEntity cuenta=new CuentaEntity();
+
+        CuentaEntityDto cuenta = new CuentaEntityDto();
         cuenta.setEstado("esperandoConfirmacion");
-        cuentaRepository.save(cuenta);
-
+        Integer idcuenta = cuentaService.saveCuentaNueva(cuenta);
+        cuenta=cuentaService.encontrarCuentaPorId(idcuenta);
         rol.setCuentaByCuentaId(cuenta);
+
         rol.setRol(rol.getRol());
-        rolRepository.save(rol);
+
+        PersonaEntityDto personaEntityDto =(PersonaEntityDto) session.getAttribute("persona");
+        personaEntityDto= personaService.buscarPersonaPorId(personaEntityDto.getId());
+        rol.setPersonaByPersonaId(personaEntityDto);
+
+        rolService.saveRol(rol);
 
         session.setAttribute("cuenta",cuenta);
         if(rol.getRol().equals("empresa")){
