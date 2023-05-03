@@ -259,6 +259,12 @@ public class CuentaPersonaService {
         persona.setEstado(dto.getEstado());
         persona.setNombre(dto.getNombre());
         persona.setApellido1(dto.getApellido1());
+        persona.setApellido2(dto.getApellido2());
+        persona.setContraseña(dto.getContraseña());
+        persona.setCorreo(dto.getCorreo());
+        persona.setDireccion(dto.getDireccion());
+        persona.setTelefono(dto.getTelefono());
+
 
         this.personaRepository.save(persona);
 
