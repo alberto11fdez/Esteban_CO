@@ -111,7 +111,7 @@
         </svg></th>
     </tr>
     <%
-        for(ConversacionEntity conversacion: persona.getConversacionsById()){
+        for(ConversacionEntityDto conversacion: conversaciones){
             if(conversacion.getEstado()==1){
     %>
     <tr>

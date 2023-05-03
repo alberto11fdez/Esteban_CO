@@ -18,6 +18,15 @@ public class ConversacionEntityDto implements Serializable {
     private PersonaEntityDto personaByPersonaId;
     private PersonaEntityDto personaByAsistenteId;
     private List<MensajeEntity> mensajesByIdconversacion;
+    private Integer idAsistente;
+
+    public Integer getIdPersona() {
+        return idAsistente;
+    }
+
+    public void setIdPersona(Integer idPersona) {
+        this.idAsistente = idPersona;
+    }
 
     public Integer getIdconversacion() {
         return idconversacion;

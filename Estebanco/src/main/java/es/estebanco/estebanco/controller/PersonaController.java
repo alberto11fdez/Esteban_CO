@@ -22,18 +22,8 @@ import java.util.Objects;
 @RequestMapping("/persona")
 public class PersonaController {
 
-
     @Autowired
-    protected CuentaService cuentaService;
-    @Autowired
-    protected ConversacionService conversacionService;
-    @Autowired
-    protected TipoRolService tipoRolService;
-    @Autowired
-    protected PersonaService personaService;
-    @Autowired
-    protected RolService rolService;
-
+    private CuentaPersonaService cuentaPersonaService;
     @Autowired
     private RolRepository rolRepository;
 
@@ -46,13 +36,14 @@ public class PersonaController {
 
         } else {
             model.addAttribute("persona",persona);
-            List<CuentaEntityDto> cuentas = this.cuentaService.cuentasPorPersona(persona);
+            List<CuentaEntityDto> cuentas = this.cuentaPersonaService.cuentasPorPersona(persona);
             model.addAttribute("cuentas",cuentas);
-            List<ConversacionEntityDto> conversaciones = this.conversacionService.conversacionPorPersona(persona);
+            List<ConversacionEntityDto> conversaciones = this.cuentaPersonaService.conversacionPorPersona(persona);
             model.addAttribute("conversaciones", conversaciones);
-            List<String> tipos_rol = tipoRolService.obtenerRoles();
+            List<String> tipos_rol = cuentaPersonaService.obtenerRoles();
             model.addAttribute("tipos_rol",tipos_rol);
-            RolEntityDto rol=new RolEntityDto();
+            RolEntity rol1 = new RolEntity();
+            RolEntityDto rol = rol1.toDTO();
             rol.setPersonaByPersonaId(persona);
             model.addAttribute("rolCuentaNueva",rol);
 
@@ -132,7 +123,7 @@ public class PersonaController {
 
     @GetMapping("/editar")
     public String doEditarPersona(@RequestParam("id") Integer idpersona, Model model){
-        PersonaEntityDto persona = personaService.encontrarPersona(idpersona);
+        PersonaEntityDto persona = cuentaPersonaService.encontrarPersona(idpersona);
         return this.mostrarEditarONuevo(persona,model);
     }
     protected String mostrarEditarONuevo(PersonaEntityDto persona, Model model){
@@ -144,10 +135,10 @@ public class PersonaController {
         persona.setEstado("esperandoConfirmacion");
         //si la persona ya esta registrada no la deja (comprobar usuario)
         String usuario=persona.getUsuario();
-        if(personaService.buscarSiExisteUsuario(usuario)!=null){
+        if(cuentaPersonaService.buscarSiExisteUsuario(usuario)!=null){
             return "redirect:/persona/registrarPersona";
         }else{
-            this.personaService.save(persona);
+            this.cuentaPersonaService.savePersona(persona);
             return "redirect:/persona/?id="+persona.getId();
         }
 
@@ -155,17 +146,17 @@ public class PersonaController {
 
     @GetMapping("/registrarPersona")
     public String registrarPersona(Model model){
-        model.addAttribute("persona",new PersonaEntityDto());
+        model.addAttribute("persona",cuentaPersonaService.nuevaPersona());
         return "datos";
     }
 
 
     @GetMapping("/entrarEnCuenta")
     public String entrarEnCuenta(@RequestParam("idPersona") Integer idPersona,@RequestParam("idCuenta") Integer idCuenta,Model model,HttpSession session){
-        RolEntityDto rol=rolService.obtenerRol_Persona_en_Empresa(idPersona,idCuenta);
+        RolEntityDto rol=cuentaPersonaService.obtenerRol_Persona_en_Empresa(idPersona,idCuenta);
 
         if(Objects.equals(rol.getRol(), "empresa") || Objects.equals(rol.getRol(), "socio") ){
-            session.setAttribute("cuenta",cuentaService.encontrarPorId(idCuenta));
+            session.setAttribute("cuenta",cuentaPersonaService.encontrarCuentaPorId(idCuenta));
             return "redirect:/cuentaEmpresa/?id="+idCuenta+"&idPersona="+idPersona;
         }else{
             return  "redirect:/cuentaPersona/?idCuenta="+idCuenta;
@@ -175,9 +166,9 @@ public class PersonaController {
 
     @GetMapping("/solicitarActivacion")
     public String solicitarActivacion(@RequestParam("idCuenta") Integer idCuenta, @RequestParam("idPersona") Integer idpersona){
-        CuentaEntityDto cuenta=cuentaService.encontrarPorId(idCuenta);
+        CuentaEntityDto cuenta=cuentaPersonaService.encontrarCuentaPorId(idCuenta);
         cuenta.setEstado("esperandoConfirmacion");
-        cuentaService.save(cuenta);
+        cuentaPersonaService.saveCuenta(cuenta);
         return "redirect:/persona/?id="+idpersona;
     }
 }

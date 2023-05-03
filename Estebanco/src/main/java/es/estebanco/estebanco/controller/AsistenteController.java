@@ -1,6 +1,7 @@
 package es.estebanco.estebanco.controller;
 
 import es.estebanco.estebanco.dto.ConversacionEntityDto;
+import es.estebanco.estebanco.dto.MensajeEntityDto;
 import es.estebanco.estebanco.dto.PersonaEntityDto;
 import es.estebanco.estebanco.entity.ConversacionEntity;
 import es.estebanco.estebanco.entity.PersonaEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -100,7 +102,9 @@ public class AsistenteController {
         conversacionNueva.setPersonaByPersonaId(cliente);
 
         //introduzco a null el asistente y lo seleccionará el cliente
-        conversacionNueva.setPersonaByAsistenteId(null);
+        //conversacionNueva.setPersonaByAsistenteId(new PersonaEntityDto());
+
+        //conversacionNueva.setMensajesByIdconversacion(new ArrayList<>());
 
 
         List<PersonaEntityDto> asistentes = this.asistenteService.getAsistente();

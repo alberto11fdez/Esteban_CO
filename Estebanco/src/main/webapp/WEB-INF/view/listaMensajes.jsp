@@ -34,7 +34,7 @@
             }else{
 
 %>
-        <p style="font-size: 15px" align="center"><%=asistente.getNombre()%>: <%=m.getTexto()%>  <a style="font-size: 10px; margin-left: 5px">(<%=m.getFechaEnvio()%>)</a></p>
+        <p style="font-size: 15px" align="center"><%=asistente.getNombre()%>: <%=m.getTexto()%>.<a style="font-size: 10px; margin-left: 5px">(<%=m.getFechaEnvio()%>)</a></p>
 <%
             }
         }

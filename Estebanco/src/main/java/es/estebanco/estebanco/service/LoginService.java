@@ -16,11 +16,18 @@ import java.util.List;
 public class LoginService {
     @Autowired
     protected PersonaRepository personaRepository;
-
+    @Autowired
+    protected RolRepository rolRepository;
 
     public PersonaEntityDto autenticar(String user, String contrasena){
         PersonaEntity persona = this.personaRepository.autenticar(user,contrasena);
         return (persona == null ? null : persona.toDTO());
+    }
+    public List<RolEntityDto> getRolByIdString(int iduser){
+        ArrayList dtos = new ArrayList<RolEntityDto>();
+        List<RolEntity> lista = rolRepository.getRolByIdString(iduser);
+        lista.forEach((final RolEntity rol)->dtos.add(rol.toDTO()));
+        return dtos;
     }
 
 

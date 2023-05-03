@@ -19,16 +19,16 @@ public interface OperacionRepository extends JpaRepository<OperacionEntity, Inte
 
 
 
-    @Query("select o from OperacionEntity o join CuentaEntity c on o.cuentaByCuentaId=c  and :cuenta = c")
-    public List<OperacionEntity> operacionesPorCuenta(@Param("cuenta") CuentaEntity cuenta);
-    @Query("select o from OperacionEntity o   join CuentaEntity c on o.cuentaByCuentaId=c  and :cuenta = c and o.tipo=:tipo")
-    public List<OperacionEntity> operacionesPorCuentaYTipo(@Param("cuenta") CuentaEntity cuenta, @Param("tipo") String tipo);
-    @Query("select o from OperacionEntity o   join CuentaEntity c on o.cuentaByCuentaId=c  and :cuenta = c and o.moneda=:moneda")
-    public List<OperacionEntity> operacionesPorCuentaYMoneda(@Param("cuenta") CuentaEntity cuenta, @Param("moneda") String moneda);
-    @Query("select o from OperacionEntity o join CuentaEntity c on o.cuentaByCuentaId=c and :cuenta=c order by o.fechaOperacion")
-    public List<OperacionEntity> operacionesPorCuentaOrdenadoPorFecha(@Param("cuenta") CuentaEntity cuenta);
-    @Query("select o from OperacionEntity o join CuentaEntity c on o.cuentaByCuentaId=c  and :cuenta = c order by o.cantidad")
-    public List<OperacionEntity> operacionesPorCuentaOrdenadoPorCantidad(@Param("cuenta") CuentaEntity cuenta);
+    @Query("select o from OperacionEntity o join CuentaEntity c on o.cuentaByCuentaId=c  and :cuenta = c.id")
+    public List<OperacionEntity> operacionesPorCuenta(@Param("cuenta") int cuenta);
+    @Query("select o from OperacionEntity o   join CuentaEntity c on o.cuentaByCuentaId=c  and :cuenta = c.id and o.tipo=:tipo")
+    public List<OperacionEntity> operacionesPorCuentaYTipo(@Param("cuenta") int cuenta, @Param("tipo") String tipo);
+    @Query("select o from OperacionEntity o   join CuentaEntity c on o.cuentaByCuentaId=c  and :cuenta = c.id and o.moneda=:moneda")
+    public List<OperacionEntity> operacionesPorCuentaYMoneda(@Param("cuenta") int cuenta, @Param("moneda") String moneda);
+    @Query("select o from OperacionEntity o join CuentaEntity c on o.cuentaByCuentaId=c and :cuenta=c.id order by o.fechaOperacion")
+    public List<OperacionEntity> operacionesPorCuentaOrdenadoPorFecha(@Param("cuenta") int cuenta);
+    @Query("select o from OperacionEntity o join CuentaEntity c on o.cuentaByCuentaId=c  and :cuenta = c.id order by o.cantidad")
+    public List<OperacionEntity> operacionesPorCuentaOrdenadoPorCantidad(@Param("cuenta") int cuenta);
     @Query("select o from OperacionEntity o join CuentaEntity c on o.cuentaByCuentaId=c  join RolEntity  r on r.cuentaByCuentaId=c and r.personaByPersonaId=:persona")
     public List<OperacionEntity> operacionesPorPersona(@Param("persona") PersonaEntity persona);
 

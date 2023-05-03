@@ -129,7 +129,7 @@ public class ConversacionService {
         conversacion.setFechaFin(dto.getFechaFin());
 
         PersonaEntityDto personaDto=dto.getPersonaByPersonaId();
-        PersonaEntity persona = null;
+        PersonaEntity persona = new PersonaEntity();
         persona.setId(personaDto.getId());
         persona.setDni(personaDto.getDni());
         persona.setNombre(personaDto.getNombre());
@@ -149,7 +149,7 @@ public class ConversacionService {
         conversacion.setPersonaByPersonaId(persona);
 
         PersonaEntityDto asistenteDto =dto.getPersonaByAsistenteId();
-        PersonaEntity asistente = null;
+        PersonaEntity asistente = new PersonaEntity();
         asistente.setId(personaDto.getId());
         asistente.setDni(personaDto.getDni());
         asistente.setNombre(personaDto.getNombre());
