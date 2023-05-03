@@ -2,18 +2,14 @@ package es.estebanco.estebanco.controller;
 
 import es.estebanco.estebanco.dao.*;
 import es.estebanco.estebanco.entity.*;
-import es.estebanco.estebanco.ui.FiltroOperacionEmpresa;
+import es.estebanco.estebanco.ui.FiltroOperacion;
 import es.estebanco.estebanco.ui.FiltroOperacionSocio;
+import es.estebanco.estebanco.ui.FiltroSocios;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
@@ -62,8 +58,79 @@ public class EmpresaControlador {
 
         model.addAttribute("tipo_operaciones", tipoOperacionEntityRepository.findAll());
 
-        FiltroOperacionEmpresa filtro = new FiltroOperacionEmpresa();
-        model.addAttribute("filtro", filtro);
+        OperacionEntity operacion = new OperacionEntity();
+        operacion.setCuentaByCuentaId(cuentaEmpresa);
+        operacion.setPersonaByPersonaId(persona);
+        model.addAttribute("operacion", operacion);
+
+        model.addAttribute("filtroOperacionSocio", new FiltroOperacionSocio());
+
+        List<OperacionEntity> operacionesRecibidas = operacionRepository.buscarOperacionesRecibidas(cuentaEmpresa.getIban());
+        model.addAttribute("operacionesRecibidas",operacionesRecibidas);
+
+
+        FiltroOperacion filtroOperacion = new FiltroOperacion();
+        model.addAttribute("filtroOperacion", filtroOperacion);
+        model.addAttribute("tipos_filtro",filtroOperacion.getTipos_filtro());
+
+        FiltroSocios filtroSocios = new FiltroSocios();
+        model.addAttribute("filtroSocios",filtroSocios);
+        model.addAttribute("tipos_filtro_socio",filtroSocios.getTipos_filtro_socio());
+
+
+        return "cuentaEmpresa";
+    }
+
+    @PostMapping("/filtrar")
+    public String filtrar(@ModelAttribute("filtroOperacion") FiltroOperacion filtroOperacion,Model model,HttpSession session){
+        List<OperacionEntity> operaciones;
+        CuentaEntity cuentaEmpresa =(CuentaEntity) session.getAttribute("cuenta");
+        if(filtroOperacion==null){
+            filtroOperacion = new FiltroOperacion();
+            filtroOperacion.setIdpersona(cuentaEmpresa.getId());
+        }
+        switch(filtroOperacion.getTipo()){
+            case "sacar":
+                operaciones = this.operacionRepository.operacionesPorCuentaYTipo(cuentaEmpresa.getId(),filtroOperacion.getTipo());
+                break;
+            case "meter":
+                operaciones = this.operacionRepository.operacionesPorCuentaYTipo(cuentaEmpresa.getId(),filtroOperacion.getTipo());
+                break;
+            case "cambio divisa":
+                operaciones = this.operacionRepository.operacionesPorCuentaYTipo(cuentaEmpresa.getId(),filtroOperacion.getTipo());
+                break;
+            case "euro":
+                operaciones = this.operacionRepository.operacionesPorCuentaYMoneda(cuentaEmpresa.getId(),filtroOperacion.getTipo());
+                break;
+            case "libra":
+                operaciones = this.operacionRepository.operacionesPorCuentaYMoneda(cuentaEmpresa.getId(),filtroOperacion.getTipo());
+                break;
+            case "ordenar por fecha":
+                operaciones = this.operacionRepository.operacionesPorCuentaOrdenadoPorFecha(cuentaEmpresa.getId());
+                break;
+            case "ordenar por cantidad":
+                operaciones = this.operacionRepository.operacionesPorCuentaOrdenadoPorCantidad(cuentaEmpresa.getId());
+                break;
+            default:
+                operaciones = this.operacionRepository.operacionesPorCuenta(cuentaEmpresa.getId());
+
+        }
+
+        PersonaEntity personaAux= (PersonaEntity) session.getAttribute("persona");
+        PersonaEntity persona = personaRepository.findById(personaAux.getId()).orElse(null);
+
+        model.addAttribute("cuentaEmpresa", cuentaEmpresa);
+
+        model.addAttribute("persona", persona);
+
+        model.addAttribute("operaciones", operaciones);
+
+        List<PersonaEntity> socios = personaRepository.obtenerSocioEmpresa(cuentaEmpresa);
+        model.addAttribute("socios", socios);
+
+        model.addAttribute("rolrepository", rolRepository);
+
+        model.addAttribute("tipo_operaciones", tipoOperacionEntityRepository.findAll());
 
         OperacionEntity operacion = new OperacionEntity();
         operacion.setCuentaByCuentaId(cuentaEmpresa);
@@ -74,9 +141,17 @@ public class EmpresaControlador {
 
         List<OperacionEntity> operacionesRecibidas = operacionRepository.buscarOperacionesRecibidas(cuentaEmpresa.getIban());
         model.addAttribute("operacionesRecibidas",operacionesRecibidas);
+
+        //filtros para las distintas listas
+        model.addAttribute("filtroOperacion", filtroOperacion);
+        model.addAttribute("tipos_filtro",filtroOperacion.getTipos_filtro());
+
+        FiltroSocios filtroSocios = new FiltroSocios();
+        model.addAttribute("filtroSocios",filtroSocios);
+        model.addAttribute("tipos_filtro_socio",filtroSocios.getTipos_filtro_socio());
+
         return "cuentaEmpresa";
     }
-
 
     @GetMapping("/crearSocio")
     public String goCrearSocios(Model model, @RequestParam("idCuenta") Integer idCuenta, HttpSession session) {
@@ -127,6 +202,7 @@ public class EmpresaControlador {
 
     @PostMapping("/socio/guardarYaExistente")
     public String doGuardarSocioYaExistente(@ModelAttribute("rolNuevo") RolEntity rol,HttpSession session) {
+
         rol.setRol("socio");
         rol.setBloqueado_empresa((byte) 0);
         rolRepository.save(rol);
@@ -209,7 +285,7 @@ public class EmpresaControlador {
                 cuentaDestino.setSaldo(cuentaDestino.getSaldo() + valor);
                 this.cuentaRepository.save(cuentaOrigen);
                 this.cuentaRepository.save(cuentaDestino);
-                this.nuevaOperacionSacarTransferencia(cuentaOrigen, cuentaDestino, valor);
+                this.nuevaOperacionSacarTransferencia(cuentaOrigen, cuentaDestino, valor,session);
 
             }
         }
@@ -224,7 +300,11 @@ public class EmpresaControlador {
         return "transferenciaEmpresa";
     }
 
-    protected void nuevaOperacionSacarTransferencia(CuentaEntity cuentaOrigen, CuentaEntity cuentaDestino, Integer valor) {
+    protected void nuevaOperacionSacarTransferencia(CuentaEntity cuentaOrigen, CuentaEntity cuentaDestino, Integer valor,HttpSession session) {
+
+        PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
+        int idPersona=persona.getId();
+
         Date now = new Date();
         OperacionEntity operacion = new OperacionEntity();
         TipoOperacionEntity tipo = this.tipoOperacionEntityRepository.buscarTipo(1);
@@ -233,7 +313,7 @@ public class EmpresaControlador {
         operacion.setTipo(tipo.getNombre());
         operacion.setFechaOperacion(now);
         operacion.setIbanCuentaDestinoOrigen(cuentaDestino.getIban());
-        operacion.setPersonaByPersonaId(personaRepository.propietarioDeCuenta(cuentaOrigen.getId()));
+        operacion.setPersonaByPersonaId(personaRepository.findById(idPersona).orElse(null));
         this.operacionRepository.save(operacion);
     }
 
@@ -246,7 +326,8 @@ public class EmpresaControlador {
         model.addAttribute("cuenta", cuenta);
         model.addAttribute("monedas", monedas);
         model.addAttribute("persona", persona);
-        return "cambioDivisaPersona";
+
+        return "cambioDivisaEmpresa";
     }
 
     @PostMapping("/guardarDivisa")
@@ -297,8 +378,7 @@ public class EmpresaControlador {
 
         model.addAttribute("tipo_operaciones", tipoOperacionEntityRepository.findAll());
 
-        FiltroOperacionEmpresa filtro = new FiltroOperacionEmpresa();
-        model.addAttribute("filtro", filtro);
+
 
         OperacionEntity operacion = new OperacionEntity();
         operacion.setCuentaByCuentaId(cuentaEmpresa);
@@ -307,6 +387,88 @@ public class EmpresaControlador {
 
         model.addAttribute("filtroOperacionSocio", new FiltroOperacionSocio());
 
+        FiltroOperacion filtro = new FiltroOperacion();
+        model.addAttribute("filtroOperacion",filtro);
+        model.addAttribute("tipos_filtro",filtro.getTipos_filtro());
+
+        FiltroSocios filtroSocios = new FiltroSocios();
+        model.addAttribute("filtroSocios",filtroSocios);
+        model.addAttribute("tipos_filtro_socio",filtroSocios.getTipos_filtro_socio());
+        return "cuentaEmpresa";
+    }
+
+    @PostMapping("/filtrarSocios")
+    public String filtroSocios(@ModelAttribute("filtroSocios") FiltroSocios filtroSocios,Model model,HttpSession session){
+
+        List<PersonaEntity> socios;
+        CuentaEntity cuentaEmpresaAux =(CuentaEntity) session.getAttribute("cuenta");
+        CuentaEntity cuentaEmpresa=cuentaRepository.findById(cuentaEmpresaAux.getId()).orElse(null);
+        if(filtroSocios==null){
+            filtroSocios = new FiltroSocios();
+            filtroSocios.setIdpersona(cuentaEmpresa.getId());
+        }
+        switch(filtroSocios.getTipo()){
+            case "Orden Dni Ascendente":
+
+                socios = personaRepository.ordenarSociosDniAscendente(cuentaEmpresa);
+                break;
+            case "Orden Dni Descendente":
+                socios = personaRepository.ordenarSociosDniDescendente(cuentaEmpresa);
+                break;
+            case "Bloqueados":
+                socios=personaRepository.ordenarSociosBloqueados(cuentaEmpresa);
+                break;
+            case "Activos":
+                socios=personaRepository.ordenarSociosActivados(cuentaEmpresa);
+                break;
+            case "Orden Apellidos Ascendente":
+                socios=personaRepository.ordenarSociosApellidosAscendente(cuentaEmpresa);
+                break;
+            case "Orden Apellidos Descendente":
+                socios=personaRepository.ordenarSociosApellidosDescendente(cuentaEmpresa);
+                break;
+            default:
+                socios=personaRepository.ordenarSociosDniAscendente(cuentaEmpresa);
+
+        }
+
+        PersonaEntity personaAux= (PersonaEntity) session.getAttribute("persona");
+        PersonaEntity persona = personaRepository.findById(personaAux.getId()).orElse(null);
+
+        model.addAttribute("cuentaEmpresa", cuentaEmpresa);
+
+        model.addAttribute("persona", persona);
+
+        List<OperacionEntity> operaciones = cuentaEmpresa.getOperacionsById();
+        model.addAttribute("operaciones", operaciones);
+
+
+        model.addAttribute("socios", socios);
+
+        model.addAttribute("rolrepository", rolRepository);
+
+        model.addAttribute("tipo_operaciones", tipoOperacionEntityRepository.findAll());
+
+        OperacionEntity operacion = new OperacionEntity();
+        operacion.setCuentaByCuentaId(cuentaEmpresa);
+        operacion.setPersonaByPersonaId(persona);
+        model.addAttribute("operacion", operacion);
+
+        model.addAttribute("filtroOperacionSocio", new FiltroOperacionSocio());
+
+        List<OperacionEntity> operacionesRecibidas = operacionRepository.buscarOperacionesRecibidas(cuentaEmpresa.getIban());
+        model.addAttribute("operacionesRecibidas",operacionesRecibidas);
+
+        //filtros para las distintas listas
+        FiltroOperacion filtroOperacion=new FiltroOperacion();
+        model.addAttribute("filtroOperacion", filtroOperacion);
+        model.addAttribute("tipos_filtro",filtroOperacion.getTipos_filtro());
+
+        FiltroSocios filtroSocios1 = new FiltroSocios();
+        model.addAttribute("filtroSocios",filtroSocios1);
+        model.addAttribute("tipos_filtro_socio",filtroSocios1.getTipos_filtro_socio());
+
         return "cuentaEmpresa";
     }
 }
+
