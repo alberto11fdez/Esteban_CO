@@ -42,4 +42,14 @@ public class PersonaService {
         PersonaEntity persona= personaRepository.buscarSiExisteUsuario(usuario);
         return persona.toDTO();
     }
+
+
+    public PersonaEntityDto buscarPersonaPorId(Integer idPersona){
+        PersonaEntity persona = this.personaRepository.buscarPersonaPorId(idPersona);
+        if(persona!=null){
+            return persona.toDTO();
+        }else{
+            return null;
+        }
+    }
 }

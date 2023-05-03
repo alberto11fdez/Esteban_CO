@@ -97,7 +97,8 @@ public class MensajeEntity {
         dto.setTexto(this.texto);
         dto.setConversacionEmisorId(this.conversacionEmisorId);
         dto.setConversacionReceptorId(this.conversacionReceptorId);
-        dto.setConversacionByConversacionIdconversacion(this.conversacionByConversacionIdconversacion.toDTO());
+        //dto.setConversacionByConversacionIdconversacion(this.conversacionByConversacionIdconversacion.toDTO());
+        dto.setIdconversacion(this.conversacionEmisorId);
         return dto;
     }
 }

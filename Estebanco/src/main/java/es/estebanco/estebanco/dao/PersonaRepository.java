@@ -37,4 +37,8 @@ public interface PersonaRepository extends JpaRepository<PersonaEntity, Integer>
     @Query("select distinct p from PersonaEntity p where p.estado = :estado")
     public List<PersonaEntity> obtenerPersonasPorEstado(@Param("estado")String estado);
 
+
+    @Query("select p from PersonaEntity p where p.id= :idPersona ")
+    public PersonaEntity buscarPersonaPorId(@Param("idPersona")Integer idPersona);
+
 }

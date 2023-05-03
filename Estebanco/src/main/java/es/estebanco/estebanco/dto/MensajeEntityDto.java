@@ -13,7 +13,16 @@ public class MensajeEntityDto implements Serializable {
     private  String texto;
     private  Integer conversacionEmisorId;
     private  Integer conversacionReceptorId;
-    private ConversacionEntityDto conversacionByConversacionIdconversacion;
+    //private ConversacionEntityDto conversacionByConversacionIdconversacion;
+    private Integer idconversacion;
+
+    public Integer getIdconversacion() {
+        return idconversacion;
+    }
+
+    public void setIdconversacion(Integer idconversacion) {
+        this.idconversacion = idconversacion;
+    }
 
     public int getIdmensaje() {
         return idmensaje;
@@ -54,7 +63,7 @@ public class MensajeEntityDto implements Serializable {
     public void setConversacionReceptorId(Integer conversacionReceptorId) {
         this.conversacionReceptorId = conversacionReceptorId;
     }
-
+/*
     public ConversacionEntityDto getConversacionByConversacionIdconversacion() {
         return conversacionByConversacionIdconversacion;
     }
@@ -62,6 +71,8 @@ public class MensajeEntityDto implements Serializable {
     public void setConversacionByConversacionIdconversacion(ConversacionEntityDto conversacionByConversacionIdconversacion) {
         this.conversacionByConversacionIdconversacion = conversacionByConversacionIdconversacion;
     }
+
+ */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

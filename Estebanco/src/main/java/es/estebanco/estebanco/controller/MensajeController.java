@@ -1,18 +1,16 @@
 package es.estebanco.estebanco.controller;
 
-import es.estebanco.estebanco.dao.AsistenteRepository;
-import es.estebanco.estebanco.dao.MensajeRepository;
-import es.estebanco.estebanco.dao.PersonaRepository;
-import es.estebanco.estebanco.entity.ConversacionEntity;
-import es.estebanco.estebanco.entity.MensajeEntity;
-import es.estebanco.estebanco.entity.PersonaEntity;
+import es.estebanco.estebanco.dto.ConversacionEntityDto;
+import es.estebanco.estebanco.dto.MensajeEntityDto;
+import es.estebanco.estebanco.dto.PersonaEntityDto;
+import es.estebanco.estebanco.service.MensajeService;
+import es.estebanco.estebanco.service.PersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,10 +20,10 @@ public class MensajeController {
 
 
     @Autowired
-    MensajeRepository mensajeRepository;
+    protected MensajeService mensajeService;
 
     @Autowired
-    PersonaRepository personaRepository;
+    protected PersonaService personaService;
 
 
 
@@ -33,10 +31,10 @@ public class MensajeController {
     public String doEntrarCliente(@RequestParam("idCliente") Integer idCliente,@RequestParam("idAsistente") Integer idAsistente,
                                   @RequestParam("idConversacion")Integer idConversacion,@RequestParam("soyCliente")Integer soyCliente,
                                   Model model){
-        PersonaEntity cliente = this.personaRepository.findById(idCliente).orElse(null);
-        PersonaEntity asistente = this.personaRepository.findById(idAsistente).orElse(null);
+        PersonaEntityDto cliente = this.personaService.buscarPersonaPorId(idCliente);
+        PersonaEntityDto asistente = this.personaService.buscarPersonaPorId(idAsistente);
 
-        List<MensajeEntity> listaMensajes = this.mensajeRepository.getMensajesDeEstaConversacion(idConversacion);
+        List<MensajeEntityDto> listaMensajes = this.mensajeService.getMensajesDeEstaConversacion(idConversacion);
         model.addAttribute("listaMensajes", listaMensajes);
 
         model.addAttribute("cliente", cliente);
@@ -52,14 +50,14 @@ public class MensajeController {
                                 @RequestParam("idConversacion")Integer idConversacion, @RequestParam("soyCliente")Integer soyCliente,
                                         Model model) {
 
-        PersonaEntity cliente = this.personaRepository.findById(idCliente).orElse(null);
-        PersonaEntity asistente = this.personaRepository.findById(idAsistente).orElse(null);
-        ConversacionEntity conversacion = this.mensajeRepository.getConversacion(idConversacion);
+        PersonaEntityDto cliente = this.personaService.buscarPersonaPorId(idCliente);
+        PersonaEntityDto asistente = this.personaService.buscarPersonaPorId(idAsistente);
+        ConversacionEntityDto conversacion = this.mensajeService.getConversacion(idConversacion);
 
-        MensajeEntity mensajeNuevo = new MensajeEntity();
+        MensajeEntityDto mensajeNuevo = new MensajeEntityDto();
 
         //meto la id del mensaje
-        int idUltimaMensaje = this.mensajeRepository.getUltimaIdMensaje();
+        int idUltimaMensaje = this.mensajeService.getUltimaIdMensaje();
         idUltimaMensaje++;
         mensajeNuevo.setIdmensaje(idUltimaMensaje);
 
@@ -75,7 +73,7 @@ public class MensajeController {
             mensajeNuevo.setConversacionReceptorId(cliente.getId());
         }
 
-        mensajeNuevo.setConversacionByConversacionIdconversacion(conversacion);
+        mensajeNuevo.setIdconversacion(conversacion.getIdconversacion());
 
         model.addAttribute("mensajeNuevo", mensajeNuevo);
         model.addAttribute("soyCliente", soyCliente);
@@ -85,14 +83,17 @@ public class MensajeController {
 
 
     @PostMapping("/guardar")
-    public String doGuardar(@ModelAttribute("mensajeNuevo") MensajeEntity mensaje, @RequestParam("soyCliente")Integer soyCliente){
+    public String doGuardar(@ModelAttribute("mensajeNuevo") MensajeEntityDto mensaje, @RequestParam("soyCliente")Integer soyCliente){
 
-        mensajeRepository.save(mensaje);
+        mensajeService.save(mensaje);
 
         if(soyCliente==1){
-            return "redirect:/mensaje/entrar?idCliente="+ mensaje.getConversacionEmisorId() + "&idAsistente="+ mensaje.getConversacionReceptorId() + "&idConversacion=" + mensaje.getConversacionByConversacionIdconversacion().getIdconversacion() + "&soyCliente=" + soyCliente;
+            //return "redirect:/mensaje/entrar?idCliente="+ mensaje.getConversacionEmisorId() + "&idAsistente="+ mensaje.getConversacionReceptorId() + "&idConversacion=" + mensaje.getConversacionByConversacionIdconversacion().getIdconversacion() + "&soyCliente=" + soyCliente;
+            return "redirect:/mensaje/entrar?idCliente="+ mensaje.getConversacionEmisorId() + "&idAsistente="+ mensaje.getConversacionReceptorId() + "&idConversacion=" + mensaje.getIdconversacion() + "&soyCliente=" + soyCliente;
         }else{
-            return "redirect:/mensaje/entrar?idCliente="+ mensaje.getConversacionReceptorId() + "&idAsistente="+ mensaje.getConversacionEmisorId() + "&idConversacion=" + mensaje.getConversacionByConversacionIdconversacion().getIdconversacion()+ "&soyCliente=" + soyCliente;
+           // return "redirect:/mensaje/entrar?idCliente="+ mensaje.getConversacionReceptorId() + "&idAsistente="+ mensaje.getConversacionEmisorId() + "&idConversacion=" + mensaje.getConversacionByConversacionIdconversacion().getIdconversacion()+ "&soyCliente=" + soyCliente;
+            return "redirect:/mensaje/entrar?idCliente="+ mensaje.getConversacionReceptorId() + "&idAsistente="+ mensaje.getConversacionEmisorId() + "&idConversacion=" + mensaje.getIdconversacion()+ "&soyCliente=" + soyCliente;
+
         }
     }
 

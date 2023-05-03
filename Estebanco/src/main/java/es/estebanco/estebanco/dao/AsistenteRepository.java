@@ -1,5 +1,6 @@
 package es.estebanco.estebanco.dao;
 
+import es.estebanco.estebanco.dto.ConversacionEntityDto;
 import es.estebanco.estebanco.entity.ConversacionEntity;
 import es.estebanco.estebanco.entity.MensajeEntity;
 import es.estebanco.estebanco.entity.PersonaEntity;
@@ -49,5 +50,8 @@ public interface AsistenteRepository extends JpaRepository<ConversacionEntity,In
 
     @Query("select MAX (c.idconversacion) from ConversacionEntity c")
     public Integer getUltimaIdConversacion();
+
+    @Query("select p from ConversacionEntity p where p.idconversacion= :idConver ")
+    public ConversacionEntity buscarConversacionPorId(@Param("idConver")Integer idConver);
 
 }

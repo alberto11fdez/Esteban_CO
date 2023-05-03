@@ -1,11 +1,11 @@
 package es.estebanco.estebanco.controller;
 
-import es.estebanco.estebanco.dao.AsistenteRepository;
-import es.estebanco.estebanco.dao.PersonaRepository;
+import es.estebanco.estebanco.dto.ConversacionEntityDto;
+import es.estebanco.estebanco.dto.PersonaEntityDto;
 import es.estebanco.estebanco.entity.ConversacionEntity;
-import es.estebanco.estebanco.entity.MensajeEntity;
 import es.estebanco.estebanco.entity.PersonaEntity;
-import es.estebanco.estebanco.entity.RolEntity;
+import es.estebanco.estebanco.service.ConversacionService;
+import es.estebanco.estebanco.service.PersonaService;
 import es.estebanco.estebanco.ui.FiltroAsistente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -23,10 +21,10 @@ import java.util.List;
 public class AsistenteController {
 
     @Autowired
-    protected AsistenteRepository asistenteRepository;
+    protected ConversacionService asistenteService;
 
     @Autowired
-    protected PersonaRepository personaRepository;
+    protected PersonaService personaService;
 
     @GetMapping("/")
     public String doListar (Model model, HttpSession session) {
@@ -39,37 +37,36 @@ public class AsistenteController {
     }
 
     protected String procesarFiltrado ( FiltroAsistente filtro, Model model, HttpSession session) {
-        List<ConversacionEntity> lista;
+        List<ConversacionEntityDto> lista;
         String urlto = "asistente";
 
-        PersonaEntity asistente = (PersonaEntity) session.getAttribute("persona");
+        PersonaEntityDto asistente = (PersonaEntityDto) session.getAttribute("persona");
         if (asistente == null) {
             urlto = "redirect:/";
         } else {
             if (filtro == null || (filtro.getIdCliente()==(-1) && filtro.getEstado()==(-1))) {
-                lista = this.asistenteRepository.conversacionPorPersona(asistente.getId());
-                //lista = this.asistenteRepository.findAll();
+                lista = this.asistenteService.conversacionPorPersona(asistente.getId());
                 filtro = new FiltroAsistente();
             }else if(filtro.getIdCliente()!=(-1) && filtro.getEstado()==(-1)){
-                lista = this.asistenteRepository.buscarPorIdCliente(filtro.getIdCliente(),asistente.getId());
+                lista = this.asistenteService.buscarPorIdCliente(filtro.getIdCliente(),asistente.getId());
             }else if(filtro.getEstado() == 1 && filtro.getIdCliente()==(-1)){
-                lista = this.asistenteRepository.conversacionesActivas(asistente.getId());
+                lista = this.asistenteService.conversacionesActivas(asistente.getId());
             }else if(filtro.getEstado() == 0 && filtro.getIdCliente()==(-1)){
-                lista = this.asistenteRepository.conversacionesBloqueadas(asistente.getId());
+                lista = this.asistenteService.conversacionesBloqueadas(asistente.getId());
             }else if(filtro.getEstado() == 1 && filtro.getIdCliente()!=(-1)){
-                lista = this.asistenteRepository.buscarPorIdClienteCuentaActiva(filtro.getIdCliente(),asistente.getId());
+                lista = this.asistenteService.buscarPorIdClienteCuentaActiva(filtro.getIdCliente(),asistente.getId());
             }else{
-                lista = this.asistenteRepository.buscarPorIdClienteCuentaBloqueada(filtro.getIdCliente(),asistente.getId());
+                lista = this.asistenteService.buscarPorIdClienteCuentaBloqueada(filtro.getIdCliente(),asistente.getId());
             }
 
 
             model.addAttribute("filtro", filtro);
             model.addAttribute("conversaciones", lista);
 
-            List<Byte> estadoConver = this.asistenteRepository.getEstados();
+            List<Byte> estadoConver = this.asistenteService.getEstados();
             model.addAttribute("estadoConver", estadoConver);
 
-            List<Integer> idClients = this.asistenteRepository.getClients();
+            List<Integer> idClients = this.asistenteService.getClients();
             model.addAttribute("idClients",idClients);
         }
 
@@ -81,11 +78,11 @@ public class AsistenteController {
 
     @GetMapping("/crearConversacion")
     public String doCrearConversacion(@RequestParam("idCliente")Integer idCliente, Model model){
-        PersonaEntity cliente = this.personaRepository.findById(idCliente).orElse(null);
+        PersonaEntityDto cliente = this.personaService.buscarPersonaPorId(idCliente);
 
-        ConversacionEntity conversacionNueva = new ConversacionEntity();
+        ConversacionEntityDto conversacionNueva = new ConversacionEntityDto();
         //meto la idConversacion
-        int idUltimaConver = this.asistenteRepository.getUltimaIdConversacion();
+        int idUltimaConver = this.asistenteService.getUltimaIdConversacion();
         idUltimaConver++;
         conversacionNueva.setIdconversacion(idUltimaConver);
         //meto el estado
@@ -106,7 +103,7 @@ public class AsistenteController {
         conversacionNueva.setPersonaByAsistenteId(null);
 
 
-        List<PersonaEntity> asistentes = this.asistenteRepository.getAsistente();
+        List<PersonaEntityDto> asistentes = this.asistenteService.getAsistente();
         model.addAttribute("asistentes", asistentes);
 
         model.addAttribute("conversacionNueva", conversacionNueva);
@@ -115,21 +112,21 @@ public class AsistenteController {
 
 
     @PostMapping("/guardar")
-    public String doGuardar(@ModelAttribute("conversacionNueva")ConversacionEntity conversacionNueva){
-        asistenteRepository.save(conversacionNueva);
+    public String doGuardar(@ModelAttribute("conversacionNueva") ConversacionEntityDto conversacionNueva){
+        asistenteService.save(conversacionNueva);
         return "redirect:/persona/?id=" + conversacionNueva.getPersonaByPersonaId().getId();
     }
 
     @GetMapping("/cerrar")
     public String doCerrar(@RequestParam("id")Integer idConversacion){
-        ConversacionEntity conversacion = this.asistenteRepository.findById(idConversacion).orElse(null);
+        ConversacionEntityDto conversacion = this.asistenteService.buscarConversacionPorId(idConversacion);
         byte estado=0;
         conversacion.setEstado(estado);
 
         Timestamp fecha = new Timestamp(System.currentTimeMillis());
         conversacion.setFechaFin(fecha);
 
-        this.asistenteRepository.save(conversacion);
+        this.asistenteService.save(conversacion);
         return "redirect:/persona/?id="+ conversacion.getPersonaByPersonaId().getId();
     }
 

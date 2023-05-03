@@ -24,7 +24,7 @@
     <form:hidden path="fechaEnvio"></form:hidden>
     <form:hidden path="conversacionEmisorId"></form:hidden>
     <form:hidden path="conversacionReceptorId"></form:hidden>
-    <form:hidden path="conversacionByConversacionIdconversacion"></form:hidden>
+    <form:hidden path="idconversacion"></form:hidden>
     <input type="hidden" name="soyCliente" value="<%=soyCliente%>">
 
     -<form:input path="texto" size="100" maxlength="100"></form:input>

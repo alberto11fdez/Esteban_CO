@@ -1,7 +1,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.estebanco.estebanco.entity.ConversacionEntity" %>
 <%@ page import="java.util.List" %>
-<%@ page import="es.estebanco.estebanco.entity.MensajeEntity" %><%--
+<%@ page import="es.estebanco.estebanco.entity.MensajeEntity" %>
+<%@ page import="es.estebanco.estebanco.dto.ConversacionEntityDto" %>
+<%@ page import="es.estebanco.estebanco.dto.MensajeEntityDto" %><%--
   Created by IntelliJ IDEA.
   User: USUARIO
   Date: 27/03/2023
@@ -11,8 +13,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<ConversacionEntity> conversaciones = (List<ConversacionEntity>) request.getAttribute("conversaciones");
-    List<MensajeEntity> mensajes = (List<MensajeEntity>) request.getAttribute("conversaciones");
+    List<ConversacionEntityDto> conversaciones = (List<ConversacionEntityDto>) request.getAttribute("conversaciones");
+    List<MensajeEntityDto> mensajes = (List<MensajeEntityDto>) request.getAttribute("conversaciones");
 %>
 
 <html>
@@ -50,7 +52,7 @@
         <th>Entrar</th>
     </tr>
     <%
-        for(ConversacionEntity conversacion: conversaciones){
+        for(ConversacionEntityDto conversacion: conversaciones){
     %>
     <tr>
         <th> <%=conversacion.getIdconversacion()%></th>
