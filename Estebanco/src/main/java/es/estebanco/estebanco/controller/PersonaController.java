@@ -26,6 +26,8 @@ public class PersonaController {
     private CuentaPersonaService cuentaPersonaService;
     @Autowired
     private RolRepository rolRepository;
+    @Autowired
+    private PersonaService personaService;
 
 
     @GetMapping("/")
@@ -148,8 +150,11 @@ public class PersonaController {
 
      */
      @PostMapping("/guardar")
-     public String doGuardar(@ModelAttribute("persona") PersonaEntityDto persona){
+     public String doGuardar(@ModelAttribute("persona") PersonaEntityDto persona,HttpSession session){
+         persona.setEstado("esperandoConfirmacion");
          int id = this.cuentaPersonaService.guardarPersona(persona);
+         PersonaEntityDto personaDto = personaService.buscarPersonaPorId(id);
+         session.setAttribute("persona",personaDto);
          return "redirect:/persona/?id="+id;
      }
 
