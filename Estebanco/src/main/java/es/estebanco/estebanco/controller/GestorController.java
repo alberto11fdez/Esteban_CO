@@ -1,11 +1,10 @@
 package es.estebanco.estebanco.controller;
 
 import es.estebanco.estebanco.dao.CuentaRepository;
+import es.estebanco.estebanco.dao.OperacionRepository;
 import es.estebanco.estebanco.dao.PersonaRepository;
 import es.estebanco.estebanco.dao.TipoMonedaEntityRepository;
-import es.estebanco.estebanco.entity.CuentaEntity;
-import es.estebanco.estebanco.entity.PersonaEntity;
-import es.estebanco.estebanco.entity.TipoMonedaEntity;
+import es.estebanco.estebanco.entity.*;
 import es.estebanco.estebanco.ui.FiltroGestor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +22,9 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/gestor")
 public class GestorController {
+
+    @Autowired
+    protected OperacionRepository operacionRepository;
 
     @Autowired
     protected CuentaRepository cuentaRepository;
@@ -173,6 +175,16 @@ public class GestorController {
             cuenta.setEstado("bloqueado");
             this.cuentaRepository.save(cuenta);
         }
+
+        return urlTo;
+    }
+    @GetMapping("/historico")
+    public String doHistoricoOperaciones(@RequestParam("idCuenta") Integer idCuenta, Model model, HttpSession session){
+        String urlTo ="gestorVistaOperaciones";
+
+        CuentaEntity cuenta = this.cuentaRepository.getById(idCuenta);
+        List <OperacionEntity> operaciones = this.operacionRepository.obtenerListaOperaciones(cuenta);
+        model.addAttribute("operaciones", operaciones);
 
         return urlTo;
     }

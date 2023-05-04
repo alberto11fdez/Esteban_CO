@@ -64,6 +64,7 @@
 
 
     <a href="/gestor/gestorPersonas">Vista de los clientes</a>
+    <a href="/gestor/cuentasSospechosas"> Vista de las transferencias sospechosas</a>
 
 </table>
 </body>
