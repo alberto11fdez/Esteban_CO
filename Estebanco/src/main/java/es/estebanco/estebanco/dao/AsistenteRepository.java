@@ -47,11 +47,22 @@ public interface AsistenteRepository extends JpaRepository<ConversacionEntity,In
     public List<PersonaEntity> getAsistente();
 
 
+    @Query("select c from PersonaEntity c where c.id = :idPersona")
+    public PersonaEntity getPersona(@Param("idPersona") Integer idPersona);
+
+    @Query("select c from PersonaEntity c, RolEntity r where c.id = :idAsistente and r.rol = 'asistente'")
+    public PersonaEntity getAsistente(@Param("idAsistente") Integer idAsistente);
+
+
 
     @Query("select MAX (c.idconversacion) from ConversacionEntity c")
     public Integer getUltimaIdConversacion();
 
     @Query("select p from ConversacionEntity p where p.idconversacion= :idConver ")
     public ConversacionEntity buscarConversacionPorId(@Param("idConver")Integer idConver);
+
+
+    @Query("select c.mensajesByIdconversacion from ConversacionEntity c where c.idconversacion =:idConver")
+    public List<MensajeEntity> devolverListaMensajes(@Param("idConver") Integer idConver);
 
 }

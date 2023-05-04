@@ -25,8 +25,6 @@ public class MensajeController {
     @Autowired
     protected PersonaService personaService;
 
-
-
     @GetMapping("/entrar")
     public String doEntrarCliente(@RequestParam("idCliente") Integer idCliente,@RequestParam("idAsistente") Integer idAsistente,
                                   @RequestParam("idConversacion")Integer idConversacion,@RequestParam("soyCliente")Integer soyCliente,
@@ -56,12 +54,11 @@ public class MensajeController {
 
         MensajeEntityDto mensajeNuevo = new MensajeEntityDto();
 
-        //meto la id del mensaje
         int idUltimaMensaje = this.mensajeService.getUltimaIdMensaje();
         idUltimaMensaje++;
         mensajeNuevo.setIdmensaje(idUltimaMensaje);
 
-        //meto la fecha de envio
+
         Timestamp fecha = new Timestamp(System.currentTimeMillis());
         mensajeNuevo.setFechaEnvio(fecha);
 
@@ -88,10 +85,8 @@ public class MensajeController {
         mensajeService.save(mensaje);
 
         if(soyCliente==1){
-            //return "redirect:/mensaje/entrar?idCliente="+ mensaje.getConversacionEmisorId() + "&idAsistente="+ mensaje.getConversacionReceptorId() + "&idConversacion=" + mensaje.getConversacionByConversacionIdconversacion().getIdconversacion() + "&soyCliente=" + soyCliente;
             return "redirect:/mensaje/entrar?idCliente="+ mensaje.getConversacionEmisorId() + "&idAsistente="+ mensaje.getConversacionReceptorId() + "&idConversacion=" + mensaje.getIdconversacion() + "&soyCliente=" + soyCliente;
         }else{
-           // return "redirect:/mensaje/entrar?idCliente="+ mensaje.getConversacionReceptorId() + "&idAsistente="+ mensaje.getConversacionEmisorId() + "&idConversacion=" + mensaje.getConversacionByConversacionIdconversacion().getIdconversacion()+ "&soyCliente=" + soyCliente;
             return "redirect:/mensaje/entrar?idCliente="+ mensaje.getConversacionReceptorId() + "&idAsistente="+ mensaje.getConversacionEmisorId() + "&idConversacion=" + mensaje.getIdconversacion()+ "&soyCliente=" + soyCliente;
 
         }

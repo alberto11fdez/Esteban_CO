@@ -17,15 +17,23 @@ public class ConversacionEntityDto implements Serializable {
     private  Timestamp fechaFin;
     private PersonaEntityDto personaByPersonaId;
     private PersonaEntityDto personaByAsistenteId;
-    private List<MensajeEntity> mensajesByIdconversacion;
+    private Integer idPersona;
     private Integer idAsistente;
 
-    public Integer getIdPersona() {
+    public Integer getIdAsistente() {
         return idAsistente;
     }
 
+    public void setIdAsistente(Integer idAsistente) {
+        this.idAsistente = idAsistente;
+    }
+
+    public Integer getIdPersona() {
+        return idPersona;
+    }
+
     public void setIdPersona(Integer idPersona) {
-        this.idAsistente = idPersona;
+        this.idPersona = idPersona;
     }
 
     public Integer getIdconversacion() {
@@ -75,16 +83,6 @@ public class ConversacionEntityDto implements Serializable {
     public void setPersonaByAsistenteId(PersonaEntityDto personaByAsistenteId) {
         this.personaByAsistenteId = personaByAsistenteId;
     }
-
-    public List<MensajeEntity> getMensajesByIdconversacion() {
-        return mensajesByIdconversacion;
-    }
-
-    public void setMensajesByIdconversacion(List<MensajeEntity> mensajesByIdconversacion) {
-        this.mensajesByIdconversacion = mensajesByIdconversacion;
-    }
-
-
 
     @Override
     public boolean equals(Object o) {

@@ -7,6 +7,7 @@ import es.estebanco.estebanco.dto.CuentaEntityDto;
 import es.estebanco.estebanco.dto.PersonaEntityDto;
 import es.estebanco.estebanco.entity.ConversacionEntity;
 import es.estebanco.estebanco.entity.CuentaEntity;
+import es.estebanco.estebanco.entity.MensajeEntity;
 import es.estebanco.estebanco.entity.PersonaEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -119,16 +120,23 @@ public class ConversacionService {
         }
     }
 
+    public PersonaEntityDto devuelvePersonaEntityDto(Integer idPersona){
+        return this.asistenteRepository.getPersona(idPersona).toDTO();
+    }
+
+    public PersonaEntityDto devuelveAsistenteEntityDto(Integer idAsistente){
+        return this.asistenteRepository.getPersona(idAsistente).toDTO();
+    }
+
 
     public void save(ConversacionEntityDto dto) {
-        ConversacionEntity conversacion;
-        conversacion = new ConversacionEntity();
+        ConversacionEntity conversacion = new ConversacionEntity();
         conversacion.setIdconversacion(dto.getIdconversacion());
         conversacion.setEstado(dto.getEstado());
         conversacion.setFechaInicio(dto.getFechaInicio());
         conversacion.setFechaFin(dto.getFechaFin());
 
-        PersonaEntityDto personaDto=dto.getPersonaByPersonaId();
+        PersonaEntityDto personaDto = dto.getPersonaByPersonaId();
         PersonaEntity persona = new PersonaEntity();
         persona.setId(personaDto.getId());
         persona.setDni(personaDto.getDni());
@@ -141,39 +149,28 @@ public class ConversacionService {
         persona.setUsuario(personaDto.getUsuario());
         persona.setContraseña(personaDto.getContraseña());
         persona.setEstado(personaDto.getEstado());
-        /*persona.setConversacionsById(personaDto.getConversacionsById());
-        persona.setOperacionesById(personaDto.getOperacionesById());
-        persona.setConversacionsById_0(personaDto.getConversacionsById_0());
-        persona.setRolsById(personaDto.getRolsById());
-
-         */
 
         conversacion.setPersonaByPersonaId(persona);
 
         PersonaEntityDto asistenteDto =dto.getPersonaByAsistenteId();
         PersonaEntity asistente = new PersonaEntity();
-        asistente.setId(personaDto.getId());
-        asistente.setDni(personaDto.getDni());
-        asistente.setNombre(personaDto.getNombre());
-        asistente.setApellido1(personaDto.getApellido1());
-        asistente.setApellido2(personaDto.getApellido2());
-        asistente.setCorreo(personaDto.getCorreo());
-        asistente.setDireccion(personaDto.getDireccion());
-        asistente.setTelefono(personaDto.getTelefono());
-        asistente.setUsuario(personaDto.getUsuario());
-        asistente.setContraseña(personaDto.getContraseña());
-        asistente.setEstado(personaDto.getEstado());
-        /*asistente.setConversacionsById(personaDto.getConversacionsById());
-        asistente.setOperacionesById(personaDto.getOperacionesById());
-        asistente.setConversacionsById_0(personaDto.getConversacionsById_0());
-        asistente.setRolsById(personaDto.getRolsById());
+        asistente.setId(asistenteDto.getId());
+        asistente.setDni(asistenteDto.getDni());
+        asistente.setNombre(asistenteDto.getNombre());
+        asistente.setApellido1(asistenteDto.getApellido1());
+        asistente.setApellido2(asistenteDto.getApellido2());
+        asistente.setCorreo(asistenteDto.getCorreo());
+        asistente.setDireccion(asistenteDto.getDireccion());
+        asistente.setTelefono(asistenteDto.getTelefono());
+        asistente.setUsuario(asistenteDto.getUsuario());
+        asistente.setContraseña(asistenteDto.getContraseña());
+        asistente.setEstado(asistenteDto.getEstado());
 
-         */
+        conversacion.setPersonaByAsistenteId(asistente);
 
+        conversacion.setMensajesByIdconversacion(this.asistenteRepository.devolverListaMensajes(conversacion.getIdconversacion()));
 
-
-        conversacion.setMensajesByIdconversacion(dto.getMensajesByIdconversacion());
-
+        this.asistenteRepository.save(conversacion);
     }
 
 
