@@ -110,7 +110,7 @@ public class ConversacionEntity {
         dto.setFechaFin(this.fechaFin);
         dto.setPersonaByAsistenteId(this.personaByAsistenteId.toDTO());
         dto.setPersonaByPersonaId(this.personaByPersonaId.toDTO());
-        dto.setMensajesByIdconversacion(this.mensajesByIdconversacion);
+        //dto.setMensajesByIdconversacion(this.mensajesByIdconversacion);
         return dto;
     }
 }

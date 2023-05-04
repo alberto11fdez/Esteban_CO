@@ -44,8 +44,8 @@ public interface OperacionRepository extends JpaRepository<OperacionEntity, Inte
     public List<OperacionEntity> buscarPorTipoOperacionEIban(@Param("idPersona") Integer idPersona,@Param("texto") String texto, @Param("tipos") List<String> tipos);
 
 
-    @Query("select  o from OperacionEntity o where o.personaByPersonaId = :socioFiltro and o.cuentaByCuentaId = :cuentaEmpresa ")
-    public List<OperacionEntity> getOperacionesSocio(@Param("socioFiltro")PersonaEntity socioFiltro, @Param("cuentaEmpresa") CuentaEntity cuentaEmpresa);
+    @Query("select  o from OperacionEntity o where o.personaByPersonaId.id = :socioFiltro and o.cuentaByCuentaId.id = :cuentaEmpresa ")
+    public List<OperacionEntity> getOperacionesSocio(@Param("socioFiltro")Integer socioFiltro, @Param("cuentaEmpresa") Integer cuentaEmpresa);
 
     @Query("select o from OperacionEntity o where o.ibanCuentaDestinoOrigen= :iban")
     public List<OperacionEntity> buscarOperacionesRecibidas(@Param("iban") String iban);

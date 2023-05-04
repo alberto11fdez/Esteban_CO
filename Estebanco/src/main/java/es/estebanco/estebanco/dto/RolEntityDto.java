@@ -1,5 +1,7 @@
 package es.estebanco.estebanco.dto;
 
+import es.estebanco.estebanco.entity.PersonaEntity;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -75,4 +77,6 @@ public class RolEntityDto implements Serializable {
                 "id = " + id + ", " +
                 "bloqueado_empresa = " + bloqueado_empresa + ")";
     }
+
+
 }

@@ -23,10 +23,10 @@ public class PersonaEntityDto implements Serializable {
     private  String usuario;
     private  String contraseña;
     private  String estado;
-    private List<ConversacionEntity> conversacionsById;
-    private List<OperacionEntity> operacionesById;
-    private List<ConversacionEntity> conversacionsById_0;
-    private List<RolEntity> rolsById;
+    //private List<ConversacionEntityDto> conversacionsById;
+    //private List<OperacionEntityDto> operacionesById;
+    //private List<ConversacionEntityDto> conversacionsById_0;
+    //private List<RolEntityDto> rolsById;
 
     public int getId() {
         return id;
@@ -116,37 +116,39 @@ public class PersonaEntityDto implements Serializable {
         this.estado = estado;
     }
 
-    public List<ConversacionEntity> getConversacionsById() {
+    /*public List<ConversacionEntityDto> getConversacionsById() {
         return conversacionsById;
     }
 
-    public void setConversacionsById(List<ConversacionEntity> conversacionsById) {
+    public void setConversacionsById(List<ConversacionEntityDto> conversacionsById) {
         this.conversacionsById = conversacionsById;
     }
 
-    public List<OperacionEntity> getOperacionesById() {
+    public List<OperacionEntityDto> getOperacionesById() {
         return operacionesById;
     }
 
-    public void setOperacionesById(List<OperacionEntity> operacionesById) {
+    public void setOperacionesById(List<OperacionEntityDto> operacionesById) {
         this.operacionesById = operacionesById;
     }
 
-    public List<ConversacionEntity> getConversacionsById_0() {
+    public List<ConversacionEntityDto> getConversacionsById_0() {
         return conversacionsById_0;
     }
 
-    public void setConversacionsById_0(List<ConversacionEntity> conversacionsById_0) {
+    public void setConversacionsById_0(List<ConversacionEntityDto> conversacionsById_0) {
         this.conversacionsById_0 = conversacionsById_0;
     }
 
-    public List<RolEntity> getRolsById() {
+    public List<RolEntityDto> getRolsById() {
         return rolsById;
     }
 
-    public void setRolsById(List<RolEntity> rolsById) {
+    public void setRolsById(List<RolEntityDto> rolsById) {
         this.rolsById = rolsById;
     }
+
+     */
 
     @Override
     public boolean equals(Object o) {

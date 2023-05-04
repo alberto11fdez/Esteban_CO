@@ -232,7 +232,7 @@ public class CajeroController {
     @PostMapping("/guardar")
     public String doGuardar (@ModelAttribute("persona") PersonaEntityDto persona) {
         this.cajeroService.guardarPersona(persona);
-        return "redirect:/cajero/?id="+persona.getId();
+        return "redirect:/cajero";
     }
 
     @GetMapping("/cambiarDivisa")

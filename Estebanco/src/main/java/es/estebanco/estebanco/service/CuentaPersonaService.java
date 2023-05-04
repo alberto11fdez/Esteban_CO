@@ -51,8 +51,13 @@ public class CuentaPersonaService {
         cuenta.setMoneda(dto.getMoneda());
         cuenta.setEstado(dto.getEstado());
         cuenta.setFechaApertura(dto.getFechaApertura());
-        cuenta.setOperacionsById(dto.getOperacionsById());
-        cuenta.setRolsById(dto.getRolsById());
+
+        //cuenta.setOperacionsById(dto.getOperacionsById());
+        cuenta.setOperacionsById(null);
+        cuenta.setOperacionsById(operacionRepository.operacionesPorCuenta(dto.getId()));
+        //cuenta.setRolsById(dto.getRolsById());
+        cuenta.setRolsById(null);
+
     }
 
     public List<String> obtenerRoles(){
@@ -184,9 +189,9 @@ public class CuentaPersonaService {
         cuenta.setId(dto.getId());
         cuenta.setMoneda(dto.getMoneda());
         cuenta.setSaldo(dto.getSaldo()-valor);
-        cuenta.setOperacionsById(dto.getOperacionsById());
+        cuenta.setOperacionsById(null);
         cuenta.setEstado(dto.getEstado());
-        cuenta.setRolsById(dto.getRolsById());
+        cuenta.setRolsById(null);
         cuenta.setFechaApertura(dto.getFechaApertura());
         cuenta.setIban(dto.getIban());
 
@@ -199,9 +204,9 @@ public class CuentaPersonaService {
         cuenta.setId(dto.getId());
         cuenta.setMoneda(dto.getMoneda());
         cuenta.setSaldo(dto.getSaldo()+valor);
-        cuenta.setOperacionsById(dto.getOperacionsById());
+        cuenta.setOperacionsById(null);
         cuenta.setEstado(dto.getEstado());
-        cuenta.setRolsById(dto.getRolsById());
+        cuenta.setRolsById(null);
         cuenta.setFechaApertura(dto.getFechaApertura());
         cuenta.setIban(dto.getIban());
 
@@ -235,9 +240,10 @@ public class CuentaPersonaService {
         cuenta.setId(dto.getId());
         cuenta.setMoneda(moneda);
         cuenta.setSaldo(dto.getSaldo());
-        cuenta.setOperacionsById(dto.getOperacionsById());
+        //List<OperacionEntityDto> operaciones = dto.getOperacionsById();
+        //cuenta.setOperacionsById(null);
         cuenta.setEstado(dto.getEstado());
-        cuenta.setRolsById(dto.getRolsById());
+        //cuenta.setRolsById(null);
         cuenta.setFechaApertura(dto.getFechaApertura());
         cuenta.setIban(dto.getIban());
 
@@ -269,5 +275,12 @@ public class CuentaPersonaService {
         this.personaRepository.save(persona);
 
         return persona.getId();
+    }
+    public Integer saveCuentaNueva(CuentaEntityDto dto) {
+        CuentaEntity cuenta = new CuentaEntity();
+        cuenta.setEstado("esperandoConfirmacion");
+
+        cuentaRepository.save(cuenta);
+        return cuenta.getId();
     }
 }

@@ -5,16 +5,19 @@
 <%@ page import="es.estebanco.estebanco.entity.PersonaEntity" %>
 <%@ page import="es.estebanco.estebanco.entity.RolEntity" %>
 <%@ page import="es.estebanco.estebanco.dao.RolRepository" %>
+<%@ page import="es.estebanco.estebanco.dto.CuentaEntityDto" %>
+<%@ page import="es.estebanco.estebanco.dto.OperacionEntityDto" %>
+<%@ page import="es.estebanco.estebanco.dto.PersonaEntityDto" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
 
-    CuentaEntity cuentaEmpresa = (CuentaEntity) request.getAttribute("cuentaEmpresa");
-    List<OperacionEntity> operaciones = (List<OperacionEntity>) request.getAttribute("operaciones");
-    List<PersonaEntity> socios = (List<PersonaEntity>) request.getAttribute("socios");
+    CuentaEntityDto cuentaEmpresa = (CuentaEntityDto) request.getAttribute("cuentaEmpresa");
+    List<OperacionEntityDto> operaciones = (List<OperacionEntityDto>) request.getAttribute("operaciones");
+    List<PersonaEntityDto> socios = (List<PersonaEntityDto>) request.getAttribute("socios");
     RolRepository rolRepository=(RolRepository) request.getAttribute("rolrepository");
-    PersonaEntity persona=(PersonaEntity) request.getAttribute("persona");
-    List<OperacionEntity> operacionesRescibidas = (List<OperacionEntity>) request.getAttribute("operacionesRescibidas");
+    PersonaEntityDto persona=(PersonaEntityDto) request.getAttribute("persona");
+    List<OperacionEntityDto> operacionesRescibidas = (List<OperacionEntityDto>) request.getAttribute("operacionesRescibidas");
 
 %>
 

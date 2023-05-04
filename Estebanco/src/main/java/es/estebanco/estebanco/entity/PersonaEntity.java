@@ -199,10 +199,12 @@ public class PersonaEntity {
         dto.setUsuario(this.usuario);
         dto.setContraseña(this.contraseña);
         dto.setEstado(this.estado);
-        dto.setConversacionsById(this.conversacionsById);
+        /*dto.setConversacionsById(this.conversacionsById);
         dto.setRolsById(this.rolsById);
         dto.setOperacionesById(this.operacionesById);
         dto.setConversacionsById_0(this.conversacionsById_0);
+
+         */
         return dto;
     }
 }

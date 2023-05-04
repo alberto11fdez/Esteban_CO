@@ -18,8 +18,8 @@ public class CuentaEntityDto implements Serializable {
     private  String estado;
     private  Timestamp fechaApertura;
     private  Integer id;
-    private List<OperacionEntity> operacionsById;
-    private List<RolEntity> rolsById;
+    //private List<OperacionEntityDto> operacionsById;
+    //private List<RolEntityDto> rolsById;
 
 
     public String getIban() {
@@ -70,21 +70,23 @@ public class CuentaEntityDto implements Serializable {
         this.id = id;
     }
 
-    public List<OperacionEntity> getOperacionsById() {
+    /*public List<OperacionEntityDto> getOperacionsById() {
         return operacionsById;
     }
 
-    public void setOperacionsById(List<OperacionEntity> operacionsById) {
+    public void setOperacionsById(List<OperacionEntityDto> operacionsById) {
         this.operacionsById = operacionsById;
     }
 
-    public List<RolEntity> getRolsById() {
+    public List<RolEntityDto> getRolsById() {
         return rolsById;
     }
 
-    public void setRolsById(List<RolEntity> rolsById) {
+    public void setRolsById(List<RolEntityDto> rolsById) {
         this.rolsById = rolsById;
     }
+
+     */
 
     @Override
     public boolean equals(Object o) {
