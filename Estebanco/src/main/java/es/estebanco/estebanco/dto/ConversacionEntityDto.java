@@ -84,6 +84,8 @@ public class ConversacionEntityDto implements Serializable {
         this.mensajesByIdconversacion = mensajesByIdconversacion;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

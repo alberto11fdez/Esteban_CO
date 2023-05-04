@@ -96,9 +96,9 @@ public class CajeroService {
         cuenta.setId(dto.getId());
         cuenta.setMoneda(dto.getMoneda());
         cuenta.setSaldo(dto.getSaldo()-valor);
-        cuenta.setOperacionsById(dto.getOperacionsById());
+        //cuenta.setOperacionsById(null);
         cuenta.setEstado(dto.getEstado());
-        cuenta.setRolsById(dto.getRolsById());
+        //cuenta.setRolsById(null);
         cuenta.setFechaApertura(dto.getFechaApertura());
         cuenta.setIban(dto.getIban());
 
@@ -129,9 +129,9 @@ public class CajeroService {
         cuenta.setId(dto.getId());
         cuenta.setMoneda(dto.getMoneda());
         cuenta.setSaldo(dto.getSaldo()+valor);
-        cuenta.setOperacionsById(dto.getOperacionsById());
+        //cuenta.setOperacionsById(null);
         cuenta.setEstado(dto.getEstado());
-        cuenta.setRolsById(dto.getRolsById());
+        //cuenta.setRolsById(null);
         cuenta.setFechaApertura(dto.getFechaApertura());
         cuenta.setIban(dto.getIban());
 
@@ -259,10 +259,13 @@ public class CajeroService {
         persona.setDireccion(dto.getDireccion());
         persona.setTelefono(dto.getTelefono());
         persona.setContraseña(dto.getContraseña());
-        persona.setConversacionsById(dto.getConversacionsById());
-        persona.setRolsById(dto.getRolsById());
-        persona.setOperacionesById(dto.getOperacionesById());
-        persona.setConversacionsById_0(dto.getConversacionsById_0());
+
+        /*persona.setConversacionsById(this.personaRepository.listadoConversaciones(dto.getId()));
+        persona.setRolsById(this.personaRepository.listadoRoles(dto.getId()));
+        persona.setOperacionesById(this.personaRepository.listadoOperaciones(dto.getId()));
+        persona.setConversacionsById_0(this.personaRepository.listadoConversaciones2(dto.getId()));
+
+         */
 
         this.personaRepository.save(persona);
     }
@@ -305,9 +308,9 @@ public class CajeroService {
         cuenta.setId(dto.getId());
         cuenta.setMoneda(moneda);
         cuenta.setSaldo(dto.getSaldo());
-        cuenta.setOperacionsById(dto.getOperacionsById());
+        //cuenta.setOperacionsById(null);
         cuenta.setEstado(dto.getEstado());
-        cuenta.setRolsById(dto.getRolsById());
+        //cuenta.setRolsById(null);
         cuenta.setFechaApertura(dto.getFechaApertura());
         cuenta.setIban(dto.getIban());
 
@@ -319,9 +322,11 @@ public class CajeroService {
         cuenta.setId(dto.getId());
         cuenta.setMoneda(dto.getMoneda());
         cuenta.setSaldo(dto.getSaldo());
-        cuenta.setOperacionsById(dto.getOperacionsById());
+        //List<OperacionEntityDto> operaciones = dto.getOperacionsById();
+        //cuenta.setOperacionsById(dto.getOperacionsById());
+        //cuenta.setOperacionsById(null);
         cuenta.setEstado(estado.getNombre());
-        cuenta.setRolsById(dto.getRolsById());
+        //cuenta.setRolsById(null);
         cuenta.setFechaApertura(dto.getFechaApertura());
         cuenta.setIban(dto.getIban());
 

@@ -58,8 +58,8 @@ public class EmpresaControlador {
         model.addAttribute("persona", persona);
 
         //List<OperacionEntity> operaciones = cuentaEmpresa.getOperacionsById();
-        List<OperacionEntityDto> operaciones = cuentaEmpresa.getOperacionsById();
-        model.addAttribute("operaciones", operaciones);
+        //List<OperacionEntityDto> operaciones = cuentaEmpresa.getOperacionsById();
+        //model.addAttribute("operaciones", operaciones);
 
         //List<PersonaEntity> socios = personaRepository.obtenerSocioEmpresa(cuentaEmpresa);
         List<PersonaEntityDto> socios = personaService.obtenerSocioEmpresa(cuentaEmpresa);
@@ -519,7 +519,8 @@ public class EmpresaControlador {
         model.addAttribute("persona", persona);
 
         //List<OperacionEntity> operaciones = cuentaEmpresa.getOperacionsById();
-        List<OperacionEntityDto> operaciones = cuentaEmpresa.getOperacionsById();
+        //List<OperacionEntityDto> operaciones = cuentaEmpresa.getOperacionsById(); DESCOMENTAR
+        List<OperacionEntityDto> operaciones = this.personaService.operacionesDeUnaEmpresa(cuentaEmpresa.getId());
         model.addAttribute("operaciones", operaciones);
 
 

@@ -2,10 +2,7 @@ package es.estebanco.estebanco.dao;
 
 
 import es.estebanco.estebanco.dto.PersonaEntityDto;
-import es.estebanco.estebanco.entity.ConversacionEntity;
-import es.estebanco.estebanco.entity.CuentaEntity;
-import es.estebanco.estebanco.entity.OperacionEntity;
-import es.estebanco.estebanco.entity.PersonaEntity;
+import es.estebanco.estebanco.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -26,6 +23,16 @@ public interface PersonaRepository extends JpaRepository<PersonaEntity, Integer>
 
  @Query("select c from CuentaEntity c join RolEntity r on c=r.cuentaByCuentaId and :idPersona=r.personaByPersonaId.id")
  public List<CuentaEntity> cuentasPorPersona(@Param("idPersona") Integer idPersona);
+
+   @Query("select p.operacionesById from PersonaEntity p where p.id = :id")
+   public List<OperacionEntity> listadoOperaciones(@Param("id") Integer id);
+
+ @Query("select p.conversacionsById from PersonaEntity p where p.id = :id")
+ public List<ConversacionEntity> listadoConversaciones(@Param("id") Integer id);
+ @Query("select p.conversacionsById_0 from PersonaEntity p where p.id = :id")
+ public List<ConversacionEntity> listadoConversaciones2(@Param("id") Integer id);
+ @Query("select p.rolsById from PersonaEntity p where p.id = :id")
+ public List<RolEntity> listadoRoles(@Param("id") Integer id);
 
    @Query("select p from PersonaEntity p where p.usuario= :usuario ")
    public PersonaEntity buscarSiExisteUsuario(@Param("usuario")String usuario);
@@ -54,5 +61,8 @@ public interface PersonaRepository extends JpaRepository<PersonaEntity, Integer>
     public List<PersonaEntity> ordenarSociosApellidosAscendente(@Param("cuenta") Integer cuenta);
     @Query("select distinct p from PersonaEntity p ,RolEntity r where p=r.personaByPersonaId and r.cuentaByCuentaId.id=:cuenta order by p.apellido1 desc , p.apellido2 desc ")
     public List<PersonaEntity> ordenarSociosApellidosDescendente(@Param("cuenta") Integer cuenta);
+
+    @Query("select c.operacionsById from CuentaEntity c where c.id= :id")
+    public List<OperacionEntity> buscarOperacionesPorID(@Param("id") Integer id);
 
 }

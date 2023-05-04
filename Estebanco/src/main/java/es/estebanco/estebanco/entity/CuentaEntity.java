@@ -124,13 +124,15 @@ public class CuentaEntity {
         dto.setId(this.id);
 
 
-        ArrayList dtosOperacion = new ArrayList<OperacionEntityDto>();
+        /*ArrayList dtosOperacion = new ArrayList<OperacionEntityDto>();
         operacionsById.forEach((final OperacionEntity operacion) -> dtosOperacion.add(operacion.toDTO()));
         ArrayList dtosRol = new ArrayList<RolEntityDto>();
         rolsById.forEach((final RolEntity rol) -> dtosRol.add(rol.toDTO()));
 
         dto.setOperacionsById(dtosOperacion);
         dto.setRolsById(dtosRol);
+
+         */
         return dto;
     }
 }

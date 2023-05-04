@@ -30,4 +30,6 @@ public interface CuentaRepository extends JpaRepository<CuentaEntity, Integer> {
     @Query("select moneda from CuentaEntity")
     public List<String> monedas();
 
+
+
 }

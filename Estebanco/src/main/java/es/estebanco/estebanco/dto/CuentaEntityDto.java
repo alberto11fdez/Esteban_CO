@@ -18,8 +18,8 @@ public class CuentaEntityDto implements Serializable {
     private  String estado;
     private  Timestamp fechaApertura;
     private  Integer id;
-    private List<OperacionEntityDto> operacionsById;
-    private List<RolEntityDto> rolsById;
+    //private List<OperacionEntityDto> operacionsById;
+    //private List<RolEntityDto> rolsById;
 
 
     public String getIban() {
@@ -70,7 +70,7 @@ public class CuentaEntityDto implements Serializable {
         this.id = id;
     }
 
-    public List<OperacionEntityDto> getOperacionsById() {
+    /*public List<OperacionEntityDto> getOperacionsById() {
         return operacionsById;
     }
 
@@ -85,6 +85,8 @@ public class CuentaEntityDto implements Serializable {
     public void setRolsById(List<RolEntityDto> rolsById) {
         this.rolsById = rolsById;
     }
+
+     */
 
     @Override
     public boolean equals(Object o) {

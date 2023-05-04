@@ -53,8 +53,10 @@ public class CuentaPersonaService {
         cuenta.setFechaApertura(dto.getFechaApertura());
 
         //cuenta.setOperacionsById(dto.getOperacionsById());
+        cuenta.setOperacionsById(null);
         cuenta.setOperacionsById(operacionRepository.operacionesPorCuenta(dto.getId()));
-        cuenta.setRolsById(dto.getRolsById());
+        //cuenta.setRolsById(dto.getRolsById());
+        cuenta.setRolsById(null);
 
     }
 
@@ -187,9 +189,9 @@ public class CuentaPersonaService {
         cuenta.setId(dto.getId());
         cuenta.setMoneda(dto.getMoneda());
         cuenta.setSaldo(dto.getSaldo()-valor);
-        cuenta.setOperacionsById(dto.getOperacionsById());
+        cuenta.setOperacionsById(null);
         cuenta.setEstado(dto.getEstado());
-        cuenta.setRolsById(dto.getRolsById());
+        cuenta.setRolsById(null);
         cuenta.setFechaApertura(dto.getFechaApertura());
         cuenta.setIban(dto.getIban());
 
@@ -202,9 +204,9 @@ public class CuentaPersonaService {
         cuenta.setId(dto.getId());
         cuenta.setMoneda(dto.getMoneda());
         cuenta.setSaldo(dto.getSaldo()+valor);
-        cuenta.setOperacionsById(dto.getOperacionsById());
+        cuenta.setOperacionsById(null);
         cuenta.setEstado(dto.getEstado());
-        cuenta.setRolsById(dto.getRolsById());
+        cuenta.setRolsById(null);
         cuenta.setFechaApertura(dto.getFechaApertura());
         cuenta.setIban(dto.getIban());
 
@@ -238,9 +240,10 @@ public class CuentaPersonaService {
         cuenta.setId(dto.getId());
         cuenta.setMoneda(moneda);
         cuenta.setSaldo(dto.getSaldo());
-        cuenta.setOperacionsById(dto.getOperacionsById());
+        //List<OperacionEntityDto> operaciones = dto.getOperacionsById();
+        //cuenta.setOperacionsById(null);
         cuenta.setEstado(dto.getEstado());
-        cuenta.setRolsById(dto.getRolsById());
+        //cuenta.setRolsById(null);
         cuenta.setFechaApertura(dto.getFechaApertura());
         cuenta.setIban(dto.getIban());
 

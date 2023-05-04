@@ -71,10 +71,18 @@ public class MensajeService {
         persona.setUsuario(personaDto.getUsuario());
         persona.setContraseña(personaDto.getContraseña());
         persona.setEstado(personaDto.getEstado());
-        persona.setConversacionsById(personaDto.getConversacionsById());
+        /*persona.setConversacionsById(personaDto.getConversacionsById());
         persona.setOperacionesById(personaDto.getOperacionesById());
         persona.setConversacionsById_0(personaDto.getConversacionsById_0());
         persona.setRolsById(personaDto.getRolsById());
+
+         */
+        persona.setConversacionsById(null);
+        persona.setOperacionesById(null);
+        persona.setConversacionsById_0(null);
+        persona.setRolsById(null);
+
+
 
 
         conversacion.setPersonaByPersonaId(persona);
@@ -94,10 +102,14 @@ public class MensajeService {
         asistente.setUsuario(personaDto.getUsuario());
         asistente.setContraseña(personaDto.getContraseña());
         asistente.setEstado(personaDto.getEstado());
-        asistente.setConversacionsById(personaDto.getConversacionsById());
+        /*asistente.setConversacionsById(personaDto.getConversacionsById());
         asistente.setOperacionesById(personaDto.getOperacionesById());
         asistente.setConversacionsById_0(personaDto.getConversacionsById_0());
         asistente.setRolsById(personaDto.getRolsById());
+         */
+
+
+
 
         conversacion.setPersonaByAsistenteId(asistente);
 
