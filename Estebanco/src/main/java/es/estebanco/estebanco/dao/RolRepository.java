@@ -22,5 +22,15 @@ public interface RolRepository extends JpaRepository<RolEntity, Integer>{
     @Query("select c from RolEntity c where c.personaByPersonaId.id =:idPerson")
     public List<RolEntity> getRolByIdString(@Param("idPerson")Integer idPerson);
 
+    @Query("select  r.cuentaByCuentaId.id from RolEntity r where r.personaByPersonaId.id=:idpersona and (r.rol='empresa' or r.rol='normal') ")
+    public List<Integer> obtenerCuentasNormlesOEmpresa(@Param("idpersona")Integer idpersona);
 
+    @Query("select  r.cuentaByCuentaId.id from RolEntity  r where r.personaByPersonaId.id=:idpersona and r.rol='socio' and r.bloqueado_empresa=0")
+    public List<Integer> obtenerCuentasSocioActivado(@Param("idpersona")Integer idpersona);
+
+    @Query("select r.personaByPersonaId.id from RolEntity r where r.cuentaByCuentaId.id=:idCuentaEmpresa and r.rol='socio' and r.bloqueado_empresa=0")
+    public List<Integer> obtenerSociosActivos(@Param("idCuentaEmpresa") Integer idCuentaEmpresa);
+
+    @Query("select r.personaByPersonaId.id from RolEntity r where r.cuentaByCuentaId.id=:idCuentaEmpresa and r.rol='socio' and r.bloqueado_empresa=1")
+    public List<Integer> obtenerSocioBloqueados(@Param("idCuentaEmpresa")Integer idCuentaEmpresa);
 }

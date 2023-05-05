@@ -34,8 +34,7 @@ public class EmpresaControlador {
     @Autowired
     protected RolService rolService;
     //protected RolRepository rolRepository;
-    @Autowired
-    protected RolRepository rolRepository;
+
     @Autowired
     protected TipoOperacionService tipoOperacionService;
     //protected TipoOperacionEntityRepository tipoOperacionEntityRepository;
@@ -58,15 +57,18 @@ public class EmpresaControlador {
         model.addAttribute("persona", persona);
 
         //List<OperacionEntity> operaciones = cuentaEmpresa.getOperacionsById();
-        //List<OperacionEntityDto> operaciones = cuentaEmpresa.getOperacionsById();
-        //model.addAttribute("operaciones", operaciones);
+        List<OperacionEntityDto> operaciones = operacionService.operacionesPorCuenta(cuentaEmpresa.getId());
+        model.addAttribute("operaciones", operaciones);
 
         //List<PersonaEntity> socios = personaRepository.obtenerSocioEmpresa(cuentaEmpresa);
-        List<PersonaEntityDto> socios = personaService.obtenerSocioEmpresa(cuentaEmpresa);
+        List<PersonaEntityDto> socios = personaService.obtenerSocioEmpresa(cuentaEmpresa,idPersona);
 
         model.addAttribute("socios", socios);
 
-        model.addAttribute("rolrepository", rolRepository);
+        List<Integer> sociosActivos = rolService.obtenerSociosActivos(idCuentaEmpresa);
+        model.addAttribute("sociosActivos",sociosActivos);
+        List<Integer> sociosBloqueados=rolService.obtenerSocioBloqueados(idCuentaEmpresa);
+        model.addAttribute("sociosBloqueados",sociosBloqueados);
 
         model.addAttribute("tipo_operaciones", tipoMonedaService.findAll());
 
@@ -152,10 +154,14 @@ public class EmpresaControlador {
         model.addAttribute("operaciones", operaciones);
 
         //List<PersonaEntity> socios = personaRepository.obtenerSocioEmpresa(cuentaEmpresa);
-        List<PersonaEntityDto> socios=personaService.obtenerSocioEmpresa(cuentaEmpresa);
+        List<PersonaEntityDto> socios=personaService.obtenerSocioEmpresa(cuentaEmpresa, persona.getId());
         model.addAttribute("socios", socios);
 
-        model.addAttribute("rolrepository", rolRepository);
+        List<Integer> sociosActivos = rolService.obtenerSociosActivos(cuentaEmpresa.getId());
+        model.addAttribute("sociosActivos",sociosActivos);
+        List<Integer> sociosBloqueados=rolService.obtenerSocioBloqueados(cuentaEmpresa.getId());
+        model.addAttribute("sociosBloqueados",sociosBloqueados);
+
 
         model.addAttribute("tipo_operaciones", tipoOperacionService.findAll());
 
@@ -185,16 +191,16 @@ public class EmpresaControlador {
     @GetMapping("/crearSocio")
     public String goCrearSocios(Model model, @RequestParam("idCuenta") Integer idCuenta, HttpSession session) {
 
-
+        PersonaEntityDto persona =(PersonaEntityDto) session.getAttribute("persona");
        // model.addAttribute("socio", new PersonaEntity());
         model.addAttribute("socio",new PersonaEntityDto());
 
         //CuentaEntity cuentaEmpresa = cuentaRepository.findById(idCuenta).orElse(null);
         CuentaEntityDto cuentaEmpresa=cuentaPersonaService.encontrarCuentaPorId(idCuenta);
         //List<PersonaEntity> personasNoSocio = personaRepository.personasNoSociosEnCuentaEmpresa(cuentaEmpresa);
-        List<PersonaEntityDto> personasNoSocio=personaService.personasNoSociosEnCuentaEmpresa(cuentaEmpresa);
+        List<PersonaEntityDto> personasNoSocio=personaService.personasNoSociosEnCuentaEmpresa(cuentaEmpresa,persona.getId());
         //List<PersonaEntity> personasSiSocio = personaRepository.obtenerSocioEmpresa(cuentaEmpresa);
-        List<PersonaEntityDto> personasSiSocio=personaService.obtenerSocioEmpresa(cuentaEmpresa);
+        List<PersonaEntityDto> personasSiSocio=personaService.obtenerSocioEmpresa(cuentaEmpresa,persona.getId());
 
         personasNoSocio.removeAll(personasSiSocio);
         model.addAttribute("personasNoSocio", personasNoSocio);
@@ -219,8 +225,8 @@ public class EmpresaControlador {
         //crea al socio
         socio.setEstado("esperandoConfirmacion");
         //this.personaRepository.save(socio);
-        personaService.save(socio);
-
+        int idSocio=cuentaPersonaService.guardarPersona(socio);
+        socio=cuentaPersonaService.encontrarPersona(idSocio);
         //Unimos la tabla persona y cuentaEmpresa a traves de la tabla rol
         //RolEntity rol = new RolEntity();
         RolEntityDto rol=new RolEntityDto();
@@ -232,7 +238,7 @@ public class EmpresaControlador {
         rol.setBloqueado_empresa((byte)0);
 
         //this.rolRepository.save(rol);
-        rolService.saveRol(rol);
+        rolService.saveRolsinId(rol);
 
         if(cuentaEmpresa.getEstado().equals("esperandoConfirmacion")){
             return "redirect:/persona/?id="+persona.getId();
@@ -243,16 +249,21 @@ public class EmpresaControlador {
 
 
     @PostMapping("/socio/guardarYaExistente")
-    public String doGuardarSocioYaExistente(@ModelAttribute("rolNuevo") RolEntityDto rol,HttpSession session) {
+    public String doGuardarSocioYaExistente(@ModelAttribute("rolNuevo") RolEntityDto rol, HttpSession session) {
+
+        rol.setPersonaByPersonaId(personaService.encontrarPersona(rol.getIdPersona()));
+
+        CuentaEntityDto cuentaEmpresa =(CuentaEntityDto) session.getAttribute("cuenta");
+        int idCuenta = cuentaEmpresa.getId();
+        CuentaEntityDto cuenta=cuentaPersonaService.encontrarCuentaPorId(idCuenta);
+        rol.setCuentaByCuentaId(cuenta);
 
         rol.setRol("socio");
         rol.setBloqueado_empresa((byte) 0);
-        //rolRepository.save(rol);
-        rolService.saveRol(rol);
-        //PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
+
+        rolService.saveRolsinId(rol);
+
         PersonaEntityDto persona = (PersonaEntityDto) session.getAttribute("persona");
-        //CuentaEntity cuentaEmpresa =(CuentaEntity) session.getAttribute("cuenta");
-        CuentaEntityDto cuentaEmpresa =(CuentaEntityDto) session.getAttribute("cuenta");
 
         if(cuentaEmpresa.getEstado().equals("esperandoConfirmacion")){
             return "redirect:/persona/?id="+persona.getId();
@@ -264,10 +275,10 @@ public class EmpresaControlador {
     @GetMapping("/socio/bloquear")
     public String bloquearSocio(@RequestParam("id") Integer idSocio, HttpSession session)
     {
-        //CuentaEntity cuentaEmpresa = (CuentaEntity) session.getAttribute("cuenta");
+
         CuentaEntityDto cuentaEmpresa=(CuentaEntityDto) session.getAttribute("cuenta");
-        //PersonaEntity persona=(PersonaEntity)session.getAttribute("persona");
-        CuentaEntityDto persona=(CuentaEntityDto)session.getAttribute("persona");
+
+        PersonaEntityDto persona=(PersonaEntityDto) session.getAttribute("persona");
 
         //RolEntity rol = rolRepository.obtenerRol_Persona_en_Empresa(idSocio, cuentaEmpresa.getId());
         RolEntityDto rol=rolService.obtenerRol_Persona_en_Empresa(idSocio, cuentaEmpresa.getId());
@@ -279,10 +290,9 @@ public class EmpresaControlador {
 
     @GetMapping("/socio/activar")
     public String activarSocio(@RequestParam("id") Integer idSocio, HttpSession session) {
-        //CuentaEntity cuentaEmpresa = (CuentaEntity) session.getAttribute("cuenta");
         CuentaEntityDto cuentaEmpresa=(CuentaEntityDto) session.getAttribute("cuenta");
-        //PersonaEntity persona=(PersonaEntity)session.getAttribute("persona");
-        CuentaEntityDto persona=(CuentaEntityDto)session.getAttribute("persona");
+
+        PersonaEntityDto persona=(PersonaEntityDto) session.getAttribute("persona");
 
         //RolEntity rol = rolRepository.obtenerRol_Persona_en_Empresa(idSocio, cuentaEmpresa.getId());
         RolEntityDto rol=rolService.obtenerRol_Persona_en_Empresa(idSocio, cuentaEmpresa.getId());
@@ -312,11 +322,8 @@ public class EmpresaControlador {
                                       @RequestParam("destino") String destino,
                                       Model model, HttpSession session) {
 
-       // PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
         PersonaEntityDto persona=(PersonaEntityDto) session.getAttribute("persona");
-        //CuentaEntity cuentaOrigen = this.cuentaRepository.cuentaOrigen(idCuenta);
         CuentaEntityDto cuentaOrigen=cuentaPersonaService.cuentaOrigen(idCuenta);
-        //CuentaEntity cuentaDestino = this.cuentaRepository.cuentaDestinoTransferencia(destino);
         CuentaEntityDto cuentaDestino=cuentaPersonaService.cuentaDestinoTransferencia(destino);
 
         String urlTo = "redirect:/cuentaEmpresa/?id=" + cuentaOrigen.getId() + "&idPersona=" + persona.getId();
@@ -364,17 +371,17 @@ public class EmpresaControlador {
         int idPersona=persona.getId();
 
         Date now = new Date();
-       // OperacionEntity operacion = new OperacionEntity();
+
         OperacionEntityDto operacion=new OperacionEntityDto();
-        //TipoOperacionEntity tipo = this.tipoOperacionEntityRepository.buscarTipo(1);
         TipoOperacionEntityDto tipo =tipoOperacionService.buscarTipo(1);
+
         operacion.setCantidad(valor);
         operacion.setCuentaByCuentaId(cuentaOrigen);
         operacion.setTipo(tipo.getNombre());
         operacion.setFechaOperacion(now);
         operacion.setIbanCuentaDestinoOrigen(cuentaDestino.getIban());
         operacion.setPersonaByPersonaId(personaService.encontrarPersona(idPersona));
-        operacionService.save(operacion);
+        operacionService.saveSinId(operacion);
     }
 
     @GetMapping("/mostrarDivisa")
@@ -422,7 +429,7 @@ public class EmpresaControlador {
         operacion.setFechaOperacion(now);
         operacion.setPersonaByPersonaId(persona);
 
-        this.operacionService.save(operacion);
+        this.operacionService.saveSinId(operacion);
     }
 
     @PostMapping("/filtroOperacionSocio")
@@ -445,10 +452,14 @@ public class EmpresaControlador {
         model.addAttribute("operaciones", operaciones);
 
        // List<PersonaEntity> socios = personaRepository.obtenerSocioEmpresa(cuentaEmpresa);
-        List<PersonaEntityDto> socios=personaService.obtenerSocioEmpresa(cuentaEmpresa);
+        List<PersonaEntityDto> socios=personaService.obtenerSocioEmpresa(cuentaEmpresa, persona.getId());
         model.addAttribute("socios", socios);
 
-        model.addAttribute("rolrepository", rolRepository);
+        List<Integer> sociosActivos = rolService.obtenerSociosActivos(cuentaEmpresa.getId());
+        model.addAttribute("sociosActivos",sociosActivos);
+        List<Integer> sociosBloqueados=rolService.obtenerSocioBloqueados(cuentaEmpresa.getId());
+        model.addAttribute("sociosBloqueados",sociosBloqueados);
+
 
         model.addAttribute("tipo_operaciones", tipoMonedaService.findAll());
 
@@ -459,6 +470,10 @@ public class EmpresaControlador {
         operacion.setCuentaByCuentaId(cuentaEmpresa);
         operacion.setPersonaByPersonaId(persona);
         model.addAttribute("operacion", operacion);
+
+        List<OperacionEntityDto> operacionesRecibidas = operacionService.buscarOperacionesRecibidas(cuentaEmpresa.getIban());
+        model.addAttribute("operacionesRecibidas",operacionesRecibidas);
+
 
         model.addAttribute("filtroOperacionSocio", new FiltroOperacionSocio());
 
@@ -526,7 +541,12 @@ public class EmpresaControlador {
 
         model.addAttribute("socios", socios);
 
-        model.addAttribute("rolrepository", rolRepository);
+        List<Integer> sociosActivos = rolService.obtenerSociosActivos(cuentaEmpresa.getId());
+        model.addAttribute("sociosActivos",sociosActivos);
+        List<Integer> sociosBloqueados=rolService.obtenerSocioBloqueados(cuentaEmpresa.getId());
+        model.addAttribute("sociosBloqueados",sociosBloqueados);
+
+
 
         model.addAttribute("tipo_operaciones", tipoOperacionService.findAll());
 

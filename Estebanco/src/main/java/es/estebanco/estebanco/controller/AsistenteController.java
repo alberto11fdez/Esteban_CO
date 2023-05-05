@@ -83,28 +83,21 @@ public class AsistenteController {
         PersonaEntityDto cliente = this.personaService.buscarPersonaPorId(idCliente);
 
         ConversacionEntityDto conversacionNueva = new ConversacionEntityDto();
-        //meto la idConversacion
+
         int idUltimaConver = this.asistenteService.getUltimaIdConversacion();
         idUltimaConver++;
         conversacionNueva.setIdconversacion(idUltimaConver);
-        //meto el estado
+
         byte estadoInicial = 1;
         conversacionNueva.setEstado(estadoInicial);
 
-        //meto la fecha de inicio
         Timestamp fecha = new Timestamp(System.currentTimeMillis());
         conversacionNueva.setFechaInicio(fecha);
-        //dejo a cero la fecha final
+
         fecha = new Timestamp(0);
         conversacionNueva.setFechaFin(fecha);
 
-        //introduzco el cliente actual
-        conversacionNueva.setPersonaByPersonaId(cliente);
-
-        //introduzco a null el asistente y lo seleccionará el cliente
-        //conversacionNueva.setPersonaByAsistenteId(new PersonaEntityDto());
-
-        //conversacionNueva.setMensajesByIdconversacion(new ArrayList<>());
+        conversacionNueva.setIdPersona(cliente.getId());
 
 
         List<PersonaEntityDto> asistentes = this.asistenteService.getAsistente();
@@ -117,6 +110,8 @@ public class AsistenteController {
 
     @PostMapping("/guardar")
     public String doGuardar(@ModelAttribute("conversacionNueva") ConversacionEntityDto conversacionNueva){
+        conversacionNueva.setPersonaByPersonaId(this.asistenteService.devuelvePersonaEntityDto(conversacionNueva.getIdPersona()));
+        conversacionNueva.setPersonaByAsistenteId(this.asistenteService.devuelveAsistenteEntityDto(conversacionNueva.getIdAsistente()));
         asistenteService.save(conversacionNueva);
         return "redirect:/persona/?id=" + conversacionNueva.getPersonaByPersonaId().getId();
     }

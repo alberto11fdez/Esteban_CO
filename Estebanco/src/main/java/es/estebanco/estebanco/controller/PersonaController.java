@@ -25,7 +25,7 @@ public class PersonaController {
     @Autowired
     private CuentaPersonaService cuentaPersonaService;
     @Autowired
-    private RolRepository rolRepository;
+    private RolService rolService;
     @Autowired
     private PersonaService personaService;
 
@@ -44,12 +44,18 @@ public class PersonaController {
             model.addAttribute("conversaciones", conversaciones);
             List<String> tipos_rol = cuentaPersonaService.obtenerRoles();
             model.addAttribute("tipos_rol",tipos_rol);
-            RolEntity rol1 = new RolEntity();
-            RolEntityDto rol = rol1.toDTO();
+            //RolEntity rol1 = new RolEntity();
+           // RolEntityDto rol = rol1.toDTO();
+            RolEntityDto rol=new RolEntityDto();
            // rol.setPersonaByPersonaId(persona);
             model.addAttribute("rolCuentaNueva",rol);
 
-            model.addAttribute("rolrepository",rolRepository);
+            List<Integer> listaCuentasNormalesOEmpresa= rolService.obtenerCuentasNormlesOEmpresa(idpersona);
+            model.addAttribute("listaCuentasNormalesOEmpresa",listaCuentasNormalesOEmpresa);
+
+            List<Integer> listaCuentasSocioActivado=rolService.obtenerCuentasSocioActivado(idpersona);
+            model.addAttribute("listaCuentasSocioActivado",listaCuentasSocioActivado);
+
             return "persona";
             //return this.procesarFiltro(null, persona, model, session);
         }

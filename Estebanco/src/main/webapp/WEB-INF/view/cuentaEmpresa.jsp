@@ -15,9 +15,10 @@
     CuentaEntityDto cuentaEmpresa = (CuentaEntityDto) request.getAttribute("cuentaEmpresa");
     List<OperacionEntityDto> operaciones = (List<OperacionEntityDto>) request.getAttribute("operaciones");
     List<PersonaEntityDto> socios = (List<PersonaEntityDto>) request.getAttribute("socios");
-    RolRepository rolRepository=(RolRepository) request.getAttribute("rolrepository");
     PersonaEntityDto persona=(PersonaEntityDto) request.getAttribute("persona");
-    List<OperacionEntityDto> operacionesRescibidas = (List<OperacionEntityDto>) request.getAttribute("operacionesRescibidas");
+    List<OperacionEntityDto> operacionesRecibidas = (List<OperacionEntityDto>) request.getAttribute("operacionesRecibidas");
+    List<Integer> sociosActivos=(List<Integer>) request.getAttribute("sociosActivos");
+    List<Integer> sociosBloqueados=(List<Integer>) request.getAttribute("sociosBloqueados");
 
 %>
 
@@ -57,32 +58,33 @@
     <button>Filtrar</button>
 </form:form>
 
-<table border="1">
-    <%
-        for(OperacionEntity operacion: operaciones){
-    %>
-    <tr>
-        <td><%=operacion.getTipo()%></td>
-        <td><%=operacion.getCantidad()%></td>
-        <td><%=operacion.getFechaOperacion()%></td>
-        <td><%=operacion.getIbanCuentaDestinoOrigen()%></td>
-    </tr>
-    <%
-        }
-    %>
-</table >
-
+<% if(!(operaciones==null)){%>
+    <table border="1">
+        <%
+            for(OperacionEntityDto operacion: operaciones){
+        %>
+        <tr>
+            <td><%=operacion.getTipo()%></td>
+            <td><%=operacion.getCantidad()%></td>
+            <td><%=operacion.getFechaOperacion()%></td>
+            <td><%=operacion.getIbanCuentaDestinoOrigen()%></td>
+        </tr>
+        <%
+            }
+        %>
+    </table >
+<%}%>
 <br/>
 <button><a href="/cuentaEmpresa/mostrarTransferencia?idCuenta=<%=cuentaEmpresa.getId()%>&idPersona=<%=persona.getId()%>">Realizar transferencia</a></button>
 <button><a href="/cuentaEmpresa/mostrarDivisa?idCuenta=<%=cuentaEmpresa.getId()%>&idPersona=<%=persona.getId()%>">Realizar cambio de divisa</a></button>
 <br/>
 <h1>Operaciones recibidas:</h1>
 
-<%if(!(operacionesRescibidas ==null))
+<%if(!(operacionesRecibidas ==null))
 {%>
 <table border="1">
     <%
-        for(OperacionEntity operacion: operacionesRescibidas){
+        for(OperacionEntityDto operacion: operacionesRecibidas){
     %>
     <tr>
         <td><%=operacion.getTipo()%></td>
@@ -116,9 +118,8 @@
 
 <table border="1">
     <%
-        for(PersonaEntity p: socios){
+        for(PersonaEntityDto p: socios){
     %>
-    <%RolEntity rol =rolRepository.obtenerRol_Persona_en_Empresa(p.getId(),cuentaEmpresa.getId());%>
     <tr>
         <td><%=p.getDni()%></td>
         <td><%=p.getNombre()%></td>
@@ -128,7 +129,7 @@
         <td>---------</td>
         <%}else{%>
         <%
-            if(rol.getBloqueado_Empresa()==0){%>
+            if(sociosActivos.contains(p.getId())){%>
         <td><a href="/cuentaEmpresa/socio/bloquear?id=<%= p.getId()%>">Bloquear</a></td>
         <%}else{%>
         <td><a href="/cuentaEmpresa/socio/activar?id=<%= p.getId()%>">Activar</a></td>

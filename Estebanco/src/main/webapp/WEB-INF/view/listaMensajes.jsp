@@ -21,8 +21,7 @@
 <body>
 <h1>Mensajes con Asistente:</h1>
 
-<h4 align="left">Mensajes Cliente</h4>
-<h4 align="center">Mensajes Asistente</h4>
+<u style="font-weight: bold">Mensajes Cliente <div style="text-align: center">Mensajes Asistente</div></u>
 
 <%
     if(!listaMensajes.isEmpty()){

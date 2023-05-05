@@ -19,9 +19,9 @@
     <form:hidden path="estado"></form:hidden>
     <form:hidden path="fechaInicio"></form:hidden>
     <form:hidden path="fechaFin"></form:hidden>
-    <form:hidden path="personaByPersonaId"></form:hidden>
+    <form:hidden path="idPersona"></form:hidden>
 
-    Selecciona al asistente que desea que le asista: <form:select path="personaByAsistenteId" items="${asistentes}" itemLabel="nombre" itemValue="id"></form:select></br>
+    Selecciona al asistente que desea que le asista: <form:select path="idAsistente" items="${asistentes}" itemLabel="nombre" itemValue="id"></form:select></br>
     <form:button>Comenzar conversación</form:button>
 </form:form>
 

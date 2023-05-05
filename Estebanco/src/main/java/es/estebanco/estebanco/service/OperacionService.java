@@ -94,6 +94,20 @@ public class OperacionService {
 
         operacionRepository.save(operacionEntity);
     }
+    public void saveSinId(OperacionEntityDto operacion) {
+        OperacionEntity operacionEntity=new OperacionEntity();
+        operacionEntity.setFechaOperacion(operacion.getFechaOperacion());
+        operacionEntity.setTipo(operacion.getTipo());
+        CuentaEntity cuenta = cuentaRepository.findById(operacion.getCuentaByCuentaId().getId()).orElse(null);
+        operacionEntity.setCuentaByCuentaId(cuenta);
+        PersonaEntity persona = personaRepository.findById(operacion.getPersonaByPersonaId().getId()).orElse(null);
+        operacionEntity.setPersonaByPersonaId(persona);
+        operacionEntity.setCantidad(operacion.getCantidad());
+        operacionEntity.setMoneda(operacion.getMoneda());
+        operacionEntity.setIbanCuentaDestinoOrigen(operacion.getIbanCuentaDestinoOrigen());
+
+        operacionRepository.save(operacionEntity);
+    }
 
     public List<OperacionEntityDto> getOperacionesSocio(PersonaEntityDto socioFiltro, CuentaEntityDto cuentaEmpresa) {
 

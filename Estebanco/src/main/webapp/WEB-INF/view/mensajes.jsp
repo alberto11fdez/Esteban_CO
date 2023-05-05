@@ -27,7 +27,7 @@
     <form:hidden path="idconversacion"></form:hidden>
     <input type="hidden" name="soyCliente" value="<%=soyCliente%>">
 
-    -<form:input path="texto" size="100" maxlength="100"></form:input>
+    -<form:input path="texto" size="100" maxlength="100" cssStyle="border-radius: 4px; border: 2x cadetblue"></form:input>
 
     <form:button>Enviar</form:button>
 </form:form>
