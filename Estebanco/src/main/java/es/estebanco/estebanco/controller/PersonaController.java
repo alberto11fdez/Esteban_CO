@@ -136,7 +136,7 @@ public class PersonaController {
     }
     protected String mostrarEditarONuevo(PersonaEntityDto persona, Model model){
         model.addAttribute("persona", persona);
-        return "datos";
+        return "datosEditar";
     }
 
     /*@PostMapping("/guardar")
@@ -163,6 +163,14 @@ public class PersonaController {
          session.setAttribute("persona",personaDto);
          return "redirect:/persona/?id="+id;
      }
+    @PostMapping("/guardarEditar")
+    public String doGuardarEdiat(@ModelAttribute("persona") PersonaEntityDto persona,HttpSession session){
+
+        int id = this.cuentaPersonaService.guardarPersona(persona);
+        PersonaEntityDto personaDto = personaService.buscarPersonaPorId(id);
+        session.setAttribute("persona",personaDto);
+        return "redirect:/persona/?id="+id;
+    }
 
     @GetMapping("/registrarPersona")
     public String registrarPersona(Model model){
