@@ -162,10 +162,10 @@ public class PersonaEntityDto implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
-
+/*
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
                 "id = " + id + ")";
-    }
+    }*/
 }

@@ -64,9 +64,9 @@ public class PersonaService {
         }
     }
 
-    public List<PersonaEntityDto> obtenerSocioEmpresa(CuentaEntityDto cuentaEmpresa) {
+    public List<PersonaEntityDto> obtenerSocioEmpresa(CuentaEntityDto cuentaEmpresa,Integer idPersona) {
 
-        List<PersonaEntity> personaEntities = personaRepository.obtenerSocioEmpresa(cuentaEmpresa.getId());
+        List<PersonaEntity> personaEntities = personaRepository.obtenerSocioEmpresa(cuentaEmpresa.getId(),idPersona);
         ArrayList dtos = new ArrayList<PersonaEntityDto>();
 
         personaEntities.forEach((final PersonaEntity persona) -> dtos.add(persona.toDTO()));
@@ -74,8 +74,8 @@ public class PersonaService {
         return  dtos;
     }
 
-    public List<PersonaEntityDto> personasNoSociosEnCuentaEmpresa(CuentaEntityDto cuentaEmpresa) {
-        List<PersonaEntity> personaEntities = personaRepository.personasNoSociosEnCuentaEmpresa(cuentaEmpresa.getId());
+    public List<PersonaEntityDto> personasNoSociosEnCuentaEmpresa(CuentaEntityDto cuentaEmpresa,Integer idPersona) {
+        List<PersonaEntity> personaEntities = personaRepository.personasNoSociosEnCuentaEmpresa(cuentaEmpresa.getId(),idPersona);
         ArrayList dtos = new ArrayList<PersonaEntityDto>();
 
         personaEntities.forEach((final PersonaEntity persona) -> dtos.add(persona.toDTO()));

@@ -17,7 +17,8 @@
     List<ConversacionEntityDto> conversaciones = (List<ConversacionEntityDto>) request.getAttribute("conversaciones");
     FiltroOperacion filtro = (FiltroOperacion) request.getAttribute("filtro");
     RolRepository rolRepository=(RolRepository) request.getAttribute("rolrepository");
-
+    List<Integer> listaCuentasSocioActivado = (List<Integer>) request.getAttribute("listaCuentasSocioActivado");
+    List<Integer> listaCuentasNormalesOEmpresa=(List<Integer>) request.getAttribute("listaCuentasNormalesOEmpresa");
 %>
 <html>
 <head>
@@ -58,6 +59,7 @@
         <th>ESTADO</th>
         <th>FECHA DE APERTURA</th>
     </tr>
+
     <%
         for(CuentaEntityDto cuenta: cuentas){
     %>
@@ -74,12 +76,12 @@
         <%}else {%>
             <td>-------</td>
         <%}%>
-        <%RolEntity rol= rolRepository.obtenerRol_Persona_en_Empresa(persona.getId(), cuenta.getId());%>
+
        <!--Si la cuenta esta activada y no es socio -->
-        <% if(cuenta.getEstado().equals("bien") && (rol.getRol().equals("normal") || rol.getRol().equals("empresa")) ){ %>
+        <% if(cuenta.getEstado().equals("bien") && listaCuentasNormalesOEmpresa.contains(cuenta.getId()) ){ %>
             <td><a href="/persona/entrarEnCuenta?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Entrar</a></td>
         <!--Si la cuenta esta activada y es un socio NO bloqueado -->
-        <%}else if(cuenta.getEstado().equals("bien") && rol.getRol().equals("socio") && rol.getBloqueado_Empresa()==0){%>
+        <%}else if(cuenta.getEstado().equals("bien") && listaCuentasSocioActivado.contains(cuenta.getId())){%>
             <td><a href="/persona/entrarEnCuenta?idPersona=<%=persona.getId()%>&idCuenta=<%=cuenta.getId()%>">Entrar</a></td>
         <%}else{%>
             <td>No se le permite entrar</td>

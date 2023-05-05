@@ -78,5 +78,13 @@ public class RolEntityDto implements Serializable {
                 "bloqueado_empresa = " + bloqueado_empresa + ")";
     }
 
+    public Integer getIdPersona() {
+        return idPersona;
+    }
 
+    public void setIdPersona(Integer idPersona) {
+        this.idPersona = idPersona;
+    }
+
+    public Integer idPersona;
 }

@@ -81,8 +81,9 @@ public class RolEntity {
         dto.setRol(this.rol);
         dto.setId(id);
         dto.setBloqueado_empresa(this.bloqueado_empresa);
-        //dto.setPersonaByPersonaId(this.personaByPersonaId.toDTO());
-        //dto.setCuentaByCuentaId(this.cuentaByCuentaId.toDTO());
+        dto.setPersonaByPersonaId(this.personaByPersonaId.toDTO());
+        dto.setCuentaByCuentaId(this.cuentaByCuentaId.toDTO());
+
         return dto;
     }
 }

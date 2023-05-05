@@ -48,9 +48,10 @@ public class CrearCuentaController {
         personaEntityDto= personaService.buscarPersonaPorId(personaEntityDto.getId());
         rol.setPersonaByPersonaId(personaEntityDto);
 
-        rolService.saveRol(rol);
+        rolService.saveRolsinId(rol);
 
         session.setAttribute("cuenta",cuenta);
+
         if(rol.getRol().equals("empresa")){
             return "redirect:/cuentaEmpresa/crearSocio?idCuenta="+cuenta.getId();
         }else{
