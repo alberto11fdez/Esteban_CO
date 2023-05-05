@@ -57,7 +57,7 @@ public class CuentaPersonaService {
         cuenta.setOperacionsById(operacionRepository.operacionesPorCuenta(dto.getId()));
         //cuenta.setRolsById(dto.getRolsById());
         cuenta.setRolsById(null);
-
+        cuentaRepository.save(cuenta);
     }
 
     public List<String> obtenerRoles(){

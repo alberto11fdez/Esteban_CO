@@ -4,12 +4,15 @@
 <%@ page import="es.estebanco.estebanco.entity.TipoMonedaEntity" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.estebanco.estebanco.entity.PersonaEntity" %>
+<%@ page import="es.estebanco.estebanco.dto.CuentaEntityDto" %>
+<%@ page import="es.estebanco.estebanco.dto.TipoMonedaEntityDto" %>
+<%@ page import="es.estebanco.estebanco.dto.PersonaEntityDto" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    CuentaEntity cuenta = (CuentaEntity) request.getAttribute("cuenta");
-    List<TipoMonedaEntity> monedas = (List<TipoMonedaEntity>) request.getAttribute("monedas");
-    PersonaEntity persona=(PersonaEntity) request.getAttribute("persona");
+    CuentaEntityDto cuenta = (CuentaEntityDto) request.getAttribute("cuenta");
+    List<TipoMonedaEntityDto> monedas = (List<TipoMonedaEntityDto>) request.getAttribute("monedas");
+    PersonaEntityDto persona=(PersonaEntityDto) request.getAttribute("persona");
 %>
 
 <html>

@@ -322,11 +322,8 @@ public class EmpresaControlador {
                                       @RequestParam("destino") String destino,
                                       Model model, HttpSession session) {
 
-       // PersonaEntity persona = (PersonaEntity) session.getAttribute("persona");
         PersonaEntityDto persona=(PersonaEntityDto) session.getAttribute("persona");
-        //CuentaEntity cuentaOrigen = this.cuentaRepository.cuentaOrigen(idCuenta);
         CuentaEntityDto cuentaOrigen=cuentaPersonaService.cuentaOrigen(idCuenta);
-        //CuentaEntity cuentaDestino = this.cuentaRepository.cuentaDestinoTransferencia(destino);
         CuentaEntityDto cuentaDestino=cuentaPersonaService.cuentaDestinoTransferencia(destino);
 
         String urlTo = "redirect:/cuentaEmpresa/?id=" + cuentaOrigen.getId() + "&idPersona=" + persona.getId();
@@ -374,17 +371,17 @@ public class EmpresaControlador {
         int idPersona=persona.getId();
 
         Date now = new Date();
-       // OperacionEntity operacion = new OperacionEntity();
+
         OperacionEntityDto operacion=new OperacionEntityDto();
-        //TipoOperacionEntity tipo = this.tipoOperacionEntityRepository.buscarTipo(1);
         TipoOperacionEntityDto tipo =tipoOperacionService.buscarTipo(1);
+
         operacion.setCantidad(valor);
         operacion.setCuentaByCuentaId(cuentaOrigen);
         operacion.setTipo(tipo.getNombre());
         operacion.setFechaOperacion(now);
         operacion.setIbanCuentaDestinoOrigen(cuentaDestino.getIban());
         operacion.setPersonaByPersonaId(personaService.encontrarPersona(idPersona));
-        operacionService.save(operacion);
+        operacionService.saveSinId(operacion);
     }
 
     @GetMapping("/mostrarDivisa")
@@ -432,7 +429,7 @@ public class EmpresaControlador {
         operacion.setFechaOperacion(now);
         operacion.setPersonaByPersonaId(persona);
 
-        this.operacionService.save(operacion);
+        this.operacionService.saveSinId(operacion);
     }
 
     @PostMapping("/filtroOperacionSocio")
