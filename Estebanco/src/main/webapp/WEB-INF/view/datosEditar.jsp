@@ -18,6 +18,8 @@
     Nombre de usuario: <form:input path="usuario" size="20" maxlength="20"/><br/>
     Contraseña: <form:input path="contraseña" size="30" maxlength="30"/><br/>
     <form:hidden path="estado"></form:hidden>
+    <form:hidden path="id"></form:hidden>
+
     <form:button>Guardar</form:button>
 </form:form>
 </body>

@@ -276,6 +276,26 @@ public class CuentaPersonaService {
 
         return persona.getId();
     }
+    public Integer guardarPersonaConId(PersonaEntityDto dto){
+        PersonaEntity persona;
+        persona = new PersonaEntity();
+
+        persona.setDni(dto.getDni());
+        persona.setUsuario(dto.getUsuario());
+        persona.setEstado(dto.getEstado());
+        persona.setNombre(dto.getNombre());
+        persona.setApellido1(dto.getApellido1());
+        persona.setApellido2(dto.getApellido2());
+        persona.setContraseña(dto.getContraseña());
+        persona.setCorreo(dto.getCorreo());
+        persona.setDireccion(dto.getDireccion());
+        persona.setTelefono(dto.getTelefono());
+        persona.setId(dto.getId());
+
+        this.personaRepository.save(persona);
+
+        return persona.getId();
+    }
     public Integer saveCuentaNueva(CuentaEntityDto dto) {
         CuentaEntity cuenta = new CuentaEntity();
         cuenta.setEstado("esperandoConfirmacion");

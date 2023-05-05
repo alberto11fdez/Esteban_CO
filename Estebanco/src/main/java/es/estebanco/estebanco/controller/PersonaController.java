@@ -164,9 +164,9 @@ public class PersonaController {
          return "redirect:/persona/?id="+id;
      }
     @PostMapping("/guardarEditar")
-    public String doGuardarEdiat(@ModelAttribute("persona") PersonaEntityDto persona,HttpSession session){
+    public String doGuardarEditar(@ModelAttribute("persona") PersonaEntityDto persona,HttpSession session){
 
-        int id = this.cuentaPersonaService.guardarPersona(persona);
+        int id = this.cuentaPersonaService.guardarPersonaConId(persona);
         PersonaEntityDto personaDto = personaService.buscarPersonaPorId(id);
         session.setAttribute("persona",personaDto);
         return "redirect:/persona/?id="+id;
