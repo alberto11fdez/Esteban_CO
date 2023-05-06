@@ -144,4 +144,21 @@ public class PersonaService {
 
         return dtos;
     }
+
+    public List<PersonaEntityDto> findAll(){
+        List<PersonaEntity> personaEntities = personaRepository.findAll();
+        ArrayList dtos = new ArrayList<PersonaEntityDto>();
+
+        personaEntities.forEach((final PersonaEntity persona) -> dtos.add(persona.toDTO()));
+
+        return  dtos;
+    }
+    public List<PersonaEntityDto> obtenerPersonasPorEstado(String estado){
+        List<PersonaEntity> personaEntities = personaRepository.obtenerPersonasPorEstado(estado);
+        ArrayList dtos = new ArrayList<PersonaEntityDto>();
+
+        personaEntities.forEach((final PersonaEntity persona) -> dtos.add(persona.toDTO()));
+
+        return  dtos;
+    }
 }

@@ -1,9 +1,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.estebanco.estebanco.entity.*" %>
+<%@ page import="es.estebanco.estebanco.dto.PersonaEntityDto" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    List<PersonaEntity> personas = (List<PersonaEntity>) request.getAttribute("personas");
+    List<PersonaEntityDto> personas = (List<PersonaEntityDto>) request.getAttribute("personas");
 %>
 <html>
 <head> Vista Gestor Bancaria Clientes</head>
@@ -25,7 +26,7 @@
         <th>ESTADO</th>
     </tr>
     <%
-        for (PersonaEntity persona : personas){
+        for (PersonaEntityDto persona : personas){
     %>
     <tr>
         <td><%= persona.getId()%></td>

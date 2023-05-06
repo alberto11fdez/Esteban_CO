@@ -1,8 +1,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.estebanco.estebanco.entity.CuentaEntity" %>
+<%@ page import="es.estebanco.estebanco.dto.CuentaEntityDto" %>
 <html>
 <%
-    CuentaEntity cuenta = (CuentaEntity) request.getAttribute("cuentaRevisar");
+    CuentaEntityDto cuenta = (CuentaEntityDto) request.getAttribute("cuentaRevisar");
 %>
 
 <head>

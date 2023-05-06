@@ -4,14 +4,21 @@ import es.estebanco.estebanco.dao.CuentaRepository;
 import es.estebanco.estebanco.dao.OperacionRepository;
 import es.estebanco.estebanco.dao.PersonaRepository;
 import es.estebanco.estebanco.dao.TipoMonedaEntityRepository;
+import es.estebanco.estebanco.dto.CuentaEntityDto;
+import es.estebanco.estebanco.dto.OperacionEntityDto;
+import es.estebanco.estebanco.dto.PersonaEntityDto;
+import es.estebanco.estebanco.dto.TipoMonedaEntityDto;
 import es.estebanco.estebanco.entity.*;
+import es.estebanco.estebanco.service.*;
 import es.estebanco.estebanco.ui.FiltroGestor;
+import es.estebanco.estebanco.ui.FiltroOperaciones;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -34,6 +41,17 @@ public class GestorController {
     @Autowired
     protected TipoMonedaEntityRepository tipoMonedaRepository;
 
+    @Autowired
+    private PersonaService personaService;
+    @Autowired
+    private GestorService gestorService;
+    @Autowired
+    private TipoMonedaService tipoMonedaService;
+    @Autowired
+    private CuentaPersonaService cuentaPersonaService;
+    @Autowired
+    private OperacionService operacionService;
+
     @GetMapping("/")
     public String doListar(Model model, HttpSession session){
         return this.procesarFiltrado(null,model,session);
@@ -48,25 +66,29 @@ public class GestorController {
         String urlTo = "gestor";
 
 
-        PersonaEntity gestor = (PersonaEntity) session.getAttribute("gestor");
+        PersonaEntityDto gestor = (PersonaEntityDto) session.getAttribute("gestor");
+
         if(gestor == null) {
             urlTo = "redirect:/";
         } else {
-            List <CuentaEntity> cuentas = this.cuentaRepository.findAll();
+            List<String> divisa = new ArrayList<>();
+            List <CuentaEntityDto> cuentas = this.gestorService.listarCuentas("", divisa);
            // List <PersonaEntity> personas = this.personaRepository.findAll();
 
             if (filtro == null || filtro.getTexto().isEmpty() && filtro.getMonedas().isEmpty()){
                 filtro = new FiltroGestor();
             } else if (filtro.getMonedas().isEmpty()) {
-                cuentas = this.cuentaRepository.cuentaPorIban(filtro.getTexto());
+                //cuentas = this.cuentaRepository.cuentaPorIban(filtro.getTexto());
+                cuentas = this.gestorService.listarCuentas(filtro.getTexto(), filtro.getMonedas());
             } else if(filtro.getTexto().isEmpty()){
-                cuentas = this.cuentaRepository.cuentaPorDivisa(filtro.getMonedas());
+                //cuentas = this.cuentaRepository.cuentaPorDivisa(filtro.getMonedas());
+                cuentas = this.gestorService.listarCuentas("", filtro.getMonedas());
             } else {
-                cuentas = this.cuentaRepository.buscarPorIbanYDivisa(filtro.getTexto(),filtro.getMonedas());
+                cuentas = this.gestorService.listarCuentas(filtro.getTexto(),filtro.getMonedas());
             }
             model.addAttribute("filtro",filtro);
             model.addAttribute("cuentas", cuentas);
-            List <TipoMonedaEntity> monedas = this.tipoMonedaRepository.findAll();
+            List <TipoMonedaEntityDto> monedas = this.tipoMonedaService.findAll();
             model.addAttribute("monedas", monedas);
             //model.addAttribute("personas", personas);
 
@@ -85,12 +107,12 @@ public class GestorController {
     protected String procesarFiltradoPersonas(FiltroGestor filtro, Model model, HttpSession session){
 
         String urlTo = "gestorPersonas";
-        PersonaEntity gestor =(PersonaEntity) session.getAttribute("gestor");
+        PersonaEntityDto gestor =(PersonaEntityDto) session.getAttribute("gestor");
 
         if (gestor == null){
             return "redirect:/";
         } else {
-            List <PersonaEntity> personas = this.personaRepository.findAll();
+            List <PersonaEntityDto> personas = this.personaService.findAll();
             model.addAttribute("personas", personas);
         }
         return urlTo;
@@ -98,12 +120,12 @@ public class GestorController {
     @GetMapping("/solicitudes")
     public String doListarSolicitudes(Model model, HttpSession session){
         String urlTo ="gestorSolicitudes";
-        PersonaEntity gestor = (PersonaEntity) session.getAttribute("gestor");
+        PersonaEntityDto gestor = (PersonaEntityDto) session.getAttribute("gestor");
 
         if(gestor == null){
             return "redirect:/";
         } else {
-            List <PersonaEntity> personaSolicitante = this.personaRepository.obtenerPersonasPorEstado("esperandoConfirmacion");
+            List <PersonaEntityDto> personaSolicitante = this.personaService.obtenerPersonasPorEstado("esperandoConfirmacion");
             model.addAttribute("personaSolicitante", personaSolicitante);
         }
 
@@ -112,13 +134,13 @@ public class GestorController {
     @GetMapping("/revisar")
     public String doRevisarEstado(@RequestParam("id") Integer id, Model model, HttpSession session){
         String urlTo ="gestorRevisarEstado";
-        PersonaEntity gestor = (PersonaEntity) session.getAttribute("gestor");
-        PersonaEntity persona;
+        PersonaEntityDto gestor = (PersonaEntityDto) session.getAttribute("gestor");
+        PersonaEntityDto persona;
 
         if(gestor == null){
             return "redirect:/";
         } else {
-            persona = this.personaRepository.findById(id).get();
+            persona = this.personaService.buscarPersonaPorId(id);
         }
         model.addAttribute("personaRevisar", persona);
 
@@ -140,24 +162,24 @@ public class GestorController {
         return urlTo;
     }*/
     @PostMapping("/revisar")
-    public String doRevisar(@ModelAttribute("personaRevisar")PersonaEntity persona){
-        this.personaRepository.save(persona);
+    public String doRevisar(@ModelAttribute("personaRevisar")PersonaEntityDto persona){
+        this.personaService.save(persona);
         return "redirect:/gestor/solicitudes";
     }
     @GetMapping("/revisarCuenta")
     public String doRevisarCuenta(@RequestParam("idCuenta") Integer idCuenta, Model model, HttpSession session){
         String urlTo ="gestorRevisarCuenta";
-        PersonaEntity gestor = (PersonaEntity) session.getAttribute("gestor");
+        PersonaEntityDto gestor = (PersonaEntityDto) session.getAttribute("gestor");
         if(gestor == null){
             return "redirect:/";
         }
-        CuentaEntity cuenta = this.cuentaRepository.getById(idCuenta);
+        CuentaEntityDto cuenta = this.cuentaPersonaService.encontrarCuentaPorId(idCuenta);
         model.addAttribute("cuentaRevisar", cuenta);
         return urlTo;
     }
 
     @PostMapping("/revisarCuenta")
-    public String doRevisarCuentaPost(@ModelAttribute("cuentaRevisar") CuentaEntity cuenta, Model model, HttpSession session){
+    public String doRevisarCuentaPost(@ModelAttribute("cuentaRevisar") CuentaEntityDto cuenta, Model model, HttpSession session){
         String urlTo ="redirect:/gestor/";
         Random iban = new Random();
         String card = "ES";
@@ -169,11 +191,11 @@ public class GestorController {
             cuenta.setEstado("bien");
             cuenta.setIban(card);
             cuenta.setFechaApertura(new Timestamp(System.currentTimeMillis()));
-            this.cuentaRepository.save(cuenta);
+            this.cuentaPersonaService.saveCuenta(cuenta);
         } else {
             cuenta.setFechaApertura(new Timestamp(System.currentTimeMillis()));
             cuenta.setEstado("bloqueado");
-            this.cuentaRepository.save(cuenta);
+            this.cuentaPersonaService.saveCuenta(cuenta);
         }
 
         return urlTo;
@@ -182,10 +204,32 @@ public class GestorController {
     public String doHistoricoOperaciones(@RequestParam("idCuenta") Integer idCuenta, Model model, HttpSession session){
         String urlTo ="gestorVistaOperaciones";
 
-        CuentaEntity cuenta = this.cuentaRepository.getById(idCuenta);
-        List <OperacionEntity> operaciones = this.operacionRepository.obtenerListaOperaciones(cuenta);
+        CuentaEntityDto cuenta = this.cuentaPersonaService.encontrarCuentaPorId(idCuenta);
+        List <OperacionEntityDto> operaciones = this.operacionService.operacionesPorCuenta(idCuenta);
         model.addAttribute("operaciones", operaciones);
+        FiltroOperaciones filtroOperaciones = new FiltroOperaciones();
+        model.addAttribute("filtroOperaciones", filtroOperaciones);
 
+        return urlTo;
+    }
+    @PostMapping("/filtrarOperaciones")
+    public String doFiltrarOperacioines(@ModelAttribute("filtroOperaciones") FiltroOperaciones filtroOperaciones, @ModelAttribute("operaciones") List<OperacionEntityDto> operaciones, Model model, HttpSession session){
+        String urlTo ="gestorVistaOperaciones";
+
+
+
+
+        return urlTo;
+    }
+    @GetMapping("/cuentasSospechosas")
+    public String doListarCuentasSospechosas(Model model, HttpSession session){
+        String urlTo ="gestorCuentasSospechosas";
+        PersonaEntityDto gestor = (PersonaEntityDto) session.getAttribute("gestor");
+        if(gestor == null){
+            return "redirect:/";
+        }
+        List <CuentaEntityDto> cuentas = this.cuentaPersonaService.cuentasSospechosas();
+        model.addAttribute("cuentasSospechosas", cuentas);
         return urlTo;
     }
 

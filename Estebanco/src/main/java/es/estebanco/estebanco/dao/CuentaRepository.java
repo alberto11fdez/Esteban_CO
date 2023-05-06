@@ -18,7 +18,7 @@ public interface CuentaRepository extends JpaRepository<CuentaEntity, Integer> {
 
     @Query("select c from CuentaEntity c where c.iban = :destino")
     public CuentaEntity cuentaDestinoTransferencia (@Param("destino") String destino);
-    @Query("select c from CuentaEntity c where c.iban = :iban")
+    @Query("select c from CuentaEntity c where c.iban like CONCAT('%', :iban, '%')")
     public List<CuentaEntity> cuentaPorIban(@Param("iban") String iban);
 
     @Query("select c from CuentaEntity c where c.moneda in :divisa")
@@ -29,6 +29,7 @@ public interface CuentaRepository extends JpaRepository<CuentaEntity, Integer> {
 
     @Query("select moneda from CuentaEntity")
     public List<String> monedas();
+
 
 
 

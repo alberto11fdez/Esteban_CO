@@ -1,10 +1,11 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.estebanco.estebanco.entity.*" %>
+<%@ page import="es.estebanco.estebanco.dto.PersonaEntityDto" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<PersonaEntity> personaSolicitante = (List<PersonaEntity>) request.getAttribute("personaSolicitante");
+    List<PersonaEntityDto> personaSolicitante = (List<PersonaEntityDto>) request.getAttribute("personaSolicitante");
 %>
 
 <html>
@@ -25,7 +26,7 @@
             <th> ESTADO </th>
         </tr>
         <%
-            for (PersonaEntity persona : personaSolicitante){
+            for (PersonaEntityDto persona : personaSolicitante){
 
         %>
         <tr>

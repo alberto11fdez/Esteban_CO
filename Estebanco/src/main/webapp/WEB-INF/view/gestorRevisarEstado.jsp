@@ -2,10 +2,11 @@
 <%@ page import="java.util.List" %>
 <%@ page import="es.estebanco.estebanco.entity.*" %>
 <%@ page import="es.estebanco.estebanco.ui.FiltroGestor" %>
+<%@ page import="es.estebanco.estebanco.dto.PersonaEntityDto" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    PersonaEntity persona = (PersonaEntity) request.getAttribute("personaRevisar");
+    PersonaEntityDto persona = (PersonaEntityDto) request.getAttribute("personaRevisar");
 
 %>
 <html>

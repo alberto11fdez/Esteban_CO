@@ -1,14 +1,16 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.estebanco.estebanco.entity.*" %>
+<%@ page import="es.estebanco.estebanco.dto.CuentaEntityDto" %>
+<%@ page import="es.estebanco.estebanco.dto.TipoMonedaEntityDto" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     List<PersonaEntity> personas = (List<PersonaEntity>) request.getAttribute("personas");
-    List<CuentaEntity> cuentas = (List<CuentaEntity>) request.getAttribute("cuentas");
+    List<CuentaEntityDto> cuentas = (List<CuentaEntityDto>) request.getAttribute("cuentas");
     List<OperacionEntity> operaciones = (List<OperacionEntity>) request.getAttribute("operaciones");
     List<RolEntity> roles = (List<RolEntity>) request.getAttribute("roles");
-    List<TipoMonedaEntity> monedas = (List<TipoMonedaEntity>) request.getAttribute("monedas");
+    List<TipoMonedaEntityDto> monedas = (List<TipoMonedaEntityDto>) request.getAttribute("monedas");
 %>
 <html>
 <head> Gestión Bancaria</head>
@@ -37,7 +39,7 @@
         <th>ID</th>
     </tr>
 <%
-    for (CuentaEntity cuenta : cuentas){
+    for (CuentaEntityDto cuenta : cuentas){
 %>
     <tr>
         <td><%= cuenta.getIban()%></td>
@@ -65,6 +67,8 @@
 
     <a href="/gestor/gestorPersonas">Vista de los clientes</a>
     <a href="/gestor/cuentasSospechosas"> Vista de las transferencias sospechosas</a>
+
+<button><a href="/logout">Log out</a></button>
 
 </table>
 </body>

@@ -303,4 +303,18 @@ public class CuentaPersonaService {
         cuentaRepository.save(cuenta);
         return cuenta.getId();
     }
+    public List<CuentaEntityDto> cuentasSospechosas(){
+        ArrayList dtos = new ArrayList<CuentaEntityDto>();
+        List<CuentaEntity> lista =  cuentaRepository.findAll();
+        for (CuentaEntity cuenta : lista){
+            List<OperacionEntity> operaciones = cuenta.getOperacionsById();
+            for(OperacionEntity operacion : operaciones){
+                CuentaEntity cuentaDestino = operacion.getCuentaByCuentaId();
+                if(cuentaDestino.getEstado().equalsIgnoreCase("sospechosa")){
+                    dtos.add(cuenta.toDTO());
+                }
+            }
+        }
+        return dtos;
+    }
 }
