@@ -7,6 +7,10 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
+/*
+   ALBERTO -> 90%.
+   FERNANDO -> 10%.
+ */
 @Entity
 @Table(name = "conversacion", schema = "estebanco", catalog = "")
 public class ConversacionEntity {

@@ -13,6 +13,11 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+    NICOLAS -> 25%. JOSÉ -> 25%.
+    SERGIO -> 16.66%. FERNANDO -> 16.66%. ALBERTO -> 16.66%.
+ */
+
 @Service
 public class PersonaService {
     @Autowired
@@ -40,6 +45,7 @@ public class PersonaService {
         persona.setUsuario(dto.getUsuario());
         persona.setContraseña(dto.getContraseña());
         persona.setEstado(dto.getEstado());
+        this.personaRepository.save(persona);
         /*persona.setConversacionsById(null);
         persona.setConversacionsById_0(null);
         persona.setOperacionesById(null);

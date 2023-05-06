@@ -1,6 +1,8 @@
 package es.estebanco.estebanco.dao;
 
-
+/*
+   HEMOS TOCADO TODOS (20% ).
+ */
 import es.estebanco.estebanco.dto.PersonaEntityDto;
 import es.estebanco.estebanco.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;

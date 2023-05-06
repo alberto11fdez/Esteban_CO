@@ -1,9 +1,13 @@
 package es.estebanco.estebanco.dto;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Objects;
-
+/*
+   FERNANDO -> 100%.
+ */
 /**
  * A DTO for the {@link es.estebanco.estebanco.entity.OperacionEntity} entity
  */
@@ -60,6 +64,10 @@ public class OperacionEntityDto implements Serializable {
 
     public void setMoneda(String moneda) {
         this.moneda = moneda;
+    }
+
+    public LocalDate getFechaOperacionLocal(){
+        return fechaOperacion.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     public void setIbanCuentaDestinoOrigen(String ibanCuentaDestinoOrigen) {

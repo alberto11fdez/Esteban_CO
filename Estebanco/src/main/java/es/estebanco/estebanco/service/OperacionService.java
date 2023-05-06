@@ -12,9 +12,13 @@ import es.estebanco.estebanco.entity.PersonaEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+   JOSE -> 90%
+   SERGIO -> 10%.
+ */
 @Service
 public class OperacionService {
 
@@ -117,5 +121,61 @@ public class OperacionService {
         operacionEntityList.forEach((final OperacionEntity operacion) -> dtos.add(operacion.toDTO()));
 
         return  dtos;
+    }
+
+    public List<OperacionEntityDto> sortOperacionesAntiguas(List<OperacionEntityDto> operaciones){
+        List<OperacionEntityDto> operacionesOrdenadas = new ArrayList<OperacionEntityDto>();
+        LocalDate hoy = LocalDate.now();
+        LocalDate fechaLimite = hoy.minusDays(30);
+
+        for (OperacionEntityDto operacion : operaciones){
+            if(operacion.getFechaOperacionLocal().isAfter(fechaLimite)){
+                operacionesOrdenadas.add(operacion);
+            }
+
+        }
+        return operacionesOrdenadas;
+    }
+
+    public List<OperacionEntityDto> sortOperacionesNuevas(List<OperacionEntityDto> operaciones){
+        List<OperacionEntityDto> operacionesOrdenadas = new ArrayList<OperacionEntityDto>();
+        LocalDate hoy = LocalDate.now();
+        LocalDate fechaLimite = hoy.minusDays(30);
+
+        for (OperacionEntityDto operacion : operaciones){
+            if(operacion.getFechaOperacionLocal().isBefore(fechaLimite)){
+                operacionesOrdenadas.add(operacion);
+            }
+
+        }
+        return operacionesOrdenadas;
+    }
+
+    public List<OperacionEntityDto> sortPrueba(Integer idCuenta){
+        CuentaEntity cuenta = cuentaRepository.findById(idCuenta).orElse(null);
+        List<OperacionEntity> operacionEntityList= this.operacionRepository.operacionesPorCuenta(idCuenta);
+        ArrayList dtos = new ArrayList<OperacionEntityDto>();
+        LocalDate hoy = LocalDate.now();
+        LocalDate fechaLimite = hoy.minusDays(30);
+
+        for(OperacionEntity operacion : operacionEntityList){
+            if(operacion.getFechaOperacionLocal().isAfter(fechaLimite)){
+                dtos.add(operacion.toDTO());
+            }
+        }
+        return dtos;
+    }
+    public List<OperacionEntityDto> sortPrueba2(Integer idCuenta){
+        List<OperacionEntity> operacionEntityList= this.operacionRepository.operacionesPorCuenta(idCuenta);
+        ArrayList dtos = new ArrayList<OperacionEntityDto>();
+        LocalDate hoy = LocalDate.now();
+        LocalDate fechaLimite = hoy.minusDays(30);
+
+        for(OperacionEntity operacion : operacionEntityList){
+            if(operacion.getFechaOperacionLocal().isBefore(fechaLimite)){
+                dtos.add(operacion.toDTO());
+            }
+        }
+        return dtos;
     }
 }

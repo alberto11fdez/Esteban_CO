@@ -18,6 +18,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+/*
+   JOSÉ MANUEL SÁNCHEZ NAVARRO -> 50%
+   NICOLÁS ZAMBRANA SMITH -> 50%.
+ */
+
 @Controller
 @RequestMapping("/persona")
 public class PersonaController {
@@ -60,71 +65,7 @@ public class PersonaController {
             //return this.procesarFiltro(null, persona, model, session);
         }
     }
-    /*
-    @PostMapping("/filtrar")
-    public String doFiltrar(@ModelAttribute("filtro")FiltroOperacion filtro, Model model, HttpSession session){
-        return this.procesarFiltro(filtro, personaRepository.findById(filtro.getIdpersona()).orElse(null), model, session);
-    }
-    protected String procesarFiltro(FiltroOperacion filtro, PersonaEntity persona, Model model, HttpSession session){
-        if(persona==null){
-            return "redirect:/";
-        }else{
-            model.addAttribute("persona",persona);
-            List<CuentaEntity> cuentas = this.cuentaRepository.cuentasPorPersona(persona);
-            model.addAttribute("cuentas",cuentas);
-            List<ConversacionEntity> conversaciones = this.personaRepository.conversacionPorPersona(persona);
-            model.addAttribute("conversaciones", conversaciones);
-            List<OperacionEntity> operaciones;
-            if(filtro==null){
-                filtro = new FiltroOperacion();
-                filtro.setIdpersona(persona.getId());
-            }
-            switch(filtro.getTipo()){
-                case "sacar":
-                    operaciones = this.operacionRepository.operacionesPorPersonaYTipo(persona,filtro.getTipo());
-                    break;
-                case "meter":
-                    operaciones = this.operacionRepository.operacionesPorPersonaYTipo(persona,filtro.getTipo());
-                    break;
-                case "cambio divisa":
-                    operaciones = this.operacionRepository.operacionesPorPersonaYTipo(persona,filtro.getTipo());
-                    break;
-                case "euro":
-                    operaciones = this.operacionRepository.operacionesPorPersonaYMoneda(persona,filtro.getTipo());
-                    break;
-                case "libra":
-                    operaciones = this.operacionRepository.operacionesPorPersonaYMoneda(persona,filtro.getTipo());
-                    break;
-                case "ordenar por fecha":
-                    operaciones = this.operacionRepository.operacionesPorPersonaOrdenadoPorFecha(persona);
-                    break;
-                case "ordenar por cantidad":
-                    operaciones = this.operacionRepository.operacionesPorPersonaOrdenadoPorCantidad(persona);
-                    break;
-                default:
-                    operaciones = this.operacionRepository.operacionesPorPersona(persona);
 
-            }
-
-            model.addAttribute("operaciones",operaciones);
-            model.addAttribute("filtro",filtro);
-            model.addAttribute("tipos_filtro",filtro.getTipos_filtro());
-
-            List<String> tipos_rol = tipoRolRepository.obtenerRoles();
-            model.addAttribute("tipos_rol",tipos_rol);
-            RolEntity rol=new RolEntity();
-            rol.setPersonaByPersonaId(persona);
-            model.addAttribute("rolCuentaNueva",rol);
-
-            model.addAttribute("rolrepository",rolRepository);
-
-        }
-
-
-        return "persona";
-    }
-
-     */
 
 
 
@@ -139,22 +80,9 @@ public class PersonaController {
         return "datosEditar";
     }
 
-    /*@PostMapping("/guardar")
-    public String doGuardar (@ModelAttribute("persona") PersonaEntityDto persona) {
-        persona.setEstado("esperandoConfirmacion");
-        //si la persona ya esta registrada no la deja (comprobar usuario)
-        String usuario=persona.getUsuario();
-        if(cuentaPersonaService.buscarSiExisteUsuario(usuario)!=null){
-            return "redirect:/persona/registrarPersona";
-        }else{
-            this.cuentaPersonaService.savePersona(persona);
-            return "redirect:/persona/?id="+persona.getId();
-        }
-
-    }
 
 
-     */
+
      @PostMapping("/guardar")
      public String doGuardar(@ModelAttribute("persona") PersonaEntityDto persona,HttpSession session){
          persona.setEstado("esperandoConfirmacion");

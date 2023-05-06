@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+   NICOLÁS -> 100%.
+ */
 @Service
 public class LoginService {
     @Autowired

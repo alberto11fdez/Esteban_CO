@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
-
+/*
+   FERNANDO LÓPEZ MURILLO -> 100%.
+ */
 @Controller
 @RequestMapping("/cajeroLogin")
 public class LoginCajeroController {

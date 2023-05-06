@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+/*
+   FERNANDO -> 90%
+   ALBERTO -> 10%.
+ */
+
 /**
  * A DTO for the {@link es.estebanco.estebanco.entity.MensajeEntity} entity
  */

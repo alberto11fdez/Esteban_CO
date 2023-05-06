@@ -5,6 +5,9 @@ import es.estebanco.estebanco.entity.TipoOperacionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+/*
+    FERNANDO -> 100%.
+ */
 
 public interface TipoEstadoEntityRepository extends JpaRepository<TipoEstadoEntity, Integer> {
     @Query("select e from TipoEstadoEntity e where e.id= :id")

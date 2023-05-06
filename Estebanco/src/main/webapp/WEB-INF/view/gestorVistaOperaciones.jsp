@@ -1,19 +1,17 @@
+<!-- SERGIO -> 100% -->
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.estebanco.estebanco.entity.*" %>
 <%@ page import="es.estebanco.estebanco.dto.OperacionEntityDto" %>
+<%@ page import="es.estebanco.estebanco.dto.CuentaEntityDto" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     List<OperacionEntityDto> operaciones = (List<OperacionEntityDto>) request.getAttribute("operaciones");
+    List<CuentaEntityDto> cuentasExternas = (List<CuentaEntityDto>) request.getAttribute("cuentasexternas");
 %>
 
-<form:form method="post" modelAttribute="filtroOperaciones" action="/gestor/filtrarOperaciones">
-    Buscar por fecha: <form:select path="fechaOperacion" size="15">
-    <form:option value="" label="Sin fecha"/>
-    <form:options items="${fechas}" itemLabel="fechaOperacion" itemValue="fechaOperacion"/>
-</form:select>
-</form:form>
+
 
 <html>
 <head>
@@ -50,6 +48,31 @@
         }
     %>
 </table>
+<h2> Listado de las cuentas reconocidas como sospechosas</h2>
+
+<table border="1">
+    <tr>
+        <th>IBAN</th>
+        <th>MONEDA</th>
+        <th>ESTADO</th>
+        <th>FECHA APERTURA</th>
+        <th>ID</th>
+    </tr>
+    <%
+        for (CuentaEntityDto cuenta : cuentasExternas) {
+    %>
+    <tr>
+        <td><%= cuenta.getIban() %></td>
+        <td><%= cuenta.getMoneda() %></td>
+        <td><%= cuenta.getEstado() %></td>
+        <td><%= cuenta.getFechaApertura() %></td>
+        <td><%= cuenta.getId() %></td>
+    </tr>
+    <%
+        }
+    %>
+</table>
 <a href="/gestor/">Volver</a>
+<a href="/gestor/cuentasSospechosas">Volver a las cuentas sospechosas</a>
 </body>
 </html>

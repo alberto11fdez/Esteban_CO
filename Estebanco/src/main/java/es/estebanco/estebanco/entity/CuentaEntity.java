@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/*
+   ALBERTO -> 90%
+   FERNANDO -> 10%.
+ */
+
 @Entity
 @Table(name = "cuenta", schema = "estebanco", catalog = "")
 public class CuentaEntity {

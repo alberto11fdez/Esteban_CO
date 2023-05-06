@@ -7,6 +7,11 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
+/*
+    FERNANDO LÓPEZ MURILLO -> 50%
+    ALBERTO FERNÁNDEZ RAMOS -> 50%.
+ */
+
 /**
  * A DTO for the {@link es.estebanco.estebanco.entity.ConversacionEntity} entity
  */

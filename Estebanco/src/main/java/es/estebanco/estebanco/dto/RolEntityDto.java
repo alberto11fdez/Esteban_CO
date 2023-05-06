@@ -4,7 +4,10 @@ import es.estebanco.estebanco.entity.PersonaEntity;
 
 import java.io.Serializable;
 import java.util.Objects;
-
+/*
+   FERNANDO -> 90%.
+   JOSE -> 10%.
+ */
 /**
  * A DTO for the {@link es.estebanco.estebanco.entity.RolEntity} entity
  */

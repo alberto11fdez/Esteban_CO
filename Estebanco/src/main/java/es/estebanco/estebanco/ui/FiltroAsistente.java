@@ -3,6 +3,9 @@ package es.estebanco.estebanco.ui;
 import es.estebanco.estebanco.entity.MensajeEntity;
 
 import java.util.List;
+/*
+   ALBERTO 100%
+ */
 
 public class FiltroAsistente {
 

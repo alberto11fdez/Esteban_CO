@@ -6,6 +6,11 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+/*
+   ALBERTO -> 90%
+   FERNANDO -> 10%.
+ */
+
 @Entity
 @Table(name = "mensaje", schema = "estebanco", catalog = "")
 public class MensajeEntity {

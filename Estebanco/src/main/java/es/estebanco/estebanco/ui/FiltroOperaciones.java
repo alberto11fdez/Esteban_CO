@@ -3,19 +3,23 @@ package es.estebanco.estebanco.ui;
 import java.util.Date;
 import java.util.List;
 
+/*
+    SERGIO -> 100%.
+ */
+
 public class FiltroOperaciones {
 
-    private List<Date> fechas;
+    private String fechas;
 
     public FiltroOperaciones(){
-        fechas = null;
+        fechas = "";
     }
 
-    public List<Date> getFechas(){
+    public String getFechas(){
         return fechas;
     }
 
-    public void setFechas(List<Date> fechas){
+    public void setFechas(){
         this.fechas = fechas;
     }
 }

@@ -1,8 +1,10 @@
+<!-- SERGIO -> 100% -->
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.estebanco.estebanco.entity.*" %>
 <%@ page import="es.estebanco.estebanco.dto.CuentaEntityDto" %>
 <%@ page import="es.estebanco.estebanco.dto.TipoMonedaEntityDto" %>
+<%@ page import="es.estebanco.estebanco.ui.FiltroGestor" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -11,6 +13,7 @@
     List<OperacionEntity> operaciones = (List<OperacionEntity>) request.getAttribute("operaciones");
     List<RolEntity> roles = (List<RolEntity>) request.getAttribute("roles");
     List<TipoMonedaEntityDto> monedas = (List<TipoMonedaEntityDto>) request.getAttribute("monedas");
+    FiltroGestor filtro = (FiltroGestor) request.getAttribute("filtro");
 %>
 <html>
 <head> Gestión Bancaria</head>
@@ -24,6 +27,7 @@
     <form:option value="" label ="Todas"/>
     <form:options items="${monedas}" itemLabel="moneda" itemValue="moneda"/>
 </form:select>
+    <form:checkbox path="fecha" value="inactivo" label="Más de 30 días sin hacer transaccion"></form:checkbox>
     <button>Filtrar</button>
 </form:form>
 
@@ -58,6 +62,13 @@
         <%
             }
         %>
+        <%
+            if(filtro.getFecha().equalsIgnoreCase("inactivo")){
+        %>
+        <td><a href="/gestor/revisarCuenta?idCuenta=<%=cuenta.getId()%>">Revisar cuenta</a></td>
+        <%
+            }
+        %>
     </tr>
 <%
     }
@@ -66,7 +77,7 @@
 
 
     <a href="/gestor/gestorPersonas">Vista de los clientes</a>
-    <a href="/gestor/cuentasSospechosas"> Vista de las transferencias sospechosas</a>
+    <a href="/gestor/cuentasSospechosas"> Vista de cuentas con transferencias sospechosas</a>
 
 <button><a href="/logout">Log out</a></button>
 

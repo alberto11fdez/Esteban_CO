@@ -16,6 +16,10 @@ import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 
+/*
+   JOSÉ MANUEL SÁNCHEZ NAVARRO -> 100%.
+ */
+
 @RequestMapping("/cuentaEmpresa")
 @Controller
 public class EmpresaControlador {

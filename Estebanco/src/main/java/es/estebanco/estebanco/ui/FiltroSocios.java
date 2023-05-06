@@ -3,6 +3,9 @@ package es.estebanco.estebanco.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+   JOSÉ -> 100%.
+ */
 public class FiltroSocios {
     private String tipo;
 

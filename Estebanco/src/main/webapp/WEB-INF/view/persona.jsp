@@ -1,3 +1,4 @@
+<!-- (ALBERTO, JOSE, NICO) -> 33% -->
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="input" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.List" %>

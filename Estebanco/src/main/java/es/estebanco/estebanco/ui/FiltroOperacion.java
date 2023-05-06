@@ -3,6 +3,10 @@ package es.estebanco.estebanco.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+   NICOLÁS -> 100%.
+ */
+
 public class FiltroOperacion {
     private String tipo;
 

@@ -4,8 +4,16 @@ import es.estebanco.estebanco.dto.OperacionEntityDto;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Objects;
+
+/*
+   ALBERTO -> 80%
+   FERNANDO -> 10%.
+   JOSE -> 10%.
+ */
 
 @Entity
 @Table(name = "operacion", schema = "estebanco", catalog = "")
@@ -47,6 +55,10 @@ public class OperacionEntity {
 
     public Date getFechaOperacion() {
         return fechaOperacion;
+    }
+
+    public LocalDate getFechaOperacionLocal(){
+        return fechaOperacion.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     public void setFechaOperacion(Date fechaOperacion) {

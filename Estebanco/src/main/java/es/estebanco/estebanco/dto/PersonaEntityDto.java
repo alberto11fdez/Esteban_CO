@@ -8,6 +8,10 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+/*
+   FERNANDO -> 100%.
+ */
+
 /**
  * A DTO for the {@link es.estebanco.estebanco.entity.PersonaEntity} entity
  */

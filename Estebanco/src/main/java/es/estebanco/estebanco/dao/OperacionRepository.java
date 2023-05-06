@@ -7,7 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
+
+/*
+   NICOLAS ZAMBRANA SMITH, JOSÉ MANUEL SÁNCHEZ NAVARRO, FERNANDO LÓPEZ MURILLO (33% CADA UNO). =)
+ */
 
 
 public interface OperacionRepository extends JpaRepository<OperacionEntity, Integer> {
@@ -49,4 +54,9 @@ public interface OperacionRepository extends JpaRepository<OperacionEntity, Inte
 
     @Query("select o from OperacionEntity o where o.ibanCuentaDestinoOrigen= :iban")
     public List<OperacionEntity> buscarOperacionesRecibidas(@Param("iban") String iban);
+
+    @Query("select o from OperacionEntity o where o.cuentaByCuentaId.id= :idCuenta and o.fechaOperacion between :fechaInicio and :fechaFin")
+    public List<OperacionEntity> sortOperacionesFecha(@Param("idCuenta") Integer idCuenta, LocalDate fechaInicio, LocalDate fechaFin);
+    @Query("select o from OperacionEntity o where o.cuentaByCuentaId.id= :idCuenta and o.fechaOperacion <= :fechaFin")
+    public List<OperacionEntity> sortOperacionesFechaAntiguas(@Param("idCuenta") Integer idCuenta, LocalDate fechaFin);
 }

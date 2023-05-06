@@ -1,5 +1,10 @@
 package es.estebanco.estebanco.ui;
 
+/*
+
+ JOSE -> 100%.
+ */
+
 public class FiltroOperacionSocio {
 
     private Integer idSocio;

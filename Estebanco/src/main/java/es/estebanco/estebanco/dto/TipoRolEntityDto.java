@@ -3,6 +3,9 @@ package es.estebanco.estebanco.dto;
 import java.io.Serializable;
 import java.util.Objects;
 
+/*
+   FERNANDO -> 100%.
+ */
 /**
  * A DTO for the {@link es.estebanco.estebanco.entity.TipoRolEntity} entity
  */

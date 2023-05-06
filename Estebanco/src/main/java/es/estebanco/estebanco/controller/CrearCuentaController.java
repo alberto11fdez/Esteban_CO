@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpSession;
 import javax.swing.text.html.parser.Entity;
 import java.sql.Timestamp;
+/*
+    JOSÉ MANUEL SÁNCHEZ NAVARRO -> 100%
+ */
 
 @Controller
 public class CrearCuentaController {

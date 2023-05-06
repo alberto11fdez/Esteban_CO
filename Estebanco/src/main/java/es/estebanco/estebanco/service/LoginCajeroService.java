@@ -6,6 +6,10 @@ import es.estebanco.estebanco.entity.PersonaEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/*
+   FERNANDO -> 100%.
+ */
+
 @Service
 public class LoginCajeroService {
     @Autowired

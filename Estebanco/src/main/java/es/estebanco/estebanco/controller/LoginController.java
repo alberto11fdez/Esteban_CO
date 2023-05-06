@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+/*
+   NICOLAS ZAMBRANA SMITH -> 100%.
+ */
 
 @Controller
 public class LoginController {

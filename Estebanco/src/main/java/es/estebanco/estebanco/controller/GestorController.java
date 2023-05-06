@@ -1,14 +1,10 @@
 package es.estebanco.estebanco.controller;
 
-import es.estebanco.estebanco.dao.CuentaRepository;
-import es.estebanco.estebanco.dao.OperacionRepository;
-import es.estebanco.estebanco.dao.PersonaRepository;
-import es.estebanco.estebanco.dao.TipoMonedaEntityRepository;
+
 import es.estebanco.estebanco.dto.CuentaEntityDto;
 import es.estebanco.estebanco.dto.OperacionEntityDto;
 import es.estebanco.estebanco.dto.PersonaEntityDto;
 import es.estebanco.estebanco.dto.TipoMonedaEntityDto;
-import es.estebanco.estebanco.entity.*;
 import es.estebanco.estebanco.service.*;
 import es.estebanco.estebanco.ui.FiltroGestor;
 import es.estebanco.estebanco.ui.FiltroOperaciones;
@@ -22,24 +18,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import es.estebanco.estebanco.entity.PersonaEntity;
 
 import javax.servlet.http.HttpSession;
+
+/*
+   SERGIO EMILIO BERINO GARCÍA -> 100%.
+ */
 
 @Controller
 @RequestMapping("/gestor")
 public class GestorController {
 
-    @Autowired
-    protected OperacionRepository operacionRepository;
-
-    @Autowired
-    protected CuentaRepository cuentaRepository;
-    @Autowired
-    protected PersonaRepository personaRepository;
-
-    @Autowired
-    protected TipoMonedaEntityRepository tipoMonedaRepository;
 
     @Autowired
     private PersonaService personaService;
@@ -71,27 +60,23 @@ public class GestorController {
         if(gestor == null) {
             urlTo = "redirect:/";
         } else {
-            List<String> divisa = new ArrayList<>();
-            List <CuentaEntityDto> cuentas = this.gestorService.listarCuentas("", divisa);
-           // List <PersonaEntity> personas = this.personaRepository.findAll();
 
-            if (filtro == null || filtro.getTexto().isEmpty() && filtro.getMonedas().isEmpty()){
+            List <CuentaEntityDto> cuentas;
+            List <String> monedasvacia = new ArrayList<>();
+
+            if(filtro == null || filtro.getFecha() == null && filtro.getMonedas().isEmpty() && filtro.getTexto().isEmpty()){ // 000
+                cuentas = this.gestorService.listarCuentas("",monedasvacia,null);
                 filtro = new FiltroGestor();
-            } else if (filtro.getMonedas().isEmpty()) {
-                //cuentas = this.cuentaRepository.cuentaPorIban(filtro.getTexto());
-                cuentas = this.gestorService.listarCuentas(filtro.getTexto(), filtro.getMonedas());
-            } else if(filtro.getTexto().isEmpty()){
-                //cuentas = this.cuentaRepository.cuentaPorDivisa(filtro.getMonedas());
-                cuentas = this.gestorService.listarCuentas("", filtro.getMonedas());
             } else {
-                cuentas = this.gestorService.listarCuentas(filtro.getTexto(),filtro.getMonedas());
+                cuentas = this.gestorService.listarCuentas(filtro.getTexto(),filtro.getMonedas(),filtro.getFecha());
             }
+
+
+
             model.addAttribute("filtro",filtro);
             model.addAttribute("cuentas", cuentas);
             List <TipoMonedaEntityDto> monedas = this.tipoMonedaService.findAll();
             model.addAttribute("monedas", monedas);
-            //model.addAttribute("personas", personas);
-
 
 
         }
@@ -146,21 +131,7 @@ public class GestorController {
 
         return urlTo;
     }
-   /* @PostMapping("/revisar")
-    public String doRevisarEstado(@ModelAttribute("personaRevisar") PersonaEntity persona,@ModelAttribute("filtro")FiltroGestor filtro, Model model, HttpSession session){
-        String urlTo ="gestor";
-        String [] checkbox = filtro.getCheckboxes();
 
-        if(checkbox.length == 1 && checkbox[0].equals("true")){
-            persona.setEstado("bien");
-        } if (checkbox.length == 1 && checkbox[0].equals("false")){
-            persona.setEstado("bloqueado");
-        } else {
-            persona.setEstado("espera_confirmacion");
-        }
-        this.personaRepository.save(persona);
-        return urlTo;
-    }*/
     @PostMapping("/revisar")
     public String doRevisar(@ModelAttribute("personaRevisar")PersonaEntityDto persona){
         this.personaService.save(persona);
@@ -202,23 +173,33 @@ public class GestorController {
     }
     @GetMapping("/historico")
     public String doHistoricoOperaciones(@RequestParam("idCuenta") Integer idCuenta, Model model, HttpSession session){
-        String urlTo ="gestorVistaOperaciones";
-
-        CuentaEntityDto cuenta = this.cuentaPersonaService.encontrarCuentaPorId(idCuenta);
-        List <OperacionEntityDto> operaciones = this.operacionService.operacionesPorCuenta(idCuenta);
-        model.addAttribute("operaciones", operaciones);
-        FiltroOperaciones filtroOperaciones = new FiltroOperaciones();
-        model.addAttribute("filtroOperaciones", filtroOperaciones);
-
-        return urlTo;
+        CuentaEntityDto cuentaHistorial = this.cuentaPersonaService.encontrarCuentaPorId(idCuenta);
+        model.addAttribute("cuentaHistorial",cuentaHistorial);
+        List <CuentaEntityDto> listadoExterno = this.gestorService.listarExternas();
+        model.addAttribute("cuentasexternas", listadoExterno);
+        return this.doProcesarOperaciones(null,model,session,idCuenta);
     }
     @PostMapping("/filtrarOperaciones")
-    public String doFiltrarOperacioines(@ModelAttribute("filtroOperaciones") FiltroOperaciones filtroOperaciones, @ModelAttribute("operaciones") List<OperacionEntityDto> operaciones, Model model, HttpSession session){
-        String urlTo ="gestorVistaOperaciones";
+    public String doFiltrarOperacioines(@ModelAttribute("filtroOperaciones") FiltroOperaciones filtroOperaciones,
+                                        @ModelAttribute("operaciones") List<OperacionEntityDto> operaciones,
+                                        @ModelAttribute("cuentaHistorial") CuentaEntityDto cuentaHistorial,
+                                        Model model, HttpSession session){
+        return this.doProcesarOperaciones(filtroOperaciones,model,session,cuentaHistorial.getId());
+    }
 
-
-
-
+    protected String doProcesarOperaciones(FiltroOperaciones filtroOperaciones, Model model, HttpSession session, Integer idCuenta){
+        String urlTo = "gestorVistaOperaciones";
+        List<OperacionEntityDto> operaciones = null;
+        if(filtroOperaciones == null || filtroOperaciones.getFechas() == null){
+            filtroOperaciones = new FiltroOperaciones();
+            operaciones = this.gestorService.sortOperaciones("",idCuenta);
+        } else if (filtroOperaciones.getFechas().equalsIgnoreCase("activo")){
+            operaciones = this.gestorService.sortOperaciones(filtroOperaciones.getFechas(),idCuenta);
+        } else if (filtroOperaciones.getFechas().equalsIgnoreCase("inactivo")){
+            operaciones = this.gestorService.sortOperaciones(filtroOperaciones.getFechas(),idCuenta);
+        }
+        model.addAttribute("operaciones", operaciones);
+        model.addAttribute("filtroOperaciones", filtroOperaciones);
         return urlTo;
     }
     @GetMapping("/cuentasSospechosas")
@@ -228,8 +209,10 @@ public class GestorController {
         if(gestor == null){
             return "redirect:/";
         }
-        List <CuentaEntityDto> cuentas = this.cuentaPersonaService.cuentasSospechosas();
+        List <CuentaEntityDto> cuentas = this.gestorService.cuentasSospechosas();
+        List <CuentaEntityDto> listadoExterno = this.gestorService.listarExternas();
         model.addAttribute("cuentasSospechosas", cuentas);
+        model.addAttribute("cuentasexternas", listadoExterno);
         return urlTo;
     }
 

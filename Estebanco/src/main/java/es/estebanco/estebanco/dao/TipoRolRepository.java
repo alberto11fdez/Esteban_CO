@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+/*
+    JOSÉ MANUEL SÁNCHEZ NAVARRO -> 100%.
+ */
 
 public interface TipoRolRepository extends JpaRepository<TipoRolEntity, Integer> {
 

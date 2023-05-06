@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+/*
+    ALBERTO FERNÁNDEZ RAMOS -> 100%.
+ */
 
 public interface MensajeRepository extends JpaRepository<MensajeEntity, Integer> {
 

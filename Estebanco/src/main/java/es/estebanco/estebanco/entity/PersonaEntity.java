@@ -7,6 +7,10 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+/*
+   ALBERTO -> 90%
+   FERNANDO -> 10%.
+ */
 @Entity
 @Table(name = "persona", schema = "estebanco", catalog = "")
 public class PersonaEntity {

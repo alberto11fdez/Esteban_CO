@@ -5,6 +5,10 @@ import es.estebanco.estebanco.dto.TipoRolEntityDto;
 import javax.persistence.*;
 import java.util.Objects;
 
+/*
+   ALBERTO -> 90%
+   FERNANDO -> 10%.
+ */
 @Entity
 @Table(name = "tipo_rol", schema = "estebanco", catalog = "")
 public class TipoRolEntity {

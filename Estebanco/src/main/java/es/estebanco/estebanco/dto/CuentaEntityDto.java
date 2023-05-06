@@ -11,6 +11,10 @@ import java.util.Objects;
 /**
  * A DTO for the {@link es.estebanco.estebanco.entity.CuentaEntity} entity
  */
+
+/*
+  FERNANDO -> 100%.
+ */
 public class CuentaEntityDto implements Serializable {
     private  String iban;
     private  Integer saldo;
@@ -69,6 +73,8 @@ public class CuentaEntityDto implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
+
+
 
     /*public List<OperacionEntityDto> getOperacionsById() {
         return operacionsById;

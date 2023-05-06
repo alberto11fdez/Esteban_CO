@@ -11,6 +11,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/*
+   NICOLAS -> 60%
+   JOSE -> 20%
+   SERGIO -> 20%.
+ */
+
 @Service
 public class CuentaPersonaService {
     @Autowired

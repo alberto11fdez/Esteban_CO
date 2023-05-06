@@ -1,5 +1,10 @@
 package es.estebanco.estebanco.dao;
 
+/*
+   JOSÉ MANUEL SÁNCHEZ NAVARRO -> 60%
+   ALBERTO FERNÁNDEZ RAMOS -> 20%
+   SERGIO BERINO GARCÍA -> 20%.
+ */
 
 import es.estebanco.estebanco.entity.CuentaEntity;
 import es.estebanco.estebanco.entity.PersonaEntity;

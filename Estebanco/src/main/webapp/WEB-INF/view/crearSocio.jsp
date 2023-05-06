@@ -1,3 +1,4 @@
+<!-- JOSÉ -> 100% -->
 <%@ page import="es.estebanco.estebanco.entity.CuentaEntity" %>
 <%@ page import="es.estebanco.estebanco.dto.PersonaEntityDto" %>
 <%@ page import="java.util.List" %>

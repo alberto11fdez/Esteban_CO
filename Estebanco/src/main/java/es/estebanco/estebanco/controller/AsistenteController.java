@@ -17,6 +17,9 @@ import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+/*
+    ALBERTO FERNÁNDEZ RAMOS -> 100%
+ */
 
 @Controller
 @RequestMapping("/asistente")

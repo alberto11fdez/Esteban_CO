@@ -11,6 +11,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/*
+   FERNANDO -> 100%.
+ */
+
 @Service
 public class CajeroService {
 

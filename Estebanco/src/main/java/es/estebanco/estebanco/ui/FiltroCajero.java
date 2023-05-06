@@ -1,7 +1,9 @@
 package es.estebanco.estebanco.ui;
 
 import java.util.List;
-
+/*
+    FERNANDO 100%.
+ */
 public class FiltroCajero {
     private String texto;
     private List<String> tipoOperacion;
