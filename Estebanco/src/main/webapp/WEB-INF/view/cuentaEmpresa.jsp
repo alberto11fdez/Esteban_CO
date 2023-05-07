@@ -143,5 +143,6 @@
 </table>
 <br/>
 <button><a href="/cuentaEmpresa/crearSocio?idCuenta=<%=cuentaEmpresa.getId()%>">Crear Socio</a></button>
+
 </body>
 </html>

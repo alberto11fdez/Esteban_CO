@@ -108,6 +108,8 @@ public class EmpresaControlador {
         List<OperacionEntityDto> operaciones;
         //CuentaEntity cuentaEmpresa =(CuentaEntity) session.getAttribute("cuenta");
         CuentaEntityDto cuentaEmpresa=(CuentaEntityDto) session.getAttribute("cuenta");
+        Integer idCuenta = cuentaEmpresa.getId();
+        cuentaEmpresa = cuentaPersonaService.encontrarCuentaPorId(idCuenta);
         if(filtroOperacion==null){
             filtroOperacion = new FiltroOperacion();
             filtroOperacion.setIdpersona(cuentaEmpresa.getId());
@@ -442,6 +444,8 @@ public class EmpresaControlador {
         PersonaEntityDto persona =(PersonaEntityDto) session.getAttribute("persona");
         //CuentaEntity cuentaEmpresa = (CuentaEntity) session.getAttribute("cuenta");
         CuentaEntityDto cuentaEmpresa = (CuentaEntityDto) session.getAttribute("cuenta");
+        Integer idCuenta = cuentaEmpresa.getId();
+        cuentaEmpresa = cuentaPersonaService.encontrarCuentaPorId(idCuenta);
 
         model.addAttribute("cuentaEmpresa", cuentaEmpresa);
 

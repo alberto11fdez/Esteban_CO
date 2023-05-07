@@ -305,6 +305,7 @@ public class CuentaPersonaService {
     public Integer saveCuentaNueva(CuentaEntityDto dto) {
         CuentaEntity cuenta = new CuentaEntity();
         cuenta.setEstado("esperandoConfirmacion");
+        cuenta.setMoneda("euro");
 
         cuentaRepository.save(cuenta);
         return cuenta.getId();

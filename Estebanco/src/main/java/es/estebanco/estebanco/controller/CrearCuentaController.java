@@ -41,6 +41,7 @@ public class CrearCuentaController {
 
         CuentaEntityDto cuenta = new CuentaEntityDto();
         cuenta.setEstado("esperandoConfirmacion");
+        cuenta.setMoneda("euro");
         Integer idcuenta = cuentaService.saveCuentaNueva(cuenta);
         cuenta=cuentaService.encontrarCuentaPorId(idcuenta);
         rol.setCuentaByCuentaId(cuenta);

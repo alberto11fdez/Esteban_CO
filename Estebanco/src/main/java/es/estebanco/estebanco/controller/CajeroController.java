@@ -226,8 +226,9 @@ public class CajeroController {
 
 
     @GetMapping("/editar")
-    public String doEditarPersona(@RequestParam("id") Integer idpersona, Model model){
-        PersonaEntityDto persona = this.cajeroService.personaPorId(idpersona);
+    public String doEditarPersona(@RequestParam("id") Integer idCuenta, Model model, HttpSession session){
+        PersonaEntityDto personaAUX = (PersonaEntityDto) session.getAttribute("persona");
+        PersonaEntityDto persona = this.cajeroService.personaPorId(personaAUX.getId());
         model.addAttribute("persona", persona);
         return "datosCajero";
     }
@@ -235,7 +236,7 @@ public class CajeroController {
     @PostMapping("/guardar")
     public String doGuardar (@ModelAttribute("persona") PersonaEntityDto persona) {
         this.cajeroService.guardarPersona(persona);
-        return "redirect:/cajero";
+        return "redirect:/cajero/";
     }
 
     @GetMapping("/cambiarDivisa")

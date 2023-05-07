@@ -133,7 +133,7 @@
 </table border="1">
 
 <button><a href="/asistente/crearConversacion?idCliente=<%=persona.getId()%>">Crear conversación</a></button></br></br>
-<button><a href="/gestor/"> Entrar como gestor</a></button>
+
 <%}else{%>
     <h1>Su cuenta sera activada mas adelante, espere por favor</h1>
 <%}%>

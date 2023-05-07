@@ -117,8 +117,7 @@ public class CuentaPersonaController {
                 model.addAttribute("error", "No puede transferir a esta cuenta porque esta bloqueada");
                 return this.mostrarEditadoTransferencia(cuentaOrigen,model);
             } else {
-                cuentaOrigen.setSaldo(cuentaOrigen.getSaldo()-valor);
-                cuentaDestino.setSaldo(cuentaDestino.getSaldo()+valor);
+                
                 this.cuentaPersonaService.guardarSacar(cuentaOrigen,valor);
                 this.cuentaPersonaService.guardarMeter(cuentaDestino,valor);
                 this.nuevaOperacionSacarTransferencia(cuentaOrigen,cuentaDestino,valor);

@@ -54,6 +54,7 @@
         <td><%=operacion.getTipo()%></td>
         <td><%=operacion.getCantidad()%></td>
         <td><%=operacion.getFechaOperacion()%></td>
+        <td><%=operacion.getIbanCuentaDestinoOrigen()%></td>
     </tr>
     <%
         }
