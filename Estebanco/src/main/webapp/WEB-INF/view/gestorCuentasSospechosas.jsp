@@ -1,4 +1,4 @@
-<!-- SERGIO -> 100% ROBARLE A FERNANDO LISTA OPERACIONES -->
+<!-- SERGIO -> 100%  -->
 <%@ page import="es.estebanco.estebanco.dto.CuentaEntityDto" %>
 <%@ page import="java.util.List" %>
 <%
